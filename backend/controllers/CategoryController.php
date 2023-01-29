@@ -43,13 +43,4 @@ class CategoryController extends Controller
             return $this->render('create_form', ['category' => $category, 'categories' => $categories]);
         }
     }
-
-    public function actionUpdate()
-    {
-
-    }
-    public function actionDelete()
-    {
-
-    }
 }
