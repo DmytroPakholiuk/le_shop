@@ -1,5 +1,7 @@
 <?php
 return [
+    'id' => 'le_shop',
+    'name' => 'Le Shop',
     'aliases' => [
         '@bower' => '@vendor/bower-asset',
         '@npm'   => '@vendor/npm-asset',
