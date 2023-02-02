@@ -25,9 +25,8 @@ class CategoryController extends Controller
     public function actionView(int $id)
     {
         $category = Category::findOne($id);
-        $parent_category = Category::findOne($category->parent_id);
 
-        return $this->render('detailed_view', ['category' => $category, 'parent_category' => $parent_category]);
+        return $this->render('detailed_view', ['category' => $category]);
     }
 
     /**

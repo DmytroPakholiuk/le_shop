@@ -2,7 +2,6 @@
 
 /**
  * @var \common\models\Category $category
- * @var \common\models\Category $parent_category
  * @var yii\web\View $this
  */
 
@@ -17,7 +16,7 @@ $this->title = 'Category #'.$category->id;?>
     <li>Updated at: <?php echo $category->updated_at; ?></li>
 
     <?php if(isset($parent_category)){
-        echo "<li>Parent category: $parent_category->name </li>";
+        echo "<li>Parent category: ".$category->parent->name." </li>";
         } ?>
 
 </ul>
