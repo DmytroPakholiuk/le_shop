@@ -16,7 +16,7 @@ $this->title = 'Category #'.$category->id;?>
     <li>Updated at: <?php echo $category->updated_at; ?></li>
 
     <?php if(isset($parent_category)){
-        echo "<li>Parent category: ".$category->parent->name." </li>";
+        echo "<li>Parent category: ".$category->parent->name ?? 'not set'." </li>";
         } ?>
 
 </ul>

@@ -14,7 +14,7 @@ $this->title = 'Category #'.$category->id;?>
         'description:html',
         [
             'label' => 'Parent category',
-            'value' => $category->parent->name,
+            'value' => $category->parent->name ?? 'not set',
         ],
         'created_at:datetime',
         'updated_at:datetime'
