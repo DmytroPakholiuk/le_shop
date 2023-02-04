@@ -10,6 +10,7 @@ namespace common\models;
  * @property int $parent_id
  * @property string $created_at
  * @property string $updated_at
+ * @property-read Category $parent
  */
 class Category extends \yii\db\ActiveRecord
 {

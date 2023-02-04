@@ -26,9 +26,3 @@ $this->title = 'Category #'.$category->id;?>
 <a href="update">update</a><br>
 <a href="delete">delete</a>
 
-<?php
-//1) ul/li вивести як список
-//2) html-таблиця tr/td гратись
-//3) якщо є parent_id то вивести ім'я
-    //4) віджетом detailsView https://github.com/yiisoft/yii2/blob/master/docs/guide-ru/output-data-widgets.md
-        // 5) кидати пуллреквест
