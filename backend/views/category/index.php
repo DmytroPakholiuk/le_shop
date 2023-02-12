@@ -32,7 +32,8 @@ $this->title = 'Category List';?>
                 'filter' => [
                         0 => 'inactive',
                         1 => 'active'
-                ]
+                ],
+                //'enableSorting' => false,
         ],
         [
                 'attribute' => 'parent_id',
@@ -42,4 +43,6 @@ $this->title = 'Category List';?>
                 }
         ]
     ]
-]);
+]); ?>
+<br>
+<a href = <?php echo \yii\helpers\Url::to(['category/create']); ?>>Create a new category</a>
