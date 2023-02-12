@@ -4,11 +4,30 @@ namespace backend\controllers;
 
 use backend\models\CategorySearch;
 use common\models\Category;
+use yii\filters\AccessControl;
 use yii\helpers\Url;
 use yii\web\Controller;
 
 class CategoryController extends Controller
 {
+    /**
+     * @return array[]
+     */
+    public function behaviors()
+    {
+        return [
+            'access' => [
+                'class' => AccessControl::class,
+                'rules' => [
+                    [
+                        'actions' => ['create', 'index', 'view', 'update'],
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ],
+                ],
+            ],
+        ];
+    }
     /**
      * @return string
      */
