@@ -1,6 +1,9 @@
 <?php
 
 namespace common\models;
+use yii\helpers\FileHelper;
+use yii\web\UploadedFile;
+
 /**
  * @property int $id
  * @property string $name
@@ -15,9 +18,15 @@ namespace common\models;
  * @property string $created_at
  * @property string $updated_at
  * @property-read array $goodsAttributes
+ * @property-read GoodsImage[] $images
  */
 class Goods extends \yii\db\ActiveRecord
 {
+    /**
+     * @var UploadedFile[]
+     */
+    public $imageFiles;
+
     /**
      * @return string
      */
@@ -35,8 +44,32 @@ class Goods extends \yii\db\ActiveRecord
             [['name', 'description'], 'string'],
             ['price', 'double'],
             ['target_credit_card', 'integer'],
-            [['created_at', 'updated_at'], 'safe']
+            [['created_at', 'updated_at'], 'safe'],
+            [['imageFiles'], 'file', 'skipOnEmpty' => true, 'extensions' => 'png, jpg', 'maxFiles' => 4],
         ];
+    }
+
+    /**
+     * @return bool
+     */
+    public function upload()
+    {
+        if ($this->validate(['imageFiles'])) {
+            foreach ($this->imageFiles as $file) {
+                FileHelper::createDirectory("images/{$this->id}");
+                $path = 'images/' . $this->id . '/' . $file->baseName . '.' . $file->extension;
+                if($file->saveAs($path)){
+                    $fileRecord = new GoodsImage();
+                    $fileRecord->size = $file->size;
+                    $fileRecord->path = $path;
+                    $fileRecord->goods_id = $this->id;
+                    $fileRecord->save();
+                }
+            }
+            return true;
+        } else {
+            return false;
+        }
     }
     /**
      * @return \yii\db\ActiveQuery
@@ -51,6 +84,14 @@ class Goods extends \yii\db\ActiveRecord
     public function getAuthor()
     {
         return $this->hasOne(User::class, ['id' => 'author_id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getImages()
+    {
+        return $this->hasMany(GoodsImage::class, ['goods_id' => 'id']);
     }
     /**
      * @return \yii\db\ActiveQuery

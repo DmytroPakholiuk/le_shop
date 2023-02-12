@@ -29,4 +29,12 @@
             'created_at:datetime',
             'updated_at:datetime'
         ]
-]);
+]); ?>
+
+<?php
+foreach($model->images as $image){
+    echo '<div>';
+    echo "<img src=\"/{$image->path}\">";
+    echo '</div>';
+}
+

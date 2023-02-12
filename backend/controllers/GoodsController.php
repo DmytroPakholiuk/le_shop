@@ -5,9 +5,11 @@ namespace backend\controllers;
 use backend\models\GoodsSearch;
 use common\models\Category;
 use common\models\Goods;
+use yii\base\Exception;
 use yii\data\ActiveDataProvider;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
+use yii\web\UploadedFile;
 
 class GoodsController extends \yii\web\Controller
 {
@@ -58,8 +60,12 @@ class GoodsController extends \yii\web\Controller
         if ($model->load(\Yii::$app->request->post()) && $model->validate()){
             $model->author_id = \Yii::$app->user->id;
             $model->save();
-
-            return $this->redirect(['/goods/view', 'id' => $model->id]);
+            $model->imageFiles = UploadedFile::getInstances($model, 'imageFiles');
+            if ($model->upload()) {
+                return $this->redirect(['/goods/view', 'id' => $model->id]);
+            } else {
+                throw new Exception('could not upload photos');
+            }
         } else {
             $categories = Category::find()->select('name')->indexBy('id')->column();
 

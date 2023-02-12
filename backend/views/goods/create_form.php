@@ -15,16 +15,18 @@ $this->title = 'Create a new item'; ?>
 
 <?php $form = ActiveForm::begin(); ?>
 
-<?php echo $form->field($model, 'name'); ?>
+<?= $form->field($model, 'name'); ?>
 
-<?php echo $form->field($model, 'description')->textarea(); ?>
+<?= $form->field($model, 'description')->textarea(); ?>
 
-<?php echo $form->field($model, 'price'); ?>
+<?= $form->field($model, 'price'); ?>
 
-<?php echo $form->field($model, 'available')->dropDownList([0 => 'No', 1 => 'Yes']); ?>
+<?= $form->field($model, 'available')->dropDownList([0 => 'No', 1 => 'Yes']); ?>
 
-<?php echo $form->field($model, 'category_id')->dropDownList($categories); ?>
+<?= $form->field($model, 'category_id')->dropDownList($categories); ?>
 
-<?php echo Html::submitButton('Submit', ['class' => 'btn btn-primary']); ?>
+<?= $form->field($model, 'imageFiles[]')->fileInput(['multiple' => true, 'accept' => 'image/*']) ?>
+
+<?= Html::submitButton('Submit', ['class' => 'btn btn-primary']); ?>
 
 <?php ActiveForm::end();?>
