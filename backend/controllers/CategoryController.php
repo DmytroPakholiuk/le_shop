@@ -61,7 +61,7 @@ class CategoryController extends Controller
         } else {
             $categories = Category::find()->select('name')->where(['status' => 1])->indexBy('id')->column();
 
-            return $this->render('create_form', ['category' => $category, 'categories' => $categories]);
+            return $this->render('create', ['category' => $category, 'categories' => $categories]);
         }
     }
 
@@ -76,7 +76,7 @@ class CategoryController extends Controller
         } else {
             $categories = Category::find()->select('name')->where(['status' => 1])->andWhere(['not', ['id' => $id]])->indexBy('id')->column();
 
-            return $this->render('update_form', ['category' => $category, 'categories' => $categories]);
+            return $this->render('update', ['category' => $category, 'categories' => $categories]);
         }
     }
 }

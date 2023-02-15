@@ -71,6 +71,21 @@ class Goods extends \yii\db\ActiveRecord
             return false;
         }
     }
+
+    /**
+     * @return void
+     */
+    public function deleteOldImages()
+    {
+        $images = GoodsImage::find(['goods_id' => $this->id])->all();
+        if ($images === null){
+            return;
+        }
+        foreach ($images as $image){
+            $image->delete();
+        }
+        FileHelper::removeDirectory('images/' . $this->id);
+    }
     /**
      * @return \yii\db\ActiveQuery
      */

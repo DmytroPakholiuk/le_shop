@@ -69,7 +69,7 @@ class GoodsController extends \yii\web\Controller
         } else {
             $categories = Category::find()->select('name')->indexBy('id')->column();
 
-            return $this->render('create_form', ['model' => $model, 'categories' => $categories]);
+            return $this->render('create', ['model' => $model, 'categories' => $categories]);
         }
     }
     /**
@@ -80,14 +80,20 @@ class GoodsController extends \yii\web\Controller
     {
         $model = Goods::findOne($id);
         if ($model->load(\Yii::$app->request->post()) && $model->validate()){
-            $model->author_id = \Yii::$app->user->id;
             $model->save();
-
-            return $this->redirect(['/goods/view', 'id' => $model->id]);
+            $model->imageFiles = UploadedFile::getInstances($model, 'imageFiles');
+            if (\Yii::$app->request->post('deleteOld')){
+                $model->deleteOldImages();
+            }
+            if ($model->upload()) {
+                return $this->redirect(['/goods/view', 'id' => $model->id]);
+            } else {
+                throw new Exception('could not upload photos');
+            }
         } else {
             $categories = Category::find()->select('name')->indexBy('id')->column();
 
-            return $this->render('update_form', ['model' => $model, 'categories' => $categories]);
+            return $this->render('update', ['model' => $model, 'categories' => $categories]);
         }
     }
 }
