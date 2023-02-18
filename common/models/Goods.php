@@ -77,11 +77,8 @@ class Goods extends \yii\db\ActiveRecord
      */
     public function deleteOldImages()
     {
-        $images = GoodsImage::find(['goods_id' => $this->id])->all();
-        if ($images === null){
-            return;
-        }
-        foreach ($images as $image){
+        //GoodsImage::deleteAll(['goods_id' => $this->id]);
+        foreach ($this->images as $image){
             $image->delete();
         }
         FileHelper::removeDirectory('images/' . $this->id);

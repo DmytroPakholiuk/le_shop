@@ -61,16 +61,15 @@ class GoodsController extends \yii\web\Controller
             $model->author_id = \Yii::$app->user->id;
             $model->save();
             $model->imageFiles = UploadedFile::getInstances($model, 'imageFiles');
-            if ($model->upload()) {
-                return $this->redirect(['/goods/view', 'id' => $model->id]);
-            } else {
-                throw new Exception('could not upload photos');
+            if (!$model->upload()) {
+                \Yii::$app->session->setFlash('error', 'could not save images');
             }
-        } else {
-            $categories = Category::find()->select('name')->indexBy('id')->column();
-
-            return $this->render('create', ['model' => $model, 'categories' => $categories]);
+            return $this->redirect(['/goods/view', 'id' => $model->id]);
         }
+        $categories = Category::find()->select('name')->indexBy('id')->column();
+
+        return $this->render('create', ['model' => $model, 'categories' => $categories]);
+
     }
     /**
      * @param $id

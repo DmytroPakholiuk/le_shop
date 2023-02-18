@@ -4,11 +4,12 @@
  * @var \common\models\Goods $model
  * @var array $categories
  * @var \yii\web\View $this
- * @var bool $isNew
  */
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
+
+$this->registerJsFile('/js/goods_form.js');
 
 $form = ActiveForm::begin(); ?>
 
@@ -24,9 +25,15 @@ $form = ActiveForm::begin(); ?>
     ->dropDownList($categories, ['prompt' => 'Category'])
     ->label('Select category'); ?>
 
+<?php echo Html::button('Add Attribute', ['class' => 'btn btn-primary', 'onclick' => 'addAttribute()']); ?>
+
+<div id="attributeForm">
+
+</div>
+
 <?= $form->field($model, 'imageFiles[]')->fileInput(['multiple' => true, 'accept' => 'image/*'])->label('Add images') ?>
 
-<?php if (!$isNew) {
+<?php if (!$model->isNewRecord) {
     echo Html::checkbox('deleteOld', false, ['label' => 'delete all old images?']);
 } ?><br>
 
