@@ -1,3 +1,5 @@
+let i = 0;
+
 function addAttribute(){
     let attributesDiv = document.getElementById('attributeForm');
     let rows = attributesDiv.children;
@@ -14,7 +16,7 @@ function addAttribute(){
 
     let attributeInput = document.createElement('input');
     attributeInput.classList.add('form-control');
-    attributeInput.setAttribute('name', 'attributeName[]')
+    attributeInput.setAttribute('name', 'goodsAttributes['+i+'][title]');
     let attributeColDiv = document.createElement('div')
     attributeColDiv.classList.add('col')
     let attributeLabel = document.createElement('label');
@@ -22,7 +24,7 @@ function addAttribute(){
 
     let valueInput = document.createElement('input');
     valueInput.classList.add('form-control');
-    valueInput.setAttribute('name', 'attributeValue[]');
+    valueInput.setAttribute('name', 'goodsAttributes['+i+'][value]');
     let valueColDiv = document.createElement('div');
     valueColDiv.classList.add('col');
     let valueLabel = document.createElement('label');
@@ -39,4 +41,5 @@ function addAttribute(){
             valueColDiv.appendChild(valueLabel);
             valueColDiv.appendChild(valueInput);
 
+            i++;
 }

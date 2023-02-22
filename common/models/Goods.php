@@ -17,8 +17,9 @@ use yii\web\UploadedFile;
  * @property int $target_credit_card
  * @property string $created_at
  * @property string $updated_at
- * @property-read array $goodsAttributes
  * @property-read GoodsImage[] $images
+ * @property-read AttributeValue[] $attributeValues
+ * @property-read AttributeName[] $attributeNames
  */
 class Goods extends \yii\db\ActiveRecord
 {
@@ -107,12 +108,18 @@ class Goods extends \yii\db\ActiveRecord
     }
     /**
      * @return \yii\db\ActiveQuery
-     * @throws \yii\base\InvalidConfigException
      */
-    /*
-    public function getGoodsAttributes()
+    public function getAttributeNames()
     {
-        return $this->hasMany(Attribute::class, ['id' => 'goods_id'])->viaTable('goodsAttributes', ['attribute_id' => 'id']);
+        return $this->hasMany(AttributeName::class, ['id' => 'goods_id'])->viaTable('goodsAttributes', ['attribute_id' => 'id']);
     }
-    */
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getAttributeValues()
+    {
+        return $this->hasMany(AttributeValue::class, ['goods_id' => 'id']);
+    }
+
 }

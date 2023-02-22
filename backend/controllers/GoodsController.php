@@ -3,6 +3,8 @@
 namespace backend\controllers;
 
 use backend\models\GoodsSearch;
+use common\models\AttributeName;
+use common\models\AttributeValue;
 use common\models\Category;
 use common\models\Goods;
 use yii\base\Exception;
@@ -56,13 +58,28 @@ class GoodsController extends \yii\web\Controller
      */
     public function actionCreate()
     {
+//        if(\Yii::$app->request->isPost){
+//            var_dump(\Yii::$app->request->post('goodsAttributes'));die();
+//        }
         $model = new Goods();
+        $attributes = \Yii::$app->request->post('goodsAttributes');
         if ($model->load(\Yii::$app->request->post()) && $model->validate()){
             $model->author_id = \Yii::$app->user->id;
             $model->save();
             $model->imageFiles = UploadedFile::getInstances($model, 'imageFiles');
             if (!$model->upload()) {
                 \Yii::$app->session->setFlash('error', 'could not save images');
+            }
+            foreach ($attributes as $attribute){
+                $attributeName = AttributeName::findOne(['name' => $attribute['title']]) ?? new AttributeName(['name' => $attribute['title']]);
+                if ($attributeName->isNewRecord){
+                    $attributeName->save();
+                }
+                $attributeValue = new AttributeValue();
+                $attributeValue->goods_id = $model->id;
+                $attributeValue->attribute_id = $attributeName->id;
+                $attributeValue->value = $attribute['value'];
+                $attributeValue->save();
             }
             return $this->redirect(['/goods/view', 'id' => $model->id]);
         }
