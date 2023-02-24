@@ -31,10 +31,14 @@ $form = ActiveForm::begin(); ?>
 
 </div>
 
+<?php if (!$model->isNewRecord) {
+    echo Html::checkbox('deleteOldAttributes', false, ['label' => 'delete all old attributes?']);
+} ?><br>
+
 <?= $form->field($model, 'imageFiles[]')->fileInput(['multiple' => true, 'accept' => 'image/*'])->label('Add images') ?>
 
 <?php if (!$model->isNewRecord) {
-    echo Html::checkbox('deleteOld', false, ['label' => 'delete all old images?']);
+    echo Html::checkbox('deleteOldImages', false, ['label' => 'delete all old images?']);
 } ?><br>
 
 <?= Html::submitButton('Submit', ['class' => 'btn btn-primary']); ?>

@@ -2,11 +2,14 @@
 /**
  * @var \common\models\Goods $model
  */
+
+use yii\widgets\DetailView;
+
 ?>
 
 <?php $this->title = $model->name ?>
 
-<?php echo \yii\widgets\DetailView::widget([
+<?php echo DetailView::widget([
         'model' => $model,
         'attributes' => [
             'id:integer',
@@ -27,9 +30,24 @@
             ],
             'target_credit_card',
             'created_at:datetime',
-            'updated_at:datetime'
+            'updated_at:datetime',
         ]
 ]); ?>
+
+<h2>Attributes:</h2>
+
+<?php
+    $config = [
+        'model' => $model,
+        'attributes' => []
+    ];
+    foreach ($model->attributeValues as $attribute){
+        $config['attributes'][] = [
+            'label' => $attribute->attributeName->name,
+            'value' => $attribute->value
+        ];
+    }
+    echo DetailView::widget($config) ?>
 
 <?php
 foreach($model->images as $image){

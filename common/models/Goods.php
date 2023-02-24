@@ -84,6 +84,31 @@ class Goods extends \yii\db\ActiveRecord
         }
         FileHelper::removeDirectory('images/' . $this->id);
     }
+
+    /**
+     * @return void
+     *
+     * Applies attributes received from POST to this Goods model
+     */
+    public function configureAttributes()
+    {
+        $attributes = \Yii::$app->request->post('goodsAttributes');
+        if (\Yii::$app->request->post('deleteOldAttributes')){
+            AttributeValue::deleteAll(['goods_id' => $this->id]);
+        }
+        foreach ($attributes as $attribute){
+            $attributeName = AttributeName::findOne(['name' => $attribute['title']]) ?? new AttributeName(['name' => $attribute['title']]);
+            if ($attributeName->isNewRecord){
+                $attributeName->save();
+            }
+            $attributeValue = new AttributeValue();
+            $attributeValue->goods_id = $this->id;
+            $attributeValue->attribute_id = $attributeName->id;
+            $attributeValue->value = $attribute['value'];
+            $attributeValue->save();
+        }
+    }
+
     /**
      * @return \yii\db\ActiveQuery
      */

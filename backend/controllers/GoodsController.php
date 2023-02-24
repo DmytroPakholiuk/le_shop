@@ -58,11 +58,7 @@ class GoodsController extends \yii\web\Controller
      */
     public function actionCreate()
     {
-//        if(\Yii::$app->request->isPost){
-//            var_dump(\Yii::$app->request->post('goodsAttributes'));die();
-//        }
         $model = new Goods();
-        $attributes = \Yii::$app->request->post('goodsAttributes');
         if ($model->load(\Yii::$app->request->post()) && $model->validate()){
             $model->author_id = \Yii::$app->user->id;
             $model->save();
@@ -70,17 +66,7 @@ class GoodsController extends \yii\web\Controller
             if (!$model->upload()) {
                 \Yii::$app->session->setFlash('error', 'could not save images');
             }
-            foreach ($attributes as $attribute){
-                $attributeName = AttributeName::findOne(['name' => $attribute['title']]) ?? new AttributeName(['name' => $attribute['title']]);
-                if ($attributeName->isNewRecord){
-                    $attributeName->save();
-                }
-                $attributeValue = new AttributeValue();
-                $attributeValue->goods_id = $model->id;
-                $attributeValue->attribute_id = $attributeName->id;
-                $attributeValue->value = $attribute['value'];
-                $attributeValue->save();
-            }
+            $model->configureAttributes();
             return $this->redirect(['/goods/view', 'id' => $model->id]);
         }
         $categories = Category::find()->select('name')->indexBy('id')->column();
@@ -98,14 +84,14 @@ class GoodsController extends \yii\web\Controller
         if ($model->load(\Yii::$app->request->post()) && $model->validate()){
             $model->save();
             $model->imageFiles = UploadedFile::getInstances($model, 'imageFiles');
-            if (\Yii::$app->request->post('deleteOld')){
+            if (\Yii::$app->request->post('deleteOldImages')){
                 $model->deleteOldImages();
             }
-            if ($model->upload()) {
-                return $this->redirect(['/goods/view', 'id' => $model->id]);
-            } else {
-                throw new Exception('could not upload photos');
+            if (!$model->upload()) {
+                \Yii::$app->session->setFlash('error', 'could not save images');
             }
+            $model->configureAttributes();
+            return $this->redirect(['/goods/view', 'id' => $model->id]);
         } else {
             $categories = Category::find()->select('name')->indexBy('id')->column();
 
