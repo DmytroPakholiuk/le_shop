@@ -3,8 +3,8 @@
 namespace backend\controllers;
 
 use backend\models\GoodsSearch;
-use common\models\AttributeName;
-use common\models\AttributeValue;
+use common\models\Attribute;
+use common\models\GoodsAttributeValue;
 use common\models\Category;
 use common\models\Goods;
 use yii\base\Exception;
@@ -66,7 +66,8 @@ class GoodsController extends \yii\web\Controller
             if (!$model->upload()) {
                 \Yii::$app->session->setFlash('error', 'could not save images');
             }
-            $model->configureAttributes();
+            $attributes = \Yii::$app->request->post('goodsAttributes');
+            $model->configureAttributes($attributes);
             return $this->redirect(['/goods/view', 'id' => $model->id]);
         }
         $categories = Category::find()->select('name')->indexBy('id')->column();
@@ -90,7 +91,8 @@ class GoodsController extends \yii\web\Controller
             if (!$model->upload()) {
                 \Yii::$app->session->setFlash('error', 'could not save images');
             }
-            $model->configureAttributes();
+            $attributes = \Yii::$app->request->post('goodsAttributes');
+            $model->configureAttributes($attributes);
             return $this->redirect(['/goods/view', 'id' => $model->id]);
         } else {
             $categories = Category::find()->select('name')->indexBy('id')->column();

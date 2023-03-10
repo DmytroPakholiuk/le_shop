@@ -7,7 +7,7 @@ namespace common\models;
  * @property string $created_at
  * @property string $updated_at
  */
-class AttributeName extends \yii\db\ActiveRecord
+class Attribute extends \yii\db\ActiveRecord
 {
     /**
      * @return string
@@ -33,6 +33,6 @@ class AttributeName extends \yii\db\ActiveRecord
      */
     public function getAttributeValues()
     {
-        return $this->hasMany(AttributeValue::class, ['attribute_id' => 'id']);
+        return $this->hasMany(GoodsAttributeValue::class, ['attribute_id' => 'id']);
     }
 }

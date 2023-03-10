@@ -1,6 +1,8 @@
 let i = 0;
 
 function addAttribute(){
+
+    /*
     let attributesDiv = document.getElementById('attributeForm');
     let rows = attributesDiv.children;
 
@@ -13,7 +15,45 @@ function addAttribute(){
            }
        }
     }
+     */
 
+    let attributeForm = $('#attributeForm');
+
+    let inputs = attributeForm.find('input');
+    for (let input of inputs){
+        if (!input.val()){
+            alert('Please fill in existing attributes');
+            return
+        }
+    }
+
+    let rowDiv = $('<div>', {
+        class: 'row'
+    }).appendTo(attributeForm);
+
+    let attributeColDiv = $('<div>', {
+        class: 'col'
+    }).appendTo(rowDiv);
+
+    $("<label>").text('Attribute Name').appendTo(attributeColDiv);
+    let attributeInput = $("<input>", {
+        class: 'form-control',
+        name: 'goodsAttributes['+i+'][title]',
+    }).appendTo(attributeColDiv);
+
+
+    let valueColDiv = $('<div>', {
+        class: 'col'
+    }).appendTo(rowDiv);
+
+    $("<label>").text('Attribute Value').appendTo(valueColDiv);
+    let valueInput = $("<input>", {
+        class: 'form-control',
+        name: 'goodsAttributes['+i+'][value]',
+    }).appendTo(valueColDiv);
+
+
+    /*
     let attributeInput = document.createElement('input');
     attributeInput.classList.add('form-control');
     attributeInput.setAttribute('name', 'goodsAttributes['+i+'][title]');
@@ -42,4 +82,7 @@ function addAttribute(){
             valueColDiv.appendChild(valueInput);
 
             i++;
+
+     */
+    i++
 }

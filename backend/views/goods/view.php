@@ -43,7 +43,7 @@ use yii\widgets\DetailView;
     ];
     foreach ($model->attributeValues as $attribute){
         $config['attributes'][] = [
-            'label' => $attribute->attributeName->name,
+            'label' => $attribute->attributeDefinition->name,
             'value' => $attribute->value
         ];
     }

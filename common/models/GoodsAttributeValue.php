@@ -5,12 +5,12 @@ namespace common\models;
  * @property string $value
  * @property integer $goods_id
  * @property integer $attribute_id
- * @property-read AttributeName $attributeName
+ * @property-read Attribute $attributeDefinition
  * @property-read Goods $goods
  * @property string $created_at
  * @property string $updated_at
  */
-class AttributeValue extends \yii\db\ActiveRecord
+class GoodsAttributeValue extends \yii\db\ActiveRecord
 {
     /**
      * @return string
@@ -35,9 +35,9 @@ class AttributeValue extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getAttributeName()
+    public function getAttributeDefinition()
     {
-        return $this->hasOne(AttributeName::class, ['id' => 'attribute_id']);
+        return $this->hasOne(Attribute::class, ['id' => 'attribute_id']);
     }
 
     /**

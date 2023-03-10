@@ -18,8 +18,8 @@ use yii\web\UploadedFile;
  * @property string $created_at
  * @property string $updated_at
  * @property-read GoodsImage[] $images
- * @property-read AttributeValue[] $attributeValues
- * @property-read AttributeName[] $attributeNames
+ * @property-read GoodsAttributeValue[] $attributeValues
+ * @property-read Attribute[] $attributeNames
  */
 class Goods extends \yii\db\ActiveRecord
 {
@@ -90,18 +90,17 @@ class Goods extends \yii\db\ActiveRecord
      *
      * Applies attributes received from POST to this Goods model
      */
-    public function configureAttributes()
+    public function configureAttributes($attributes)
     {
-        $attributes = \Yii::$app->request->post('goodsAttributes');
         if (\Yii::$app->request->post('deleteOldAttributes')){
-            AttributeValue::deleteAll(['goods_id' => $this->id]);
-        }
+            GoodsAttributeValue::deleteAll(['goods_id' => $this->id]);
+        }// todo implement deletion via ajax
         foreach ($attributes as $attribute){
-            $attributeName = AttributeName::findOne(['name' => $attribute['title']]) ?? new AttributeName(['name' => $attribute['title']]);
+            $attributeName = Attribute::findOne(['name' => $attribute['title']]) ?? new Attribute(['name' => $attribute['title']]);
             if ($attributeName->isNewRecord){
                 $attributeName->save();
-            }
-            $attributeValue = new AttributeValue();
+            }// todo find existing attr with that name
+            $attributeValue = new GoodsAttributeValue();
             $attributeValue->goods_id = $this->id;
             $attributeValue->attribute_id = $attributeName->id;
             $attributeValue->value = $attribute['value'];
@@ -136,7 +135,7 @@ class Goods extends \yii\db\ActiveRecord
      */
     public function getAttributeNames()
     {
-        return $this->hasMany(AttributeName::class, ['id' => 'goods_id'])->viaTable('goodsAttributes', ['attribute_id' => 'id']);
+        return $this->hasMany(Attribute::class, ['id' => 'goods_id'])->viaTable('goodsAttributes', ['attribute_id' => 'id']);
     }
 
     /**
@@ -144,7 +143,7 @@ class Goods extends \yii\db\ActiveRecord
      */
     public function getAttributeValues()
     {
-        return $this->hasMany(AttributeValue::class, ['goods_id' => 'id']);
+        return $this->hasMany(GoodsAttributeValue::class, ['goods_id' => 'id']);
     }
 
 }
