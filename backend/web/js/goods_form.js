@@ -52,6 +52,13 @@ function addAttribute(){
         name: 'goodsAttributes['+i+'][value]',
     }).appendTo(valueColDiv);
 
+    // $('<button>', {
+    //     class: 'col btn btn-primary',
+    //     text: 'Delete attribute'
+    // }).appendTo(rowDiv).onclick(function (){
+    //     //let relatedInputs = $(this).siblings('input')
+    // })
+
 
     /*
     let attributeInput = document.createElement('input');

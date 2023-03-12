@@ -25,7 +25,7 @@ class GoodsController extends \yii\web\Controller
                 'class' => AccessControl::class,
                 'rules' => [
                     [
-                        'actions' => ['create', 'index', 'view', 'update'],
+                        'actions' => ['create', 'index', 'view', 'update', 'delete-attribute'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -99,5 +99,18 @@ class GoodsController extends \yii\web\Controller
 
             return $this->render('update', ['model' => $model, 'categories' => $categories]);
         }
+    }
+
+    public function actionDeleteAttribute()
+    {
+        $goodsId = \Yii::$app->request->post('goodsId');
+        $attributeId = \Yii::$app->request->post('attributeId');
+        $goodsAttribute = GoodsAttributeValue::findOne(['goods_id' => $goodsId, 'attribute_id' => $attributeId]);
+        $goodsAttribute->is_deleted = 1;
+        $goodsAttribute->save();
+
+        return $this->asJson([
+            'message' => 'Attribute deleted'
+        ]);
     }
 }

@@ -9,6 +9,7 @@ namespace common\models;
  * @property-read Goods $goods
  * @property string $created_at
  * @property string $updated_at
+ * @property int $is_deleted
  */
 class GoodsAttributeValue extends \yii\db\ActiveRecord
 {
@@ -26,10 +27,15 @@ class GoodsAttributeValue extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['goods_id', 'attribute_id'], 'integer'],
+            [['goods_id', 'attribute_id', 'is_deleted'], 'integer'],
             ['value', 'string'],
             [['created_at','updated_at'], 'safe'],
         ];
+    }
+
+    public static function primaryKey()
+    {
+        return ['goods_id', "attribute_id"];
     }
 
     /**

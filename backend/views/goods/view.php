@@ -5,6 +5,7 @@
 
 use yii\widgets\DetailView;
 
+$this->registerJsFile('/js/goods_view.js');
 ?>
 
 <?php $this->title = $model->name ?>
@@ -42,10 +43,17 @@ use yii\widgets\DetailView;
         'attributes' => []
     ];
     foreach ($model->attributeValues as $attribute){
-        $config['attributes'][] = [
-            'label' => $attribute->attributeDefinition->name,
-            'value' => $attribute->value
-        ];
+        if (!$attribute->is_deleted){
+            $config['attributes'][] = [
+                'label' => $attribute->attributeDefinition->name,
+                'format' => 'raw',
+                'value' => $attribute->value . \yii\helpers\Html::button('del', [
+                        'class' => 'btn btn-danger',
+                        'id' => $attribute->attribute_id,
+                        'onclick' => "deleteAttribute({$model->id}, {$attribute->attribute_id})"
+                    ])
+            ];
+        }
     }
     echo DetailView::widget($config) ?>
 
