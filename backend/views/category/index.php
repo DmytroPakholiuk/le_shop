@@ -7,6 +7,8 @@
  * @var yii\web\View $this
  */
 
+use yii\grid\ActionColumn;
+
 $this->title = 'Category List';?>
 
 <h1>Category List</h1>
@@ -41,6 +43,9 @@ $this->title = 'Category List';?>
                 'value' => function(\common\models\Category $model){
                     return $model->parent->name ?? null;
                 }
+        ],
+        [
+                'class' => ActionColumn::class,
         ]
     ]
 ]); ?>

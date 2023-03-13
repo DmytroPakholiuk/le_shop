@@ -3,6 +3,8 @@
 namespace backend\controllers;
 
 use backend\models\GoodsSearch;
+use common\models\Attribute;
+use common\models\GoodsAttributeValue;
 use common\models\Category;
 use common\models\Goods;
 use yii\base\Exception;
@@ -23,7 +25,7 @@ class GoodsController extends \yii\web\Controller
                 'class' => AccessControl::class,
                 'rules' => [
                     [
-                        'actions' => ['create', 'index', 'view', 'update'],
+                        'actions' => ['create', 'index', 'view', 'update', 'delete-attribute'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -61,16 +63,17 @@ class GoodsController extends \yii\web\Controller
             $model->author_id = \Yii::$app->user->id;
             $model->save();
             $model->imageFiles = UploadedFile::getInstances($model, 'imageFiles');
-            if ($model->upload()) {
-                return $this->redirect(['/goods/view', 'id' => $model->id]);
-            } else {
-                throw new Exception('could not upload photos');
+            if (!$model->upload()) {
+                \Yii::$app->session->setFlash('error', 'could not save images');
             }
-        } else {
-            $categories = Category::find()->select('name')->indexBy('id')->column();
-
-            return $this->render('create', ['model' => $model, 'categories' => $categories]);
+            $attributes = \Yii::$app->request->post('goodsAttributes');
+            $model->configureAttributes($attributes);
+            return $this->redirect(['/goods/view', 'id' => $model->id]);
         }
+        $categories = Category::find()->select('name')->indexBy('id')->column();
+
+        return $this->render('create', ['model' => $model, 'categories' => $categories]);
+
     }
     /**
      * @param $id
@@ -82,18 +85,32 @@ class GoodsController extends \yii\web\Controller
         if ($model->load(\Yii::$app->request->post()) && $model->validate()){
             $model->save();
             $model->imageFiles = UploadedFile::getInstances($model, 'imageFiles');
-            if (\Yii::$app->request->post('deleteOld')){
+            if (\Yii::$app->request->post('deleteOldImages')){
                 $model->deleteOldImages();
             }
-            if ($model->upload()) {
-                return $this->redirect(['/goods/view', 'id' => $model->id]);
-            } else {
-                throw new Exception('could not upload photos');
+            if (!$model->upload()) {
+                \Yii::$app->session->setFlash('error', 'could not save images');
             }
+            $attributes = \Yii::$app->request->post('goodsAttributes');
+            $model->configureAttributes($attributes);
+            return $this->redirect(['/goods/view', 'id' => $model->id]);
         } else {
             $categories = Category::find()->select('name')->indexBy('id')->column();
 
             return $this->render('update', ['model' => $model, 'categories' => $categories]);
         }
+    }
+
+    public function actionDeleteAttribute()
+    {
+        $goodsId = \Yii::$app->request->post('goodsId');
+        $attributeId = \Yii::$app->request->post('attributeId');
+        $goodsAttribute = GoodsAttributeValue::findOne(['goods_id' => $goodsId, 'attribute_id' => $attributeId]);
+        $goodsAttribute->is_deleted = 1;
+        $goodsAttribute->save();
+
+        return $this->asJson([
+            'message' => 'Attribute deleted'
+        ]);
     }
 }

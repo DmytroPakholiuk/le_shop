@@ -4,6 +4,7 @@ namespace backend\controllers;
 
 use backend\models\CategorySearch;
 use common\models\Category;
+use yii\db\Query;
 use yii\filters\AccessControl;
 use yii\helpers\Url;
 use yii\web\Controller;
@@ -20,7 +21,7 @@ class CategoryController extends Controller
                 'class' => AccessControl::class,
                 'rules' => [
                     [
-                        'actions' => ['create', 'index', 'view', 'update'],
+                        'actions' => ['create', 'index', 'view', 'update', 'category-list'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -78,5 +79,30 @@ class CategoryController extends Controller
 
             return $this->render('update', ['category' => $category, 'categories' => $categories]);
         }
+    }
+
+    /**
+     * @param $q
+     * @param $id
+     * @return array[]
+     */
+    public function actionCategoryList($q = null, $id = null) {
+        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        $out = ['results' => ['id' => '', 'text' => '']];
+        if (!is_null($q)) {
+            $query = new Query;
+            $query->select('id, name AS text')
+                ->from('categories')
+                ->where(['like', 'name', $q])
+                ->limit(20);
+            $command = $query->createCommand();
+            $data = $command->queryAll();
+            $out['results'] = array_values($data);
+        }
+        elseif ($id > 0) {
+            $out['results'] = ['id' => $id, 'text' => Category::find($id)->name];
+        }
+
+        return $out;
     }
 }

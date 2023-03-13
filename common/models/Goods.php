@@ -17,8 +17,9 @@ use yii\web\UploadedFile;
  * @property int $target_credit_card
  * @property string $created_at
  * @property string $updated_at
- * @property-read array $goodsAttributes
  * @property-read GoodsImage[] $images
+ * @property-read GoodsAttributeValue[] $attributeValues
+ * @property-read Attribute[] $attributeNames
  */
 class Goods extends \yii\db\ActiveRecord
 {
@@ -77,15 +78,40 @@ class Goods extends \yii\db\ActiveRecord
      */
     public function deleteOldImages()
     {
-        $images = GoodsImage::find(['goods_id' => $this->id])->all();
-        if ($images === null){
-            return;
-        }
-        foreach ($images as $image){
+        //GoodsImage::deleteAll(['goods_id' => $this->id]);
+        foreach ($this->images as $image){
             $image->delete();
         }
         FileHelper::removeDirectory('images/' . $this->id);
+        //todo: integrate kortiks fileinput
     }
+
+    /**
+     * @return void
+     *
+     * Applies attributes received from POST to this Goods model
+     */
+    public function configureAttributes($attributes)
+    {
+        if (\Yii::$app->request->post('deleteOldAttributes')){
+            GoodsAttributeValue::deleteAll(['goods_id' => $this->id]);
+        }// todo implement deletion via ajax
+        foreach ($attributes as $attribute){
+            $attributeName = Attribute::findOne(['name' => $attribute['title']]) ?? new Attribute(['name' => $attribute['title']]);
+            if ($attributeName->isNewRecord){
+                $attributeName->save();
+            }
+            $attributeValue = GoodsAttributeValue::find()->where(['goods_id' => $this->id])->
+                andWhere(['attribute_id' => $attributeName->id])->andWhere(['is_deleted' => 0])->one() ?? new GoodsAttributeValue();
+            if ($attributeValue->isNewRecord){
+                $attributeValue->goods_id = $this->id;
+                $attributeValue->attribute_id = $attributeName->id;
+            }
+            $attributeValue->value = $attribute['value'];
+            $attributeValue->save();
+        }
+    }
+
     /**
      * @return \yii\db\ActiveQuery
      */
@@ -110,12 +136,18 @@ class Goods extends \yii\db\ActiveRecord
     }
     /**
      * @return \yii\db\ActiveQuery
-     * @throws \yii\base\InvalidConfigException
      */
-    /*
-    public function getGoodsAttributes()
+    public function getAttributeNames()
     {
         return $this->hasMany(Attribute::class, ['id' => 'goods_id'])->viaTable('goodsAttributes', ['attribute_id' => 'id']);
     }
-    */
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getAttributeValues()
+    {
+        return $this->hasMany(GoodsAttributeValue::class, ['goods_id' => 'id']);
+    }
+
 }

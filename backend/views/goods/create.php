@@ -10,4 +10,4 @@ $this->title = 'Create a new item'; ?>
 
 <h1>Create a new item</h1>
 
-<?php echo $this->render('goods_form', ['model' => $model, 'categories' => $categories, 'isNew' => true]); ?>
+<?php echo $this->render('goods_form', ['model' => $model, 'categories' => $categories]); ?>

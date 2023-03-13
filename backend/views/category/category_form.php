@@ -1,7 +1,10 @@
 <?php
 
 use common\models\Category;
+use kartik\select2\Select2;
+use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
+use yii\web\JsExpression;
 use yii\widgets\ActiveForm;
 
 /**
@@ -18,7 +21,27 @@ $form = ActiveForm::begin(['id' => 'category_create_form']);?>
 
 <?= $form->field($category, 'status')->dropDownList([0 => 'inactive', 1 => 'active', ], ['prompt' => 'Select status'])?>
 
-<?= $form->field($category, 'parent_id')->dropDownList($categories, ['prompt' => 'Select parent category'])->label('Parent category'); ?>
+<?php /*= $form->field($category, 'parent_id')->dropDownList($categories, ['prompt' => 'Select parent category'])->label('Parent category'); */?>
+
+<?= $form->field($category, 'parent_id')->widget(Select2::class, [
+    'model' => $category,
+//    'data' => $categories,
+    'options' => [
+        'placeholder' => 'Start entering category:',
+
+        ],
+//    'data' => $dataList
+    'pluginOptions' => [
+        'minimumInputLength' => 3,
+            'ajax' => [
+            'url' => \yii\helpers\Url::to('category-list'),
+            'dataType' => 'json',
+            'data' => new JsExpression('function(params) { return {q:params.term}; }')
+            ],
+        ]
+]) ?>
+
+
 
 <?= Html::submitButton('submit', ['class' => 'btn btn-primary']);?>
 

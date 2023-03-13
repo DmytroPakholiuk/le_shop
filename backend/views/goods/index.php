@@ -6,6 +6,8 @@
  * @var yii\web\View $this
  */
 
+use yii\grid\ActionColumn;
+
 $this->title = 'Goods List';?>
 
 <?php echo \yii\grid\GridView::widget([
@@ -34,9 +36,12 @@ $this->title = 'Goods List';?>
             'label' => 'Author'
         ],
         'created_at:datetime',
-        'updated_at:datetime'
+        'updated_at:datetime',
+        [
+                'class' => ActionColumn::class,
+        ]
+        ],
 
-    ]
 ]); ?>
 <br>
 <a href = <?php echo \yii\helpers\Url::to(['goods/create']); ?>>Create a new item</a>
