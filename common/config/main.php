@@ -12,4 +12,7 @@ return [
             'class' => \yii\caching\FileCache::class,
         ],
     ],
+    'params' => [
+        'bsVersion' => '5.x'
+        ]
 ];

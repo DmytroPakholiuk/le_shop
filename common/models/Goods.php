@@ -83,6 +83,7 @@ class Goods extends \yii\db\ActiveRecord
             $image->delete();
         }
         FileHelper::removeDirectory('images/' . $this->id);
+        //todo: integrate kortiks fileinput
     }
 
     /**
