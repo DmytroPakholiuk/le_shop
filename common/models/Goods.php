@@ -102,7 +102,7 @@ class Goods extends \yii\db\ActiveRecord
                 $attributeName->save();
             }
             $attributeValue = GoodsAttributeValue::find()->where(['goods_id' => $this->id])->
-                andWhere(['attribute_id' => $attributeName->id])->one() ?? new GoodsAttributeValue();
+                andWhere(['attribute_id' => $attributeName->id])->andWhere(['is_deleted' => 0])->one() ?? new GoodsAttributeValue();
             if ($attributeValue->isNewRecord){
                 $attributeValue->goods_id = $this->id;
                 $attributeValue->attribute_id = $attributeName->id;
