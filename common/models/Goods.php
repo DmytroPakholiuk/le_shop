@@ -100,10 +100,13 @@ class Goods extends \yii\db\ActiveRecord
             $attributeName = Attribute::findOne(['name' => $attribute['title']]) ?? new Attribute(['name' => $attribute['title']]);
             if ($attributeName->isNewRecord){
                 $attributeName->save();
-            }// todo find existing attr with that name
-            $attributeValue = new GoodsAttributeValue();
-            $attributeValue->goods_id = $this->id;
-            $attributeValue->attribute_id = $attributeName->id;
+            }
+            $attributeValue = GoodsAttributeValue::find()->where(['goods_id' => $this->id])->
+                andWhere(['attribute_id' => $attributeName->id])->one() ?? new GoodsAttributeValue();
+            if ($attributeValue->isNewRecord){
+                $attributeValue->goods_id = $this->id;
+                $attributeValue->attribute_id = $attributeName->id;
+            }
             $attributeValue->value = $attribute['value'];
             $attributeValue->save();
         }

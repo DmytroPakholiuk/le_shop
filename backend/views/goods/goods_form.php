@@ -45,6 +45,7 @@ $form = ActiveForm::begin(); ?>
 <?php echo Html::button('Add Attribute', ['class' => 'btn btn-primary', 'onclick' => 'addAttribute()']); ?>
 
 <div id="attributeForm">
+    <p>Any existing attributes with the same name will be overwritten</p>
 
 </div>
 
