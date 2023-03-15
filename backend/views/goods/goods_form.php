@@ -6,12 +6,16 @@
  * @var \yii\web\View $this
  */
 
+use kartik\file\FileInput;
+use kartik\icons\FontAwesomeAsset;
 use kartik\select2\Select2;
 use yii\helpers\Html;
+use yii\helpers\Url;
 use yii\web\JsExpression;
 use yii\widgets\ActiveForm;
 
 $this->registerJsFile('/js/goods_form.js');
+FontAwesomeAsset::register($this);
 
 $form = ActiveForm::begin(); ?>
 
@@ -53,7 +57,24 @@ $form = ActiveForm::begin(); ?>
     echo Html::checkbox('deleteOldAttributes', false, ['label' => 'delete all old attributes?']);
 } ?><br>
 
-<?= $form->field($model, 'imageFiles[]')->fileInput(['multiple' => true, 'accept' => 'image/*'])->label('Add images') ?>
+<?php //echo $form->field($model, 'imageFiles[]')->fileInput(['multiple' => true, 'accept' => 'image/*'])->label('Add images') ?>
+
+<?php
+$initialPreview = [];
+foreach ($model->images as $image){
+    $initialPreview[] = Url::to('/'.$image->path);
+}
+echo $form->field($model, 'imageFiles[]')->label('Add images')->widget(FileInput::class,[
+        'options'=>[
+            'multiple'=>true
+        ],
+        'pluginOptions' => [
+            'initialPreview' => $initialPreview,
+            'initialPreviewAsData'=>true,
+            'overwriteInitial'=>false,
+            'maxFileSize'=>2800
+    ]
+]) ?>
 
 <?php if (!$model->isNewRecord) {
     echo Html::checkbox('deleteOldImages', false, ['label' => 'delete all old images?']);

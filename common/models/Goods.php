@@ -96,19 +96,21 @@ class Goods extends \yii\db\ActiveRecord
         if (\Yii::$app->request->post('deleteOldAttributes')){
             GoodsAttributeValue::deleteAll(['goods_id' => $this->id]);
         }// todo implement deletion via ajax
-        foreach ($attributes as $attribute){
-            $attributeName = Attribute::findOne(['name' => $attribute['title']]) ?? new Attribute(['name' => $attribute['title']]);
-            if ($attributeName->isNewRecord){
-                $attributeName->save();
-            }
-            $attributeValue = GoodsAttributeValue::find()->where(['goods_id' => $this->id])->
+        if (isset($attributes)){
+            foreach ($attributes as $attribute){
+                $attributeName = Attribute::findOne(['name' => $attribute['title']]) ?? new Attribute(['name' => $attribute['title']]);
+                if ($attributeName->isNewRecord){
+                    $attributeName->save();
+                }
+                $attributeValue = GoodsAttributeValue::find()->where(['goods_id' => $this->id])->
                 andWhere(['attribute_id' => $attributeName->id])->andWhere(['is_deleted' => 0])->one() ?? new GoodsAttributeValue();
-            if ($attributeValue->isNewRecord){
-                $attributeValue->goods_id = $this->id;
-                $attributeValue->attribute_id = $attributeName->id;
+                if ($attributeValue->isNewRecord){
+                    $attributeValue->goods_id = $this->id;
+                    $attributeValue->attribute_id = $attributeName->id;
+                }
+                $attributeValue->value = $attribute['value'];
+                $attributeValue->save();
             }
-            $attributeValue->value = $attribute['value'];
-            $attributeValue->save();
         }
     }
 
