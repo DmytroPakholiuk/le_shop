@@ -7,10 +7,14 @@ use common\models\Attribute;
 use common\models\GoodsAttributeValue;
 use common\models\Category;
 use common\models\Goods;
+use common\models\GoodsImage;
 use yii\base\Exception;
 use yii\data\ActiveDataProvider;
+use yii\db\Query;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
+use yii\web\BadRequestHttpException;
+use yii\web\NotFoundHttpException;
 use yii\web\UploadedFile;
 
 class GoodsController extends \yii\web\Controller
@@ -25,7 +29,7 @@ class GoodsController extends \yii\web\Controller
                 'class' => AccessControl::class,
                 'rules' => [
                     [
-                        'actions' => ['create', 'index', 'view', 'update', 'delete-attribute'],
+                        'actions' => ['create', 'index', 'view', 'update', 'delete-attribute', 'delete-image', 'upload-image', 'goods-list'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -81,7 +85,9 @@ class GoodsController extends \yii\web\Controller
      */
     public function actionUpdate($id)
     {
-        $model = Goods::findOne($id);
+        if(!$model = Goods::findOne($id)){
+            throw new NotFoundHttpException();
+        };
         if ($model->load(\Yii::$app->request->post()) && $model->validate()){
             $model->save();
             $model->imageFiles = UploadedFile::getInstances($model, 'imageFiles');
@@ -101,6 +107,9 @@ class GoodsController extends \yii\web\Controller
         }
     }
 
+    /**
+     * @return \yii\web\Response
+     */
     public function actionDeleteAttribute()
     {
         $goodsId = \Yii::$app->request->post('goodsId');
@@ -112,5 +121,56 @@ class GoodsController extends \yii\web\Controller
         return $this->asJson([
             'message' => 'Attribute deleted'
         ]);
+    }
+
+    /**
+     * @return \yii\web\Response
+     */
+    public function actionDeleteImage()
+    {
+        $key = \Yii::$app->request->post('key');
+        GoodsImage::deleteImage($key);
+        return $this->asJson(['message' => $key ? 'Image deleted' : 'Something went wrong']);
+    }
+
+    public function actionUploadImage()
+    {
+        $goods_id = (int)\Yii::$app->request->post('goods_id');
+        var_dump(\Yii::$app->request->post('goods_id'));
+        if (!($goods_id === 'null')){
+            $model = Goods::findOne($goods_id);
+        } else {
+            throw new BadRequestHttpException();
+//            $model = new Goods();
+        }
+        $model->imageFiles = UploadedFile::getInstances($model, 'imageFiles');
+        if (!$model->upload()) {
+                \Yii::$app->session->setFlash('error', 'could not save images');
+        }
+    }
+
+    /**
+     * @param $q
+     * @param $id
+     * @return array[]
+     */
+    public function actionGoodsList($q = null, $id = null) {
+        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        $out = ['results' => ['id' => '', 'text' => '']];
+        if (!is_null($q)) {
+            $query = new Query;
+            $query->select('id, name AS text')
+                ->from('goods')
+                ->where(['like', 'name', $q])
+                ->limit(20);
+            $command = $query->createCommand();
+            $data = $command->queryAll();
+            $out['results'] = array_values($data);
+        }
+        elseif ($id > 0) {
+            $out['results'] = ['id' => $id, 'text' => Goods::find($id)->name];
+        }
+
+        return $out;
     }
 }

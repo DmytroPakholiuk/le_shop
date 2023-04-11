@@ -86,6 +86,7 @@ class Goods extends \yii\db\ActiveRecord
         //todo: integrate kortiks fileinput
     }
 
+
     /**
      * @return void
      *
@@ -150,6 +151,10 @@ class Goods extends \yii\db\ActiveRecord
     public function getAttributeValues()
     {
         return $this->hasMany(GoodsAttributeValue::class, ['goods_id' => 'id']);
+    }
+
+    public function getOrders(){
+        return $this->hasMany(Order::class, ['id' => 'order_id'])->viaTable('orders_goods', ['goods_id' => 'id']);
     }
 
 }

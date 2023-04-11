@@ -61,10 +61,13 @@ $form = ActiveForm::begin(); ?>
 
 <?php
 $initialPreview = [];
+$initialPreviewConfig = [];
 foreach ($model->images as $image){
     $initialPreview[] = Url::to('/'.$image->path);
+    $initialPreviewConfig[] = ['key' => $image->id];
 }
-echo $form->field($model, 'imageFiles[]')->label('Add images')->widget(FileInput::class,[
+if (!$model->isNewRecord){
+    echo $form->field($model, 'imageFiles[]')->label('Add images')->widget(FileInput::class,[
         'options'=>[
             'multiple'=>true
         ],
@@ -72,9 +75,20 @@ echo $form->field($model, 'imageFiles[]')->label('Add images')->widget(FileInput
             'initialPreview' => $initialPreview,
             'initialPreviewAsData'=>true,
             'overwriteInitial'=>false,
-            'maxFileSize'=>2800
-    ]
-]) ?>
+            'maxFileSize'=>2800,
+            'deleteUrl' => Url::to('/goods/delete-image'),
+            'initialPreviewConfig' => $initialPreviewConfig,
+            'uploadUrl' => Url::to(['/goods/upload-image']),
+            'uploadExtraData' => [
+                'goods_id' => $model->id
+            ],
+        ]
+    ]);
+} else {
+    echo "You will be able to add images when updating the item <br>";
+}
+
+?>
 
 <?php if (!$model->isNewRecord) {
     echo Html::checkbox('deleteOldImages', false, ['label' => 'delete all old images?']);

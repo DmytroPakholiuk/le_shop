@@ -8,6 +8,7 @@ use yii\db\Query;
 use yii\filters\AccessControl;
 use yii\helpers\Url;
 use yii\web\Controller;
+use yii\web\NotFoundHttpException;
 
 class CategoryController extends Controller
 {
@@ -71,7 +72,9 @@ class CategoryController extends Controller
      * @return string|\yii\web\Response
      */
     public function actionUpdate($id){
-        $category = Category::findOne($id);
+        if(!$category = Category::findOne($id)){
+            throw new NotFoundHttpException();
+        };
         if (\Yii::$app->request->isPost && $category->load(\Yii::$app->request->post()) && $category->save()) {
             return $this->redirect(Url::to(['view', 'id' => $category->id]));
         } else {
