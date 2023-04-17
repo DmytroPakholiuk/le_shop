@@ -42,13 +42,7 @@ class CategorySearch extends \common\models\Category
         $query->andFilterWhere(['like', 'name', $this->name]);
         $query->andFilterWhere(['like', 'description', $this->description]);
 
-        if ($this->created_between){
-            $this->created_before = $this->parseTime($this->created_between)[0];
-            $this->created_after = $this->parseTime($this->created_between)[1];
-
-            $query->andFilterWhere(['>=', 'created_at', $this->created_before]);
-            $query->andFilterWhere(['<=', 'created_at', $this->created_after]);
-        }
+        $this->filterDate($this->created_between, 'created_at', $query);
         //
         return $dataProvider;
     }
