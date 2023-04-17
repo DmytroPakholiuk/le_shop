@@ -13,6 +13,8 @@ $this->title = 'Category List';?>
 
 <h1>Category List</h1>
 
+<?php echo $this->render('search', ['model' => $searchModel, 'categories' => $categories]);?>
+
 <?php echo \yii\grid\GridView::widget([
         'dataProvider' => $dataProvider,
     'filterModel' => $searchModel,
@@ -44,6 +46,7 @@ $this->title = 'Category List';?>
                     return $model->parent->name ?? null;
                 }
         ],
+        'created_at:datetime',
         [
                 'class' => ActionColumn::class,
         ]

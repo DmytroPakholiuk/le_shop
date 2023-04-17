@@ -37,6 +37,7 @@ class CategoryController extends Controller
     {
         $searchModel = new CategorySearch();
         $dataProvider = $searchModel->search(\Yii::$app->request->get());
+//        var_dump(\Yii::$app->request->get());die();
         $categories = Category::find()->select('name')->indexBy('id')->column();
         return $this->render('index', ['searchModel' => $searchModel, 'dataProvider' => $dataProvider, 'categories' => $categories]);
     }

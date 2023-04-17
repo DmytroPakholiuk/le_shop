@@ -27,7 +27,9 @@ class GoodsSearch extends \common\models\Goods
         } else {
             $dataProvider->query->andFilterWhere(['id' => $this->id])
                 ->andFilterWhere(['like', 'name', $this->name])
+//                ->andFilterWhere(['like', 'price', $this->price])
                 ->andFilterWhere(['category_id' => $this->category_id])
+                ->andFilterWhere(['price' => $this->price])
                 ->andFilterWhere(['author_id' => $this->author_id]);
 
             return $dataProvider;
