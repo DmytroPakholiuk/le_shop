@@ -2,11 +2,19 @@
 
 namespace backend\models;
 
+use common\models\DateParser;
 use common\models\Goods;
 use yii\data\ActiveDataProvider;
 
 class GoodsSearch extends \common\models\Goods
 {
+    use DateParser;
+
+    public $created_between;
+
+    public $price_from;
+    public $price_to;
+
     /**
      * @return array|array[]
      */
@@ -14,8 +22,8 @@ class GoodsSearch extends \common\models\Goods
     {
         return [
             [['id', 'available', 'category_id', 'author_id'], 'integer'],
-            [['name'], 'string'],
-            ['price', 'double']
+            [['name', 'created_between'], 'string'],
+            [['price', 'price_from', 'price_to'], 'double']
         ];
     }
     public function search(array $params)
@@ -29,8 +37,12 @@ class GoodsSearch extends \common\models\Goods
                 ->andFilterWhere(['like', 'name', $this->name])
 //                ->andFilterWhere(['like', 'price', $this->price])
                 ->andFilterWhere(['category_id' => $this->category_id])
-                ->andFilterWhere(['price' => $this->price])
+                ->andFilterWhere(['>=', 'price', $this->price_from])
+                ->andFilterWhere(['<=', 'price', $this->price_to])
                 ->andFilterWhere(['author_id' => $this->author_id]);
+
+            $this->filterDate($this->created_between, 'created_at', $query);
+
 
             return $dataProvider;
         }

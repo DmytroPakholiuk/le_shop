@@ -12,8 +12,6 @@ class CategorySearch extends \common\models\Category
     use DateParser;
 
     public $created_between;
-    public $created_before;
-    public $created_after;
 
     public function rules()
     {

@@ -10,6 +10,8 @@ use yii\grid\ActionColumn;
 
 $this->title = 'Goods List';?>
 
+<?php echo $this->render('search', ['model' => $searchModel]); ?>
+
 <?php echo \yii\grid\GridView::widget([
     'dataProvider' => $dataProvider,
     'filterModel' => $searchModel,

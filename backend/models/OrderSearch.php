@@ -33,7 +33,7 @@ class OrderSearch extends \common\models\Order
         }
         $query->andFilterWhere(['delivery_method' => $this->delivery_method]);
         $query->andFilterWhere(['payment_method' => $this->payment_method]);
-        $query->andFilterWhere(['like', 'delivery_address', $this->name]);
+        $query->andFilterWhere(['like', 'delivery_address', $this->delivery_address]);
         //
         return $dataProvider;
     }

@@ -34,6 +34,7 @@ use yii\widgets\ActiveForm;
         ],
 //    'data' => $dataList
         'pluginOptions' => [
+            'allowClear' => true,
             'minimumInputLength' => 2,
             'ajax' => [
                 'url' => \yii\helpers\Url::to('category-list'),
