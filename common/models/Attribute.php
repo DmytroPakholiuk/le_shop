@@ -24,6 +24,7 @@ class Attribute extends \yii\db\ActiveRecord
     {
         return [
             ['name', 'string'],
+            ['name', 'required'],
             [['created_at','updated_at'], 'safe'],
         ];
     }

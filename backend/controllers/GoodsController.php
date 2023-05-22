@@ -136,17 +136,22 @@ class GoodsController extends \yii\web\Controller
     public function actionUploadImage()
     {
         $goods_id = (int)\Yii::$app->request->post('goods_id');
-        var_dump(\Yii::$app->request->post('goods_id'));
+        var_dump(\Yii::$app->request->isPjax);
+        var_dump(\Yii::$app->request->post());
         if (!($goods_id === 'null')){
             $model = Goods::findOne($goods_id);
+            var_dump($model);die;
         } else {
             throw new BadRequestHttpException();
 //            $model = new Goods();
         }
         $model->imageFiles = UploadedFile::getInstances($model, 'imageFiles');
+//        var_dump($model->imageFiles);
         if (!$model->upload()) {
                 \Yii::$app->session->setFlash('error', 'could not save images');
         }
+//        return $this->asJson([]);
+        return $this->render('update', ['model' => $model]);
     }
 
     /**

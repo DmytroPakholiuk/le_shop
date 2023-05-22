@@ -13,6 +13,7 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\web\JsExpression;
 use yii\widgets\ActiveForm;
+use yii\widgets\Pjax;
 
 $this->registerJsFile('/js/goods_form.js');
 FontAwesomeAsset::register($this);
@@ -67,7 +68,11 @@ foreach ($model->images as $image){
     $initialPreviewConfig[] = ['key' => $image->id];
 }
 if (!$model->isNewRecord){
-    echo $form->field($model, 'imageFiles[]')->label('Add images')->widget(FileInput::class,[
+    Pjax::begin();
+
+    echo $form->field($model, 'images[]')->label('Delete existing images')->widget(FileInput::class,[
+//    echo FileInput::widget([
+//            'name' => 'Delete old images',
         'options'=>[
             'multiple'=>true
         ],
@@ -76,16 +81,52 @@ if (!$model->isNewRecord){
             'initialPreviewAsData'=>true,
             'overwriteInitial'=>false,
             'maxFileSize'=>2800,
-            'deleteUrl' => Url::to('/goods/delete-image'),
+//            'deleteUrl' => Url::to('/goods/delete-image'),
             'initialPreviewConfig' => $initialPreviewConfig,
             'uploadUrl' => Url::to(['/goods/upload-image']),
+//            'uploadExtraData' => [
+//                'goods_id' => $model->id
+//            ],
+            'fileActionSettings' => [
+                    'showDelete' => false,
+                    'showUpload' => false,
+            ],
+            'showUpload' => false
+        ]
+    ]);
+
+    echo $form->field($model, 'imageFiles[]')->label('Add images to the goods')->widget(FileInput::class,[
+        'options'=>[
+            'multiple'=>true
+        ],
+        'pluginOptions' => [
+            'showUpload' => false,
+            'overwriteInitial'=>false,
+            'maxFileSize'=>2800,
             'uploadExtraData' => [
                 'goods_id' => $model->id
             ],
         ]
     ]);
+//    echo Html::submitButton('Upload images', ['/goods/upload-image']);
+    echo Html::a('upload images', Url::to('/goods/upload-image', []), ['class' => 'btn btn-primary']);
+
+    Pjax::end();
+
 } else {
-    echo "You will be able to add images when updating the item <br>";
+    echo $form->field($model, 'imageFiles[]')->label('Add images to the goods')->widget(FileInput::class,[
+        'options'=>[
+            'multiple'=>true
+        ],
+        'pluginOptions' => [
+            'showUpload' => false,
+            'overwriteInitial'=>false,
+            'maxFileSize'=>2800,
+            'uploadExtraData' => [
+                'goods_id' => $model->id
+            ],
+        ]
+    ]);
 }
 
 ?>

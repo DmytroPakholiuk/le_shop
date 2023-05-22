@@ -29,6 +29,7 @@ class GoodsAttributeValue extends \yii\db\ActiveRecord
         return [
             [['goods_id', 'attribute_id', 'is_deleted'], 'integer'],
             ['value', 'string'],
+            [['value', 'attribute_id', 'goods_id'], 'required'],
             [['created_at','updated_at'], 'safe'],
         ];
     }
