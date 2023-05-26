@@ -23,7 +23,10 @@
         "kartik-v/bootstrap-fileinput": "dev-master",
         "kartik-v/yii2-widget-fileinput": "dev-master",
         "kartik-v/yii2-icons": "dev-master",
-        "kartik-v/yii2-date-range": "dev-master"
+        "kartik-v/yii2-date-range": "dev-master",
+        "guzzlehttp/guzzle": "^7.0",
+        "aki/yii2-bot-telegram": "*",
+      "ext-json": "*"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.1.0",

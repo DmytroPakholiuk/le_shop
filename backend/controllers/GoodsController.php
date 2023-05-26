@@ -8,6 +8,7 @@ use common\models\GoodsAttributeValue;
 use common\models\Category;
 use common\models\Goods;
 use common\models\GoodsImage;
+use common\models\RevAiClient;
 use yii\base\Exception;
 use yii\data\ActiveDataProvider;
 use yii\db\Query;
@@ -29,7 +30,8 @@ class GoodsController extends \yii\web\Controller
                 'class' => AccessControl::class,
                 'rules' => [
                     [
-                        'actions' => ['create', 'index', 'view', 'update', 'delete-attribute', 'delete-image', 'upload-image', 'goods-list'],
+                        'actions' => ['create', 'index', 'view', 'update', 'delete-attribute',
+                            'delete-image', 'upload-image', 'goods-list', 'find-by-audio'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -133,6 +135,18 @@ class GoodsController extends \yii\web\Controller
         return $this->asJson(['message' => $key ? 'Image deleted' : 'Something went wrong']);
     }
 
+    public function actionFindByAudio(){
+        if ($this->request->isGet){
+            return $this->render('audio');
+        }
+        if ($this->request->isPost){
+
+            $client = new RevAiClient();
+            $client->uploadedFile = UploadedFile::getInstance($client, 'uploadedFile');
+
+        }
+    }
+
     public function actionUploadImage()
     {
         $goods_id = (int)\Yii::$app->request->post('goods_id');
@@ -140,7 +154,7 @@ class GoodsController extends \yii\web\Controller
         var_dump(\Yii::$app->request->post());
         if (!($goods_id === 'null')){
             $model = Goods::findOne($goods_id);
-            var_dump($model);die;
+//            var_dump($model);die;
         } else {
             throw new BadRequestHttpException();
 //            $model = new Goods();
