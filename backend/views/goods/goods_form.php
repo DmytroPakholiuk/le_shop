@@ -2,7 +2,7 @@
 
 /**
  * @var \common\models\Goods $model
- * @var array $categories
+// * @var array $categories
  * @var \yii\web\View $this
  */
 
@@ -70,30 +70,32 @@ foreach ($model->images as $image){
 if (!$model->isNewRecord){
     Pjax::begin();
 
-    echo $form->field($model, 'images[]')->label('Delete existing images')->widget(FileInput::class,[
+    if (!empty($model->images)) {
+        echo $form->field($model, 'images[]')->label('Delete existing images')->widget(FileInput::class,[
 //    echo FileInput::widget([
 //            'name' => 'Delete old images',
-        'options'=>[
-            'multiple'=>true
-        ],
-        'pluginOptions' => [
-            'initialPreview' => $initialPreview,
-            'initialPreviewAsData'=>true,
-            'overwriteInitial'=>false,
-            'maxFileSize'=>2800,
-//            'deleteUrl' => Url::to('/goods/delete-image'),
-            'initialPreviewConfig' => $initialPreviewConfig,
-            'uploadUrl' => Url::to(['/goods/upload-image']),
+            'options'=>[
+                'multiple'=>true
+            ],
+            'pluginOptions' => [
+                'initialPreview' => $initialPreview,
+                'initialPreviewAsData'=>true,
+                'overwriteInitial'=>false,
+                'maxFileSize'=>2800,
+                'deleteUrl' => Url::to('/goods/delete-image'),
+                'initialPreviewConfig' => $initialPreviewConfig,
+                'uploadUrl' => Url::to(['/goods/upload-image']),
 //            'uploadExtraData' => [
 //                'goods_id' => $model->id
 //            ],
-            'fileActionSettings' => [
+                'fileActionSettings' => [
                     'showDelete' => false,
                     'showUpload' => false,
-            ],
-            'showUpload' => false
-        ]
-    ]);
+                ],
+                'showUpload' => false
+            ]
+        ]);
+    }
 
     echo $form->field($model, 'imageFiles[]')->label('Add images to the goods')->widget(FileInput::class,[
         'options'=>[
@@ -108,8 +110,8 @@ if (!$model->isNewRecord){
             ],
         ]
     ]);
-//    echo Html::submitButton('Upload images', ['/goods/upload-image']);
-    echo Html::a('upload images', Url::to('/goods/upload-image', []), ['class' => 'btn btn-primary']);
+//    echo Html::submitButton('Upload images', ['/goods/update', 'id' => $model->id]);
+//    echo Html::a('upload images', Url::to('/goods/upload-image', []), ['class' => 'btn btn-primary']);
 
     Pjax::end();
 

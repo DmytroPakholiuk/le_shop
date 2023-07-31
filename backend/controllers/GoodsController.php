@@ -8,7 +8,6 @@ use common\models\GoodsAttributeValue;
 use common\models\Category;
 use common\models\Goods;
 use common\models\GoodsImage;
-use common\models\RevAiClient;
 use yii\base\Exception;
 use yii\data\ActiveDataProvider;
 use yii\db\Query;
@@ -31,7 +30,8 @@ class GoodsController extends \yii\web\Controller
                 'rules' => [
                     [
                         'actions' => ['create', 'index', 'view', 'update', 'delete-attribute',
-                            'delete-image', 'upload-image', 'goods-list', 'find-by-audio'],
+                            'delete-image', 'upload-image', 'goods-list', 'find-by-audio', 'vue-test',
+                            'get-main-goods-thumbnail', 'get-main-goods-thumbnails'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -101,6 +101,9 @@ class GoodsController extends \yii\web\Controller
             }
             $attributes = \Yii::$app->request->post('goodsAttributes');
             $model->configureAttributes($attributes);
+            if (\Yii::$app->request->isPjax){
+                return $this->render('update', ['model' => $model]);
+            }
             return $this->redirect(['/goods/view', 'id' => $model->id]);
         } else {
             $categories = Category::find()->select('name')->indexBy('id')->column();
@@ -135,23 +138,12 @@ class GoodsController extends \yii\web\Controller
         return $this->asJson(['message' => $key ? 'Image deleted' : 'Something went wrong']);
     }
 
-    public function actionFindByAudio(){
-        if ($this->request->isGet){
-            return $this->render('audio');
-        }
-        if ($this->request->isPost){
-
-            $client = new RevAiClient();
-            $client->uploadedFile = UploadedFile::getInstance($client, 'uploadedFile');
-
-        }
-    }
 
     public function actionUploadImage()
     {
         $goods_id = (int)\Yii::$app->request->post('goods_id');
         var_dump(\Yii::$app->request->isPjax);
-        var_dump(\Yii::$app->request->post());
+        var_dump(\Yii::$app->request->post());die();
         if (!($goods_id === 'null')){
             $model = Goods::findOne($goods_id);
 //            var_dump($model);die;
@@ -166,6 +158,41 @@ class GoodsController extends \yii\web\Controller
         }
 //        return $this->asJson([]);
         return $this->render('update', ['model' => $model]);
+    }
+
+    /**
+     * returns a JSON about main thumbnail of selected item
+     *
+     * @param $id
+     * @return \yii\web\Response
+     *
+     * @throws NotFoundHttpException
+     */
+    public function actionGetMainGoodsThumbnail($id)
+    {
+        try {
+            $goods = Goods::findOne($id);
+            $imageRecord = GoodsImage::findOne(GoodsImage::find()->where(['goods_id' => $goods->id])->min('id'));
+            if ($imageRecord === null){
+                throw new NotFoundHttpException();
+            }
+        } catch (\Exception $exception) {
+            throw new NotFoundHttpException('This item does not exist or does not have any images');
+        }
+        return $this->asJson([
+            'id' => $imageRecord->id,
+            'goods_id' => $imageRecord->goods_id,
+            'uri' => '/' . $imageRecord->path,
+            'width' => $imageRecord->width,
+            'height' => $imageRecord->height,
+            'size' => $imageRecord->size
+        ]);
+    }
+
+
+    public function actionGetMainGoodsThumbnails()
+    {
+        $requestJson = \Yii::$app->request->post();
     }
 
     /**
@@ -192,4 +219,11 @@ class GoodsController extends \yii\web\Controller
 
         return $out;
     }
+
+    public function actionVueTest()
+    {
+        return $this->render('vue_test');
+    }
+
+
 }

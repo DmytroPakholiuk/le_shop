@@ -59,16 +59,23 @@ class Goods extends \yii\db\ActiveRecord
             foreach ($this->imageFiles as $file) {
                 FileHelper::createDirectory("images/{$this->id}");
                 $path = 'images/' . $this->id . '/' . $file->baseName . '.' . $file->extension;
+
                 if($file->saveAs($path)){
-                    $fileRecord = new GoodsImage();
+                    $fileRecord = GoodsImage::find()->where(['goods_id' => $this->id])->andWhere(['path' => $path])->one() ?? new GoodsImage();
                     $fileRecord->size = $file->size;
                     $fileRecord->path = $path;
                     $fileRecord->goods_id = $this->id;
+                    $fileRecord->save();
+
+                    $im = new \Imagick($path);
+                    $fileRecord->height = $im->getImageHeight();
+                    $fileRecord->width = $im->getImageWidth();
                     $fileRecord->save();
                 }
             }
             return true;
         } else {
+//            var_dump($this->errors);die();
             return false;
         }
     }
@@ -83,7 +90,6 @@ class Goods extends \yii\db\ActiveRecord
             $image->delete();
         }
         FileHelper::removeDirectory('images/' . $this->id);
-        //todo: integrate kortiks fileinput
     }
 
 
@@ -96,7 +102,7 @@ class Goods extends \yii\db\ActiveRecord
     {
         if (\Yii::$app->request->post('deleteOldAttributes')){
             GoodsAttributeValue::deleteAll(['goods_id' => $this->id]);
-        }// todo implement deletion via ajax
+        }
         if (isset($attributes)){
             foreach ($attributes as $attribute){
                 $attributeName = Attribute::findOne(['name' => $attribute['title']]) ?? new Attribute(['name' => $attribute['title']]);
