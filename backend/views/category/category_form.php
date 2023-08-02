@@ -32,7 +32,7 @@ $form = ActiveForm::begin(['id' => 'category_create_form']);?>
         ],
 //    'data' => $dataList
     'pluginOptions' => [
-        'minimumInputLength' => 3,
+        'minimumInputLength' => 2,
             'ajax' => [
             'url' => \yii\helpers\Url::to('category-list'),
             'dataType' => 'json',

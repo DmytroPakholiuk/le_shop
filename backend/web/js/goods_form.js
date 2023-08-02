@@ -20,8 +20,10 @@ function addAttribute(){
     let attributeForm = $('#attributeForm');
 
     let inputs = attributeForm.find('input');
+    console.log(inputs);
+
     for (let input of inputs){
-        if (!input.val()){
+        if (!($(input).val())){
             alert('Please fill in existing attributes');
             return
         }
@@ -92,4 +94,9 @@ function addAttribute(){
 
      */
     i++
+}
+
+function uploadFiles(){
+
+
 }

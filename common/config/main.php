@@ -11,6 +11,15 @@ return [
         'cache' => [
             'class' => \yii\caching\FileCache::class,
         ],
+
+        'rabbit' => [
+            'class' => \common\components\AMQPManager::class,
+            'host' => 'localhost',
+            'port' => 5672,
+            'user' => 'guest',
+            'pass' => 'guest',
+            'vhost' => '/'
+        ]
     ],
     'params' => [
         'bsVersion' => '5.x'

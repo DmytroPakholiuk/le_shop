@@ -3,17 +3,21 @@
 namespace backend\models;
 
 use common\models\Category;
+use common\models\DateParser;
 use frontend\tests\functional\ContactCest;
 use yii\data\ActiveDataProvider;
 
 class CategorySearch extends \common\models\Category
 {
+    use DateParser;
+
+    public $created_between;
 
     public function rules()
     {
         return [
             [['id', 'status', 'parent_id'], 'integer'],
-            [['name', 'created_at', 'updated_at', 'description'], 'string'],
+            [['name', 'created_at', 'updated_at', 'description', 'created_between'], 'string'],
         ];
     }
     public function search(array $params)
@@ -35,6 +39,8 @@ class CategorySearch extends \common\models\Category
         $query->andFilterWhere(['parent_id' => $this->parent_id]);
         $query->andFilterWhere(['like', 'name', $this->name]);
         $query->andFilterWhere(['like', 'description', $this->description]);
+
+        $this->filterDate($this->created_between, 'created_at', $query);
         //
         return $dataProvider;
     }

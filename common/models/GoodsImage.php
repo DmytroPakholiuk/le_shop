@@ -3,6 +3,7 @@
 namespace common\models;
 
 use yii\db\ActiveRecord;
+use yii\helpers\FileHelper;
 
 /**
  * @property int $id
@@ -32,6 +33,7 @@ class GoodsImage extends ActiveRecord
     {
         return [
             [['size', 'height', 'width', 'goods_id'], 'integer'],
+            [['goods_id'], 'required'],
             [['path'], 'string'],
             [['created_at', 'updated_at'], 'safe']
         ];
@@ -42,5 +44,19 @@ class GoodsImage extends ActiveRecord
      */
     public function getGoods(){
         return $this->hasOne(Goods::class, ['id' => 'goods_id']);
+    }
+
+    /**
+     * @return bool
+     */
+    public static function deleteImage(int $id)
+    {
+        $image = GoodsImage::findOne($id);
+        if ($image == null) return false;
+
+        FileHelper::unlink($image->path);
+        $image->delete();
+
+        return true;
     }
 }
