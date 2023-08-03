@@ -2,12 +2,15 @@
 
 namespace backend\models;
 
+use common\models\DateParser;
 use common\models\Order;
 use yii\data\ActiveDataProvider;
 
 class OrderSearch extends \common\models\Order
 {
-    public function rules()
+    use DateParser;
+
+    public function rules(): array
     {
         return [
             [['id', 'status', 'delivery_method', 'payment_method', 'customer_id'], 'integer'],
@@ -34,6 +37,8 @@ class OrderSearch extends \common\models\Order
         $query->andFilterWhere(['delivery_method' => $this->delivery_method]);
         $query->andFilterWhere(['payment_method' => $this->payment_method]);
         $query->andFilterWhere(['like', 'delivery_address', $this->delivery_address]);
+
+        $this->filterDate($this->created_at, 'created_at', $query);
         //
         return $dataProvider;
     }
