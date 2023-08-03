@@ -12,9 +12,10 @@ trait DateParser
      *
      * takes a range string, returns array. [0] - starting date, [1] - ending date
      */
-    public function explodeTime($time)
+    public function explodeTime($time): array|bool
     {
-        $timeArr = explode(' - ', $time);
+//        $timeArr = explode(' - ', $time);
+        $timeArr = explode('--', $time);
 
         return $timeArr;
     }
@@ -27,14 +28,18 @@ trait DateParser
      *
      * Method to apply filter of dates from DatePicker`s request string
      */
-    public function filterDate($range, $colName, Query $query){
+    public function filterDate($range, $colName, Query $query): void
+    {
         if ($range){
             $arrRange = $this->explodeTime($range);
-            $after = $arrRange[0];
-            $before = $arrRange[1];
+            $after = $arrRange[0] ?? null;
+            $before = $arrRange[1] ?? null;
 
-            $query->andFilterWhere(['>=', $colName, $after]);
-            $query->andFilterWhere(['<=', $colName, $before]);
+            if ($after !== null && $before !== null) {
+                $query->andWhere(['between', $colName, $after, $before]);
+            }
+//            $query->andFilterWhere(['>=', $colName, $after]);
+//            $query->andFilterWhere(['<=', $colName, $before]);
         }
     }
 }

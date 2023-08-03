@@ -6,11 +6,12 @@
  * @var yii\web\View $this
  */
 
+use kartik\daterange\DateRangePicker;
 use yii\grid\ActionColumn;
 
 $this->title = 'Goods List';?>
 
-<?php echo $this->render('search', ['model' => $searchModel]); ?>
+<?php //echo $this->render('search', ['model' => $searchModel]); ?>
 
 <?php echo \yii\grid\GridView::widget([
     'dataProvider' => $dataProvider,
@@ -37,12 +38,56 @@ $this->title = 'Goods List';?>
             'attribute' => 'author.username',
             'label' => 'Author'
         ],
-        'created_at:datetime',
-        'updated_at:datetime',
+        [
+            'attribute' => 'created_at',
+            'filter' => DateRangePicker::widget([
+                'language' => 'uk-UK',
+                'model' => $searchModel,
+                'attribute' => 'created_at',
+                'convertFormat' => true,
+                'pluginOptions' => [
+                    'allowClear' => true,
+                    'showDropdowns' => true,
+                    'timePicker' => true,
+                    'timePicker24Hour' => true,
+                    'timePickerIncrement' => 1,
+                    'locale' => [
+                        'format' => 'Y-m-d H:i:00',
+                        'separator' => '--',
+                        'applyLabel' => 'Підтвердити',
+                        'cancelLabel' => 'Відміна',
+                    ],
+                    'opens' => 'right',
+                ]
+            ]),
+        ],
+        [
+            'attribute' => 'updated_at',
+            'filter' => DateRangePicker::widget([
+                'language' => 'uk-UK',
+                'model' => $searchModel,
+                'attribute' => 'updated_at',
+                'convertFormat' => true,
+                'pluginOptions' => [
+                    'allowClear' => true,
+                    'showDropdowns' => true,
+                    'timePicker' => true,
+                    'timePicker24Hour' => true,
+                    'timePickerIncrement' => 1,
+                    'locale' => [
+                        'format' => 'Y-m-d H:i:00',
+                        'separator' => '--',
+                        'applyLabel' => 'Підтвердити',
+                        'cancelLabel' => 'Відміна',
+                    ],
+                    'opens' => 'right',
+                ]
+            ]),
+        ],
         [
                 'class' => ActionColumn::class,
         ]
-        ],
+    ],
 
 ]); ?>
 <br>

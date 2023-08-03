@@ -41,8 +41,10 @@ class GoodsSearch extends \common\models\Goods
                 ->andFilterWhere(['<=', 'price', $this->price_to])
                 ->andFilterWhere(['author_id' => $this->author_id]);
 
-            $this->filterDate($this->created_between, 'created_at', $query);
+//            $this->filterDate($this->created_between, 'created_at', $query);
 
+            $this->filterDate($this->created_at, 'created_at', $query);
+            $this->filterDate($this->updated_at, 'updated_at', $query);
 
             return $dataProvider;
         }

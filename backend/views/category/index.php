@@ -94,6 +94,29 @@ $this->title = 'Category List';?>
             ]),
         ],
         [
+            'attribute' => 'updated_at',
+            'filter' => DateRangePicker::widget([
+                'language' => 'uk-UK',
+                'model' => $searchModel,
+                'attribute' => 'updated_at',
+                'convertFormat' => true,
+                'pluginOptions' => [
+                    'allowClear' => true,
+                    'showDropdowns' => true,
+                    'timePicker' => true,
+                    'timePicker24Hour' => true,
+                    'timePickerIncrement' => 1,
+                    'locale' => [
+                        'format' => 'Y-m-d H:i:00',
+                        'separator' => '--',
+                        'applyLabel' => 'Підтвердити',
+                        'cancelLabel' => 'Відміна',
+                    ],
+                    'opens' => 'right',
+                ]
+            ]),
+        ],
+        [
                 'class' => ActionColumn::class,
         ]
     ]
