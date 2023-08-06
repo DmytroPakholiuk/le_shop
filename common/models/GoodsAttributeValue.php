@@ -2,7 +2,8 @@
 
 namespace common\models;
 /**
- * @property string $value
+ * An abstract class fit for manipulation of attribute values of any type
+ *
  * @property integer $goods_id
  * @property integer $attribute_id
  * @property-read Attribute $attributeDefinition
@@ -11,33 +12,34 @@ namespace common\models;
  * @property string $updated_at
  * @property int $is_deleted
  */
-class GoodsAttributeValue extends \yii\db\ActiveRecord
+abstract class GoodsAttributeValue extends \yii\db\ActiveRecord
 {
     /**
-     * @return string
+     * @return string|null
      */
-    public static function tableName()
+    public static function tableName(): ?string
     {
-        return 'goods_attributes';
+        return null;
     }
 
     /**
      * @return array
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             [['goods_id', 'attribute_id', 'is_deleted'], 'integer'],
-            ['value', 'string'],
-            [['value', 'attribute_id', 'goods_id'], 'required'],
+            [['attribute_id', 'goods_id'], 'required'],
             [['created_at','updated_at'], 'safe'],
         ];
     }
 
-    public static function primaryKey()
-    {
-        return ['goods_id', "attribute_id"];
-    }
+//    public static function primaryKey()
+//    {
+//        return ['goods_id', "attribute_id"];
+//    }
+
+    public abstract function getValue();
 
     /**
      * @return \yii\db\ActiveQuery

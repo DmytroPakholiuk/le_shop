@@ -9,7 +9,6 @@ use yii\widgets\ActiveForm;
 
 /**
  * @var Category $category - new Category
- * @var array $categories
  * @var yii\web\View $this
  */
 
