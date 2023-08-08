@@ -10,7 +10,7 @@ class GoodsSearch extends \common\models\Goods
 {
     use DateParser;
 
-    public $created_between;
+    public string $created_between;
 
     public $price_from;
     public $price_to;
@@ -37,14 +37,19 @@ class GoodsSearch extends \common\models\Goods
                 ->andFilterWhere(['like', 'name', $this->name])
 //                ->andFilterWhere(['like', 'price', $this->price])
                 ->andFilterWhere(['category_id' => $this->category_id])
-                ->andFilterWhere(['>=', 'price', $this->price_from])
-                ->andFilterWhere(['<=', 'price', $this->price_to])
-                ->andFilterWhere(['author_id' => $this->author_id]);
+//                ->andFilterWhere(['>=', 'price', $this->price_from])
+//                ->andFilterWhere(['<=', 'price', $this->price_to])
+                ->andFilterWhere(['author_id' => $this->author_id])
+                ->andFilterWhere(['available' => $this->available]);
 
 //            $this->filterDate($this->created_between, 'created_at', $query);
 
             $this->filterDate($this->created_at, 'created_at', $query);
             $this->filterDate($this->updated_at, 'updated_at', $query);
+
+            if (isset($this->price_from, $this->price_to)){
+                $dataProvider->query->andFilterWhere(['between', 'price', $this->price_from, $this->price_to]);
+            }
 
             return $dataProvider;
         }

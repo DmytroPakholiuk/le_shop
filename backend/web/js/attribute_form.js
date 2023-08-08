@@ -21,9 +21,6 @@ function selectType()
     let categorySelect = document.getElementById('category-select')
     let selectedText = dropdownList.options[dropdownList.selectedIndex].text
 
-    console.log(dropdownList.options[dropdownList.selectedIndex].text)
-    console.log(categorySelect.value)
-
     if (selectedText === 'dictionary'){
         selectedDictionary = true
         definitionForm.hidden = false
@@ -39,25 +36,41 @@ function selectType()
 
 function generateDefinitionHtml(name = '')
 {
-    let definitionDiv = document.createElement('div')
-    definitionDiv.classList.add('row')
+    if (definitionCount < 100){
 
-    let valueInput = document.createElement('input')
-    valueInput.classList.add('form-control', 'col-6')
-    valueInput.style.margin = '10px'
-    valueInput.name = 'Attribute[dictionaryDefinition]['+definitionCount+']'
+        let definitionDiv = document.createElement('div')
+        definitionDiv.classList.add('row')
+        definitionDiv.id = 'definition-' + definitionCount
+
+        let valueInput = document.createElement('input')
+        valueInput.classList.add('form-control', 'col-6')
+        valueInput.style.margin = '10px'
+        valueInput.value = name
+        valueInput.name = 'Attribute[dictionaryDefinition]['+definitionCount+']'
 
 
-    let deleteButton = document.createElement('button')
-    deleteButton.classList.add('btn', 'btn-danger', 'col-1')
-    deleteButton.textContent = 'delete definition'
-    deleteButton.style.margin = '10px'
-    deleteButton.addEventListener('click', function (ev) {
-        ev.currentTarget.parentElement.innerHTML = ''
-    })
+        let deleteButton = document.createElement('button')
+        deleteButton.classList.add('btn', 'btn-danger', 'col-1')
+        deleteButton.textContent = 'delete definition'
+        deleteButton.style.margin = '10px'
+        deleteButton.addEventListener('click', function (ev) {
+            ev.currentTarget.parentElement.innerHTML = ''
+        })
 
-    definitionDiv.append(valueInput, deleteButton)
-    definitionForm.append(definitionDiv)
+        definitionDiv.append(valueInput, deleteButton)
+        definitionForm.append(definitionDiv)
 
-    definitionCount++
+        definitionCount++
+    } else {
+        alert('Too many attributes')
+    }
+}
+
+// function eraseElement(ev){
+//     ev.currentTarget.parentElement.innerHTML = ''
+// }
+
+function eraseElement(id){
+    let deletingDiv = document.getElementById(id)
+    deletingDiv.innerHTML = ''
 }

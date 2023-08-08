@@ -8,8 +8,11 @@
 
 use kartik\daterange\DateRangePicker;
 use yii\grid\ActionColumn;
+use yii\helpers\Html;
 
-$this->title = 'Goods List';?>
+$this->title = 'Goods List';
+
+//$this->registerJsFile('/js/goods-index.js')?>
 
 <?php //echo $this->render('search', ['model' => $searchModel]); ?>
 
@@ -19,7 +22,21 @@ $this->title = 'Goods List';?>
     'columns' => [
         'id',
         'name',
-        'price',
+//        'price',
+        [
+            'attribute' => 'price',
+            'filter' =>
+                "<div class = 'row'>"
+                    . Html::input('text', 'GoodsSearch[price_from]', $searchModel->price_from, [
+                            'class' => 'col form-control',
+                            'placeholder' => 'from',
+                    ])
+                    . Html::input('text', 'GoodsSearch[price_to]', $searchModel->price_to, [
+                            'class' => 'col form-control',
+                            'placeholder' => 'to'
+                    ])
+                . "</div>"
+        ],
         [
             'attribute' => 'available',
             'value' => function(\common\models\Goods $model){
@@ -28,7 +45,9 @@ $this->title = 'Goods List';?>
                 } else {
                     return 'Yes';
                 }
-            }
+            },
+            'filter' => Html::dropDownList('GoodsSearch[available]', $searchModel->available,
+                [0 => 'No', 1 => 'Yes'], ['class' => 'form-control'])
         ],
         [
             'attribute' => 'category.name',

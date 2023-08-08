@@ -1,6 +1,7 @@
 <?php
 
 namespace common\models;
+use PhpParser\Node\Expr\BinaryOp\BooleanAnd;
 use yii\base\InvalidValueException;
 use yii\db\ActiveQuery;
 
@@ -12,6 +13,7 @@ use yii\db\ActiveQuery;
  * @property string $type
  * @property int $category_id
  * @property-read GoodsAttributeValue[] $attributeValues
+ * @property-read Category $category
  */
 class Attribute extends \yii\db\ActiveRecord
 {
@@ -80,6 +82,31 @@ class Attribute extends \yii\db\ActiveRecord
     private function getTextValues()
     {
         return $this->hasMany(GoodsAttributeTextValue::class, ['attribute_id' => 'id']);
+    }
+
+    private function getIntegerValues()
+    {
+        return $this->hasMany(GoodsAttributeIntegerValue::class, ['attribute_id' => 'id']);
+    }
+
+    private function getFloatValues()
+    {
+        return $this->hasMany(GoodsAttributeFloatValue::class, ['attribute_id' => 'id']);
+    }
+
+    private function getBooleanValues()
+    {
+        return $this->hasMany(GoodsAttributeBooleanValue::class, ['attribute_id' => 'id']);
+    }
+
+    private function getDictionaryValues()
+    {
+        return $this->hasMany(GoodsAttributeDictionaryValue::class, ['attribute_id' => 'id']);
+    }
+
+    public function getCategory()
+    {
+        return $this->hasOne(Category::class, ['id' => 'category_id']);
     }
 
 }
