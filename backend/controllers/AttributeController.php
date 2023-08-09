@@ -2,6 +2,7 @@
 
 namespace backend\controllers;
 
+use backend\models\AttributeSearch;
 use common\models\Attribute;
 use common\models\GoodsAttributeDictionaryDefinition;
 use yii\helpers\ArrayHelper;
@@ -11,7 +12,14 @@ class AttributeController extends \yii\web\Controller
 {
     public function actionIndex()
     {
+        $searchModel = new AttributeSearch();
+        $dataProvider = $searchModel->search(\Yii::$app->request->get());
 
+        return $this->render('index', [
+            'dataProvider' => $dataProvider,
+            'searchModel' => $searchModel,
+            'types' => $searchModel->types()
+        ]);
     }
 
     public function actionCreate()
