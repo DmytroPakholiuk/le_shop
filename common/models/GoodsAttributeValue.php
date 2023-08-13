@@ -40,6 +40,10 @@ abstract class GoodsAttributeValue extends \yii\db\ActiveRecord
 //    }
 
     public abstract function getValue();
+    public function getPresentableValue(): string
+    {
+        return "{$this->getValue()}";
+    }
 
     /**
      * @return \yii\db\ActiveQuery

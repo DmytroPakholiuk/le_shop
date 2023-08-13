@@ -2,7 +2,7 @@
 
 namespace common\models;
 /**
- * @property int $value_id
+ * @property int $value
  * @property-read GoodsAttributeDictionaryDefinition $dictionaryDefinition
  */
 class GoodsAttributeDictionaryValue extends GoodsAttributeValue
@@ -23,13 +23,18 @@ class GoodsAttributeDictionaryValue extends GoodsAttributeValue
         );
     }
 
-    public function getValue()
+    public function getValue(): string
+    {
+        return $this->value;
+    }
+
+    public function getPresentableValue(): string
     {
         return $this->dictionaryDefinition->value;
     }
 
     public function getDictionaryDefinition()
     {
-        return $this->hasOne(GoodsAttributeDictionaryDefinition::class, ['id' => 'value_id']);
+        return $this->hasOne(GoodsAttributeDictionaryDefinition::class, ['id' => 'value']);
     }
 }

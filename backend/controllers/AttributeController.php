@@ -4,6 +4,7 @@ namespace backend\controllers;
 
 use backend\models\AttributeSearch;
 use common\models\Attribute;
+use common\models\Category;
 use common\models\GoodsAttributeDictionaryDefinition;
 use yii\helpers\ArrayHelper;
 use yii\web\NotFoundHttpException;
@@ -139,6 +140,37 @@ class AttributeController extends \yii\web\Controller
         $definitions = GoodsAttributeDictionaryDefinition::find()->where(['attribute_id' => $model->id])->all();
         $definitionMap = ArrayHelper::map($definitions, 'id', 'value');
         return $this->asJson($definitionMap);
+    }
+
+    /**
+     * @param int $id
+     * @param int $goodsId
+     * @return \yii\web\Response
+     * @throws NotFoundHttpException
+     */
+    public function actionGetCategoryAttributes(int $id, int $goodsId = 0)
+    {
+        $category = Category::findOne($id) ?? throw new NotFoundHttpException();
+        $attributes = Attribute::find()->where(['category_id' => $id])
+            ->orWhere(['is', 'category_id', null])->asArray()->all();
+        foreach ($attributes as $key => &$attribute){
+            if ($attribute['type'] === 'dictionary'){
+                if (!empty($attribute['definitions'] = GoodsAttributeDictionaryDefinition::find())){
+                    $attribute['definitions'] = GoodsAttributeDictionaryDefinition::find()
+                        ->where(['attribute_id' => $attribute['id']])
+                        ->asArray()->all();
+                } else {
+                    unset($attributes[$key]);
+                    unset($attribute);
+                }
+            }
+
+            if ($goodsId && isset($attribute)){
+                $attributeValue = Attribute::getValueFor($attribute['id'], $attribute['type'], $goodsId);
+                $attribute['value'] = $attributeValue;
+            }
+        }
+        return $this->asJson($attributes);
     }
 
 }

@@ -25,4 +25,9 @@ class GoodsAttributeBooleanValue extends GoodsAttributeValue
     {
         return $this->value;
     }
+
+    public function getPresentableValue(): string
+    {
+        return $this->getValue() ? 'Yes' : 'No';
+    }
 }

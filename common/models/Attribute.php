@@ -4,6 +4,7 @@ namespace common\models;
 use PhpParser\Node\Expr\BinaryOp\BooleanAnd;
 use yii\base\InvalidValueException;
 use yii\db\ActiveQuery;
+use yii\db\ActiveRecord;
 
 /**
  * @property string $name
@@ -54,6 +55,62 @@ class Attribute extends \yii\db\ActiveRecord
             }],
             [['created_at','updated_at'], 'safe'],
         ];
+    }
+
+    /**
+     * Returns a new instance of GoodsAttributeValue according to the type of this attribute
+     * @return GoodsAttributeValue
+     */
+    public function newGoodsAttributeValue(): GoodsAttributeValue
+    {
+        switch ($this->type){
+            case 'text':
+                return new GoodsAttributeTextValue();
+            case 'integer':
+                return new GoodsAttributeIntegerValue();
+            case 'float':
+                return new GoodsAttributeFloatValue();
+            case 'boolean':
+                return new GoodsAttributeBooleanValue();
+            case 'dictionary':
+                return new GoodsAttributeDictionaryValue();
+            default:
+                throw new InvalidValueException("This Attribute's type is unacceptable ({$this->type})");
+        }
+    }
+
+    public static function getValueFor(int $attributeId, string $type, int $goodsId): GoodsAttributeValue|null
+    {
+        $value = null;
+        switch ($type){
+            case 'text':
+                $value = GoodsAttributeTextValue::find()->where(['attribute_id' => $attributeId])
+                    ->andWhere(['goods_id' => $goodsId])->one();
+                break;
+            case 'integer':
+                $value = GoodsAttributeIntegerValue::find()->where(['attribute_id' => $attributeId])
+                    ->andWhere(['goods_id' => $goodsId])->one();
+                break;
+            case 'float':
+                $value = GoodsAttributeFloatValue::find()->where(['attribute_id' => $attributeId])
+                    ->andWhere(['goods_id' => $goodsId])->one();
+                break;
+            case 'boolean':
+                $value = GoodsAttributeBooleanValue::find()->where(['attribute_id' => $attributeId])
+                    ->andWhere(['goods_id' => $goodsId])->one();
+                break;
+            case 'dictionary':
+                $value = GoodsAttributeDictionaryValue::find()
+                    ->where(['attribute_id' => $attributeId])
+                    ->andWhere(['goods_id' => $goodsId])->one();
+                break;
+            default:
+                throw new InvalidValueException("This Attribute's type is unacceptable ({$type})");
+        }
+        /**
+         * @var null|GoodsAttributeValue $value
+         */
+        return $value;
     }
 
     /**
