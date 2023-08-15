@@ -4,17 +4,27 @@
  * @var \yii\data\ActiveDataProvider $dataProvider
  * @var \backend\models\GoodsSearch $searchModel
  * @var yii\web\View $this
+ * @var \common\models\Attribute[] $attributeDefinitions
  */
 
 use kartik\daterange\DateRangePicker;
 use yii\grid\ActionColumn;
 use yii\helpers\Html;
+use yii\web\JsExpression;
+use yii\widgets\ActiveForm;
 
 $this->title = 'Goods List';
 
 //$this->registerJsFile('/js/goods-index.js')?>
 
-<?php //echo $this->render('search', ['model' => $searchModel]); ?>
+<?php $form = ActiveForm::begin([
+    'action' => ['index'],
+    'method' => 'get',
+]); ?>
+
+<?php echo $this->render('search', ['model' => $searchModel, 'attributeDefinitions' => $attributeDefinitions, 'form' => $form]); ?>
+
+
 
 <?php echo \yii\grid\GridView::widget([
     'dataProvider' => $dataProvider,
@@ -22,7 +32,6 @@ $this->title = 'Goods List';
     'columns' => [
         'id',
         'name',
-//        'price',
         [
             'attribute' => 'price',
             'filter' =>
@@ -49,9 +58,33 @@ $this->title = 'Goods List';
             'filter' => Html::dropDownList('GoodsSearch[available]', $searchModel->available,
                 [0 => 'No', 1 => 'Yes'], ['class' => 'form-control'])
         ],
+//        [
+//            'attribute' => 'category.name',
+//            'label' => 'Category',
+//        ],
         [
-            'attribute' => 'category.name',
-            'label' => 'Category'
+            'attribute' => 'category_id',
+            'label' => 'Category',
+            'value' => function(\common\models\Goods $model) {
+                return $model?->category?->name;
+            },
+            'filter' => \kartik\select2\Select2::widget([
+                'model' => $searchModel,
+                'attribute' => 'category_id',
+                'initValueText' => $searchModel?->category?->name ?? '',
+                'options' => [
+                    'placeholder' => 'Start entering category:',
+                ],
+                'pluginOptions' => [
+                    'allowClear' => true,
+                    'minimumInputLength' => 2,
+                    'ajax' => [
+                        'url' => \yii\helpers\Url::to('/category/category-list'),
+                        'dataType' => 'json',
+                        'data' => new JsExpression('function(params) { return {q:params.term}; }')
+                    ],
+                ]
+            ]),
         ],
         [
             'attribute' => 'author.username',
@@ -109,5 +142,7 @@ $this->title = 'Goods List';
     ],
 
 ]); ?>
+
+<?php ActiveForm::end(); ?>
 <br>
 <a href = <?php echo \yii\helpers\Url::to(['goods/create']); ?>>Create a new item</a>

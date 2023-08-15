@@ -12,7 +12,7 @@ use yii\db\ActiveRecord;
  */
 class GoodsAttributeDictionaryDefinition extends ActiveRecord
 {
-    public function getDefinitionsFor(Attribute $attribute, bool $asArray = false): array
+    public static function getDefinitionsFor(Attribute $attribute, bool $asArray = false): array
     {
         $query = self::find()->where(['attribute_id' => $attribute->id]);
         if ($asArray){

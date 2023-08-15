@@ -6,6 +6,7 @@ use backend\models\AttributeSearch;
 use common\models\Attribute;
 use common\models\Category;
 use common\models\GoodsAttributeDictionaryDefinition;
+use yii\db\Expression;
 use yii\helpers\ArrayHelper;
 use yii\web\NotFoundHttpException;
 
@@ -152,7 +153,7 @@ class AttributeController extends \yii\web\Controller
     {
         $category = Category::findOne($id) ?? throw new NotFoundHttpException();
         $attributes = Attribute::find()->where(['category_id' => $id])
-            ->orWhere(['is', 'category_id', null])->asArray()->all();
+            ->orWhere(['is', 'category_id', new Expression('null')])->asArray()->all();
         foreach ($attributes as $key => &$attribute){
             if ($attribute['type'] === 'dictionary'){
                 if (!empty($attribute['definitions'] = GoodsAttributeDictionaryDefinition::find())){

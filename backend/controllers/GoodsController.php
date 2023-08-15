@@ -10,6 +10,7 @@ use common\models\Goods;
 use common\models\GoodsImage;
 use yii\base\Exception;
 use yii\data\ActiveDataProvider;
+use yii\db\Expression;
 use yii\db\Query;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
@@ -68,11 +69,24 @@ class GoodsController extends \yii\web\Controller
      */
     public function actionIndex()
     {
+        $get = \Yii::$app->request->get();
         $searchModel = new GoodsSearch();
-        $dataProvider = $searchModel->search(\Yii::$app->request->get());
 
-        return $this->render('index', ['dataProvider' => $dataProvider, 'searchModel' => $searchModel]);
+        $attributeDefinitionsQuery = Attribute::find()->where(['is', 'category_id', new Expression('null')]);
+        if (isset($get['GoodsSearch']['category_id']) && $get['GoodsSearch']['category_id'] != null){
+            $attributeDefinitionsQuery->orWhere(['category_id' => $get['GoodsSearch']['category_id']]);
+        }
+        $attributeDefinitions = $attributeDefinitionsQuery->all();
+
+        $dataProvider = $searchModel->search($get);
+
+        return $this->render('index', [
+            'dataProvider' => $dataProvider,
+            'searchModel' => $searchModel,
+            'attributeDefinitions' => $attributeDefinitions
+        ]);
     }
+    
     /**
      * @return string|\yii\web\Response
      */
