@@ -42,7 +42,7 @@ use yii\widgets\ActiveForm;
                     break;
                 case 'boolean':
                     echo $form->field($model->attributeValueSearch, "searchValues[{$attributeDefinition->id}]")
-                        ->dropDownList([0 => 'No', 1 => 'Yes'])->label($attributeDefinition->name);
+                        ->dropDownList([0 => 'No', 1 => 'Yes', 100 => '[any]'])->label($attributeDefinition->name);
                     break;
                 case 'dictionary':
                     $dictionary = GoodsAttributeDictionaryDefinition::getDefinitionsFor($attributeDefinition, true);
@@ -50,6 +50,7 @@ use yii\widgets\ActiveForm;
                     foreach ($dictionary as $key => $item){
                         $options[$key] = $item['value'];
                     }
+                    $options[100] = '[any]';
                     echo $form->field($model->attributeValueSearch, "searchValues[{$attributeDefinition->id}]")
                         ->dropDownList($options)->label($attributeDefinition->name);
             }

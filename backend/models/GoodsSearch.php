@@ -57,19 +57,23 @@ class GoodsSearch extends \common\models\Goods
                 ->andFilterWhere(['category_id' => $this->category_id])
 //                ->andFilterWhere(['>=', 'price', $this->price_from])
 //                ->andFilterWhere(['<=', 'price', $this->price_to])
-                ->andFilterWhere(['author_id' => $this->author_id])
-                ->andFilterWhere(['available' => $this->available]);
+                ->andFilterWhere(['author_id' => $this->author_id]);
+
+            if ($this->available != 100){
+                $dataProvider->query->andFilterWhere(['available' => $this->available]);
+            }
 
 //            $this->filterDate($this->created_between, 'created_at', $query);
 
             $this->filterDate($this->created_at, 'created_at', $query);
             $this->filterDate($this->updated_at, 'updated_at', $query);
 
-            if (isset($this->price_from, $this->price_to)){
-                $dataProvider->query->andFilterWhere(['between', 'price', $this->price_from, $this->price_to]);
+            if (isset($this->price_from)){
+                $dataProvider->query->andFilterWhere(['>', 'price', $this->price_from]);
             }
-
-
+            if (isset($this->price_to)){
+                $dataProvider->query->andFilterWhere(['<', 'price', $this->price_to]);
+            }
 
             return $dataProvider;
         }

@@ -17,18 +17,32 @@ use yii\db\QueryInterface;
 
 class AttributeValueSearch extends Model
 {
-    public array $searchValues = [];
-
     /**
      * Attribute definitions by which the search is conducted. For better selection time the
      * attribute definitions are sorted by type like $searchAttributeDefinitions['integer'][25]
      * @var array
      */
-    public array $searchAttributeDefinitions;
+    public array $searchValues = [];
 
+    /**
+     * ActiveRecord[] array that contains Attribute definitions by which the search is conducted
+     * @var array
+     */
+    private array $searchAttributeDefinitions;
+
+    /**
+     * integer array containing ids of matching goods
+     * @var array
+     */
     public array $goodsIds;
 
-    public array $searchAttributeValues;
+    /**
+     * contains arrays that represent collections of record arrays. Each such collection is
+     * a result of search by one attribute definition. Array structure looks like
+     * $searchAttributeValues[$attribute_id][0]['goods_id'] - path to value
+     * @var array
+     */
+    private array $searchAttributeValues;
 
     /**
      * Populates $searchAttributeDefinitions based on $this->$searchValues which has to be populated beforehand
@@ -45,6 +59,10 @@ class AttributeValueSearch extends Model
 //        }
     }
 
+    /**
+     * populates $this->searchAttributeValues
+     * @return void
+     */
     private function populateSearchValues()
     {
         foreach ($this->searchAttributeDefinitions as $definition){
@@ -52,6 +70,12 @@ class AttributeValueSearch extends Model
         }
     }
 
+    /**
+     * gives an array of ['goods_id'] elements from attribute values that match the search values
+     * for that attribute definition
+     * @param Attribute $attribute
+     * @return array
+     */
     private function findValues(Attribute $attribute): array
     {
         switch ($attribute->type){
@@ -77,18 +101,26 @@ class AttributeValueSearch extends Model
                 }
                 return $values->asArray()->all();
             case 'boolean':
-                return GoodsAttributeBooleanValue::find()->select('goods_id')
-                    ->where(['value' => $this->searchValues[$attribute->id]])
-                    ->andWhere(['attribute_id' => $attribute->id])->asArray()->all();
+                $values = GoodsAttributeBooleanValue::find()->select('goods_id')->where(['attribute_id' => $attribute->id]);
+                if ($this->searchValues[$attribute->id] != 100){
+                    $values->andWhere(['value' => $this->searchValues[$attribute->id]]);
+                }
+                return $values->asArray()->all();
             case 'dictionary':
-                return GoodsAttributeDictionaryValue::find()->select('goods_id')
-                    ->where(['value' => $this->searchValues[$attribute->id]])
-                    ->andWhere(['attribute_id' => $attribute->id])->asArray()->all();
+                $values = GoodsAttributeDictionaryValue::find()->select('goods_id')->where(['attribute_id' => $attribute->id]);
+                if ($this->searchValues[$attribute->id] != 100){
+                    $values->andWhere(['value' => $this->searchValues[$attribute->id]]);
+                }
+                return $values->asArray()->all();
             default:
                 throw new InvalidValueException("This Attribute's type is unacceptable ({$attribute->type})");
         }
     }
 
+    /**
+     * makes an array of goods ids that match all the searches
+     * @return void
+     */
     private function pickGoods()
     {
         foreach ($this->searchAttributeValues as &$valueCollection){
@@ -101,6 +133,11 @@ class AttributeValueSearch extends Model
         $this->goodsIds = call_user_func_array('array_intersect', $this->searchAttributeValues);
     }
 
+    /**
+     * conducts the search by attributes and applies additional query filters for $dataProvider
+     * @param ActiveDataProvider $dataProvider
+     * @return void
+     */
     public function search(ActiveDataProvider $dataProvider)
     {
         /**
