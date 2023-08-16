@@ -46,6 +46,7 @@ class Goods extends \yii\db\ActiveRecord
             ['price', 'double'],
             ['target_credit_card', 'integer'],
             [['created_at', 'updated_at'], 'safe'],
+            [['name', 'price'], 'required'],
             [['imageFiles'], 'file', 'skipOnEmpty' => true, 'extensions' => 'png, jpg', 'maxFiles' => 4],
         ];
     }
@@ -100,22 +101,23 @@ class Goods extends \yii\db\ActiveRecord
      */
     public function configureAttributes($attributes)
     {
-        if (\Yii::$app->request->post('deleteOldAttributes')){
-            GoodsAttributeValue::deleteAll(['goods_id' => $this->id]);
-        }
+//        if (\Yii::$app->request->post('deleteOldAttributes')){
+//            GoodsAttributeValue::deleteAll(['goods_id' => $this->id]);
+//        }
         if (isset($attributes)){
-            foreach ($attributes as $attribute){
-                $attributeName = Attribute::findOne(['name' => $attribute['title']]) ?? new Attribute(['name' => $attribute['title']]);
-                if ($attributeName->isNewRecord){
-                    $attributeName->save();
-                }
-                $attributeValue = GoodsAttributeValue::find()->where(['goods_id' => $this->id])->
-                andWhere(['attribute_id' => $attributeName->id])->andWhere(['is_deleted' => 0])->one() ?? new GoodsAttributeValue();
+            /**
+             * @var Attribute[] $attributeRecords
+             */
+            $attributeRecords = Attribute::find()->where(['in', 'id', array_keys($attributes)])->all();
+            foreach ($attributeRecords as $attributeRecord){
+                $attributeValue = Attribute::getValueFor($attributeRecord->id, $attributeRecord->type, $this->id)
+                    ?? $attributeRecord->newGoodsAttributeValue($attributeRecord->type);
+
                 if ($attributeValue->isNewRecord){
                     $attributeValue->goods_id = $this->id;
-                    $attributeValue->attribute_id = $attributeName->id;
+                    $attributeValue->attribute_id = $attributeRecord->id;
                 }
-                $attributeValue->value = $attribute['value'];
+                $attributeValue->value = $attributes[$attributeRecord->id];
                 $attributeValue->save();
             }
         }

@@ -10,6 +10,7 @@ use common\models\Goods;
 use common\models\GoodsImage;
 use yii\base\Exception;
 use yii\data\ActiveDataProvider;
+use yii\db\Expression;
 use yii\db\Query;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
@@ -39,6 +40,7 @@ class GoodsController extends \yii\web\Controller
             ],
         ];
     }
+
     /**
      * @param $id
      * @return string
@@ -46,19 +48,45 @@ class GoodsController extends \yii\web\Controller
     public function actionView($id)
     {
         $model = Goods::findOne($id);
+        /**
+         * @var Attribute[] $attributeDefinitions
+         */
+        $attributeDefinitions = Attribute::find()->where(['category_id' => $model->category_id])->all();
+        $attributes = [];
+        foreach ($attributeDefinitions as $attribute){
+            $attributeItem = [
+                'definition' => $attribute,
+                'value' => Attribute::getValueFor($attribute->id, $attribute->type, $model->id)
+            ];
+            $attributes[] = $attributeItem;
+        }
 
-        return $this->render('view', ['model' => $model]);
+        return $this->render('view', ['model' => $model, 'attributes' => $attributes]);
     }
+
     /**
      * @return string
      */
     public function actionIndex()
     {
+        $get = \Yii::$app->request->get();
         $searchModel = new GoodsSearch();
-        $dataProvider = $searchModel->search(\Yii::$app->request->get());
 
-        return $this->render('index', ['dataProvider' => $dataProvider, 'searchModel' => $searchModel]);
+        $attributeDefinitionsQuery = Attribute::find()->where(['is', 'category_id', new Expression('null')]);
+        if (isset($get['GoodsSearch']['category_id']) && $get['GoodsSearch']['category_id'] != null){
+            $attributeDefinitionsQuery->orWhere(['category_id' => $get['GoodsSearch']['category_id']]);
+        }
+        $attributeDefinitions = $attributeDefinitionsQuery->all();
+
+        $dataProvider = $searchModel->search($get);
+
+        return $this->render('index', [
+            'dataProvider' => $dataProvider,
+            'searchModel' => $searchModel,
+            'attributeDefinitions' => $attributeDefinitions
+        ]);
     }
+    
     /**
      * @return string|\yii\web\Response
      */
@@ -99,7 +127,8 @@ class GoodsController extends \yii\web\Controller
             if (!$model->upload()) {
                 \Yii::$app->session->setFlash('error', 'could not save images');
             }
-            $attributes = \Yii::$app->request->post('goodsAttributes');
+
+            $attributes = \Yii::$app->request->post('GoodsAttributeValue');
             $model->configureAttributes($attributes);
             if (\Yii::$app->request->isPjax){
                 return $this->render('update', ['model' => $model]);

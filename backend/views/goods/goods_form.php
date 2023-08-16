@@ -15,7 +15,9 @@ use yii\web\JsExpression;
 use yii\widgets\ActiveForm;
 use yii\widgets\Pjax;
 
-$this->registerJsFile('/js/goods_form.js');
+$this->registerJs('let goodsId = ' . ($model?->id ?? '0') . ';', \yii\web\View::POS_HEAD);
+//var_dump($model?->id);die();
+$this->registerJsFile('/js/goods_form.js', ['depends' => \backend\assets\AppAsset::class]);
 FontAwesomeAsset::register($this);
 
 $form = ActiveForm::begin(); ?>
@@ -35,6 +37,8 @@ $form = ActiveForm::begin(); ?>
     'model' => $model,
     'options' => [
         'placeholder' => 'Start entering category:',
+        'onchange' => 'renderAttributeForm()',
+        'id' => 'categoryPicker'
 
     ],
     'pluginOptions' => [
@@ -47,15 +51,16 @@ $form = ActiveForm::begin(); ?>
     ]
 ]) ?>
 
-<?php echo Html::button('Add Attribute', ['class' => 'btn btn-primary', 'onclick' => 'addAttribute()']); ?>
+<?php //echo Html::button('Add Attribute', ['class' => 'btn btn-primary', 'onclick' => 'addAttribute()']); ?>
+
+
 
 <div id="attributeForm">
-    <p>Any existing attributes with the same name will be overwritten</p>
 
 </div>
 
 <?php if (!$model->isNewRecord) {
-    echo Html::checkbox('deleteOldAttributes', false, ['label' => 'delete all old attributes?']);
+//    echo Html::checkbox('deleteOldAttributes', false, ['label' => 'delete all old attributes?']);
 } ?><br>
 
 <?php //echo $form->field($model, 'imageFiles[]')->fileInput(['multiple' => true, 'accept' => 'image/*'])->label('Add images') ?>
@@ -137,6 +142,6 @@ if (!$model->isNewRecord){
     echo Html::checkbox('deleteOldImages', false, ['label' => 'delete all old images?']);
 } ?><br>
 
-<?= Html::submitButton('Submit', ['class' => 'btn btn-primary']); ?>
+<?= Html::submitButton('Submit', ['class' => 'btn btn-primary', 'id' => 'submitButton']); ?>
 
 <?php ActiveForm::end();?>

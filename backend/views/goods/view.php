@@ -1,6 +1,8 @@
 <?php
 /**
  * @var \common\models\Goods $model
+ * @var \yii\web\View $this
+ * @var array $attributes
  */
 
 use yii\widgets\DetailView;
@@ -42,19 +44,36 @@ $this->registerJsFile('/js/goods_view.js');
         'model' => $model,
         'attributes' => []
     ];
-    foreach ($model->attributeValues as $attribute){
-        if (!$attribute->is_deleted){
+    foreach ($attributes as $attribute){
+        /**
+         * @var \common\models\Attribute $attributeDefinition
+         */
+        $attributeDefinition = $attribute['definition'];
+        /**
+         * @var \common\models\GoodsAttributeValue $attributeValue
+         */
+        $attributeValue = $attribute['value'];
+        if ($attributeValue !== null && !$attributeValue->is_deleted){
             $config['attributes'][] = [
-                'label' => $attribute->attributeDefinition->name,
+                'label' => $attributeDefinition->name,
                 'format' => 'raw',
-                'value' => $attribute->value . \yii\helpers\Html::button('del', [
-                        'class' => 'btn btn-danger',
-                        'id' => $attribute->attribute_id,
-                        'onclick' => "deleteAttribute({$model->id}, {$attribute->attribute_id})"
-                    ])
+                'value' => $attributeValue->getPresentableValue()
             ];
         }
     }
+//    foreach ($model->attributeValues as $attribute){
+//        if (!$attribute->is_deleted){
+//            $config['attributes'][] = [
+//                'label' => $attribute->attributeDefinition->name,
+//                'format' => 'raw',
+//                'value' => $attribute->value . \yii\helpers\Html::button('del', [
+//                        'class' => 'btn btn-danger',
+//                        'id' => $attribute->attribute_id,
+//                        'onclick' => "deleteAttribute({$model->id}, {$attribute->attribute_id})"
+//                    ])
+//            ];
+//        }
+//    }
     echo DetailView::widget($config) ?>
 
 <?php

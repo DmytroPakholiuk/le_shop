@@ -1,76 +1,66 @@
 <?php
 
+use common\models\GoodsAttributeDictionaryDefinition;
 use kartik\daterange\DateRangePicker;
 use kartik\select2\Select2;
 use yii\helpers\Html;
+use yii\helpers\Url;
 use yii\web\JsExpression;
 use yii\widgets\ActiveForm;
 
 /* @var $this yii\web\View */
 /* @var $model backend\models\GoodsSearch */
 /* @var $form yii\widgets\ActiveForm */
+/* @var $attributeDefinitions \common\models\Attribute[] */
+
 ?>
 
     <div class="post-search">
 
-<?php $form = ActiveForm::begin([
-    'action' => ['index'],
-    'method' => 'get',
-]); ?>
-
-<?= $form->field($model, 'name'); ?>
-
-<?= $form->field($model, 'description')->textarea(); ?>
-
-<?= $form->field($model, 'price_from'); ?>
-
-<?= $form->field($model, 'price_to'); ?>
-
-<?= $form->field($model, 'available')->dropDownList([0 => 'No', 1 => 'Yes'], ['options' => [1 => ['selected' => true]]]); ?>
-
-<?= $form->field($model, 'category_id')->widget(Select2::class, [
-    'model' => $model,
-    'options' => [
-        'placeholder' => 'Start entering category:',
-
-    ],
-    'pluginOptions' => [
-        'minimumInputLength' => 3,
-        'allowClear' => true,
-        'ajax' => [
-            'url' => \yii\helpers\Url::to('/category/category-list'),
-            'dataType' => 'json',
-            'data' => new JsExpression('function(params) { return {q:params.term}; }')
-        ],
-    ]
-]) ?>
-
-        <?php echo '<div class="drp-container">'; ?>
-
-        <!--    --><?php //= $form->field($model, 'created_between', [
-        ////        'addon'=>['prepend'=>['content'=>'<i class="fas fa-calendar-alt"></i>']],
-        //        'options'=>['class'=>'drp-container mb-2']
-        //    ])->widget(DateRangePicker::classname(), [
-        //        'useWithAddon'=>true
-        //    ]); ?>
-        <?php echo '<label> Created between </label>' ?>
-        <?php echo DateRangePicker::widget([
-            'model' => $model,
-            'attribute'=>'created_between',
-            'value'=>'2015-10-19 - 2015-11-03',
-            'convertFormat'=>true,
-//        'disabled' => true,
-            'pluginOptions'=>[
-                'locale'=>['format'=>'Y-m-d']
-            ]
-        ]); ?>
-
-        <?php echo '</div>'; ?>
+    <h4> Search by Attributes: </h4>
+    <?php
+        foreach ($attributeDefinitions as $attributeDefinition){
+            switch ($attributeDefinition->type){
+                case 'text':
+                    echo $form->field($model->attributeValueSearch, "searchValues[{$attributeDefinition->id}]")
+                        ->label($attributeDefinition->name);
+                    break;
+                case ($attributeDefinition->type == 'integer' || $attributeDefinition->type == 'float'):
+                    echo "<label>{$attributeDefinition->name}</label>";
+                    echo '<div class="row">';
+                    echo $form->field($model->attributeValueSearch, "searchValues[{$attributeDefinition->id}][from]", [
+                            'options' => [
+                                'class' => 'col'
+                            ]
+                        ])->input('text', ['placeholder' => 'from'])->label(false);
+                    echo $form->field($model->attributeValueSearch, "searchValues[{$attributeDefinition->id}][to]", [
+                            'options' => [
+                                'class' => 'col'
+                            ]
+                        ])->input('text', ['placeholder' => 'to'])->label(false);
+                    echo "</div>";
+                    break;
+                case 'boolean':
+                    echo $form->field($model->attributeValueSearch, "searchValues[{$attributeDefinition->id}]")
+                        ->dropDownList([0 => 'No', 1 => 'Yes', 100 => '[any]'])->label($attributeDefinition->name);
+                    break;
+                case 'dictionary':
+                    $dictionary = GoodsAttributeDictionaryDefinition::getDefinitionsFor($attributeDefinition, true);
+                    $options = [];
+                    foreach ($dictionary as $key => $item){
+                        $options[$key] = $item['value'];
+                    }
+                    $options[100] = '[any]';
+                    echo $form->field($model->attributeValueSearch, "searchValues[{$attributeDefinition->id}]")
+                        ->dropDownList($options)->label($attributeDefinition->name);
+            }
+        }
+    ?>
 
         <div class="form-group">
-            <?= Html::submitButton('Find', ['class' => 'btn btn-primary']) ?>
-            <?= Html::resetButton('Clear', ['class' => 'btn btn-default']) ?>
+            <?= Html::submitButton('Find', ['class' => 'btn btn-info']) ?>
+            <?= Html::a('Clear', Url::to('/goods/index'), ['class' => 'btn btn-default']) ?>
         </div>
 
-    <?php ActiveForm::end(); ?>
+
 </div>
