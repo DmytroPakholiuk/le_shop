@@ -34,7 +34,7 @@ class AttributeValueSearch extends Model
      * integer array containing ids of matching goods
      * @var array
      */
-    public array $goodsIds;
+    public array $goodsIds = [];
 
     /**
      * contains arrays that represent collections of record arrays. Each such collection is
@@ -42,7 +42,7 @@ class AttributeValueSearch extends Model
      * $searchAttributeValues[$attribute_id][0]['goods_id'] - path to value
      * @var array
      */
-    private array $searchAttributeValues;
+    private array $foundAttributeValues = [];
 
     /**
      * Populates $searchAttributeDefinitions based on $this->$searchValues which has to be populated beforehand
@@ -66,7 +66,20 @@ class AttributeValueSearch extends Model
     private function populateSearchValues()
     {
         foreach ($this->searchAttributeDefinitions as $definition){
-            $this->searchAttributeValues[$definition->id] = $this->findValues($definition);
+            // we filter out the 'empty' values to save resources on searching and intersecting search results
+            $worthSearching = false;
+            switch ($definition->type){
+                case 'text':
+                    $worthSearching = !empty($this->searchValues[$definition->id]); break;
+                case ($definition->type == 'integer' || $definition->type == 'float'):
+                    $worthSearching = !empty($this->searchValues[$definition->id]['from']) ||
+                        !empty($this->searchValues[$definition->id]['to']); break;
+                case ($definition->type == 'boolean' || $definition->type == 'dictionary'):
+                    $worthSearching = $this->searchValues[$definition->id] != 100;
+            }
+            if ($worthSearching){
+                $this->foundAttributeValues[$definition->id] = $this->findValues($definition);
+            }
         }
     }
 
@@ -123,14 +136,16 @@ class AttributeValueSearch extends Model
      */
     private function pickGoods()
     {
-        foreach ($this->searchAttributeValues as &$valueCollection){
+        foreach ($this->foundAttributeValues as &$valueCollection){
             $idArray = [];
             foreach ($valueCollection as $value){
                 $idArray[] = $value['goods_id'];
             }
             $valueCollection = $idArray;
         }
-        $this->goodsIds = call_user_func_array('array_intersect', $this->searchAttributeValues);
+        if (!empty($this->foundAttributeValues)){
+            $this->goodsIds = call_user_func_array('array_intersect', $this->foundAttributeValues);
+        }
     }
 
     /**
@@ -146,12 +161,15 @@ class AttributeValueSearch extends Model
         $query = $dataProvider->query;
         $this->populateSearchDefinitions();
         $this->populateSearchValues();
-        $this->pickGoods();
-        if (empty($this->goodsIds)){
-            //impossible statement
-            $query->andFilterWhere(['is', 'id', new Expression('null')]);
+        if (!empty($this->foundAttributeValues)){
+            $this->pickGoods();
+            if (empty($this->goodsIds)){
+                //impossible statement
+                $query->andFilterWhere(['is', 'id', new Expression('null')]);
+            }
+            $query->andFilterWhere(['id' => $this->goodsIds]);
         }
-        $query->andFilterWhere(['id' => $this->goodsIds]);
+
 //        var_dump($this->goodsIds);die();
     }
 }
