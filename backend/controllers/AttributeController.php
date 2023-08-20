@@ -31,12 +31,12 @@ class AttributeController extends \yii\web\Controller
 
         if (\Yii::$app->request->isPost){
             $post = \Yii::$app->request->post()['Attribute'];
-            $model->type = $types[$post['type']];
+            $model->type = $post['type'];
             $model->name = $post['name'];
             $model->category_id = $post['category_id'];
 
             if ($model->save()){
-                if ($model->type === 'dictionary'){
+                if ($model->type == Attribute::ATTRIBUTE_TYPE_DICTIONARY){
                     foreach ($post['dictionaryDefinition'] as $item){
                         $definition = new GoodsAttributeDictionaryDefinition();
                         $definition->attribute_id = $model->id;
@@ -60,7 +60,7 @@ class AttributeController extends \yii\web\Controller
         };
         $types = Attribute::getPossibleTypes();
         $oldDefinitions = null;
-        if ($model->type === 'dictionary'){
+        if ($model->type == Attribute::ATTRIBUTE_TYPE_DICTIONARY){
             /**
              * @var GoodsAttributeDictionaryDefinition[] $oldDefinitions
              */
@@ -71,13 +71,13 @@ class AttributeController extends \yii\web\Controller
             $post = \Yii::$app->request->post()['Attribute'];
             $newDefinitions = null;
 
-            if ($model->type === 'dictionary'){
+            if ($model->type == Attribute::ATTRIBUTE_TYPE_DICTIONARY){
                 /**
                  * @var GoodsAttributeDictionaryDefinition[] $oldDefinitions
                  */
                 // we try to find common items in old and new definitions and omit changes to those
 
-                if (isset($post['dictionaryDefinition']) && $types[$post['type']] === 'dictionary'){
+                if (isset($post['dictionaryDefinition']) && $post['type'] == Attribute::ATTRIBUTE_TYPE_DICTIONARY){
                     $newDefinitions = $post['dictionaryDefinition'];
                 } else {
                     $newDefinitions = [];
@@ -93,12 +93,12 @@ class AttributeController extends \yii\web\Controller
                 }
             }
 
-            $model->type = $types[$post['type']];
+            $model->type = $post['type'];
             $model->name = $post['name'];
             $model->category_id = $post['category_id'];
 
             if ($model->save()){
-                if ($model->type === 'dictionary'){
+                if ($model->type == Attribute::ATTRIBUTE_TYPE_DICTIONARY){
                     foreach ($newDefinitions as $item){
                         $definition = new GoodsAttributeDictionaryDefinition();
                         $definition->attribute_id = $model->id;
@@ -124,19 +124,25 @@ class AttributeController extends \yii\web\Controller
     {
         $model = Attribute::findOne($id);
         $definitions = null;
-        if ($model->type === 'dictionary'){
+        if ($model->type == Attribute::ATTRIBUTE_TYPE_DICTIONARY){
             $definitions = GoodsAttributeDictionaryDefinition::find()->where(['attribute_id' => $model->id])->all();
         }
         $category = $model->category;
+        $types = Attribute::getPossibleTypes();
 
-        return $this->render('view', ['model' => $model, 'definitions' => $definitions, 'category' => $category]);
+        return $this->render('view', [
+            'model' => $model,
+            'definitions' => $definitions,
+            'category' => $category,
+            'types' => $types
+        ]);
     }
 
     public function actionGetDictionaryDefinitions($id)
     {
-        $model = Attribute::findOne($id) ?? throw new NotFoundHttpException();
-        if ($model->type !== 'dictionary'){
-            throw new NotFoundHttpException();
+        $model = Attribute::findOne($id) ?? throw new NotFoundHttpException('attribute not found');
+        if ($model->type != Attribute::ATTRIBUTE_TYPE_DICTIONARY){
+            throw new NotFoundHttpException('this attribute exists but is not of dictionary type');
         }
         $definitions = GoodsAttributeDictionaryDefinition::find()->where(['attribute_id' => $model->id])->all();
         $definitionMap = ArrayHelper::map($definitions, 'id', 'value');
@@ -151,11 +157,10 @@ class AttributeController extends \yii\web\Controller
      */
     public function actionGetCategoryAttributes(int $id, int $goodsId = 0)
     {
-        $category = Category::findOne($id) ?? throw new NotFoundHttpException();
-        $attributes = Attribute::find()->where(['category_id' => $id])
-            ->orWhere(['is', 'category_id', new Expression('null')])->asArray()->all();
+        $category = Category::findOne($id) ?? null;
+        $attributes = Attribute::getAttributesForCategory($category, true);
         foreach ($attributes as $key => &$attribute){
-            if ($attribute['type'] === 'dictionary'){
+            if ($attribute['type'] == Attribute::ATTRIBUTE_TYPE_DICTIONARY){
                 if (!empty($attribute['definitions'] = GoodsAttributeDictionaryDefinition::find())){
                     $attribute['definitions'] = GoodsAttributeDictionaryDefinition::find()
                         ->where(['attribute_id' => $attribute['id']])

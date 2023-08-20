@@ -29,7 +29,7 @@ $this->title = 'Attribute definition list'; ?>
         [
             'attribute' => 'type',
             'filter' => Html::dropDownList('AttributeSearch[type]',
-                array_search($searchModel->type, $types),
+                $searchModel->type,
                 $types,
                 ['class' => 'form-control']
             )

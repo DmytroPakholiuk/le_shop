@@ -7,6 +7,7 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\web\JsExpression;
 use yii\widgets\ActiveForm;
+use common\models\Attribute;
 
 /* @var $this yii\web\View */
 /* @var $model backend\models\GoodsSearch */
@@ -21,11 +22,11 @@ use yii\widgets\ActiveForm;
     <?php
         foreach ($attributeDefinitions as $attributeDefinition){
             switch ($attributeDefinition->type){
-                case 'text':
+                case Attribute::ATTRIBUTE_TYPE_TEXT:
                     echo $form->field($model->attributeValueSearch, "searchValues[{$attributeDefinition->id}]")
                         ->label($attributeDefinition->name);
                     break;
-                case ($attributeDefinition->type == 'integer' || $attributeDefinition->type == 'float'):
+                case ($attributeDefinition->type == Attribute::ATTRIBUTE_TYPE_INTEGER || $attributeDefinition->type == Attribute::ATTRIBUTE_TYPE_FLOAT):
                     echo "<label>{$attributeDefinition->name}</label>";
                     echo '<div class="row">';
                     echo $form->field($model->attributeValueSearch, "searchValues[{$attributeDefinition->id}][from]", [
@@ -40,11 +41,11 @@ use yii\widgets\ActiveForm;
                         ])->input('text', ['placeholder' => 'to'])->label(false);
                     echo "</div>";
                     break;
-                case 'boolean':
+                case Attribute::ATTRIBUTE_TYPE_BOOLEAN:
                     echo $form->field($model->attributeValueSearch, "searchValues[{$attributeDefinition->id}]")
                         ->dropDownList([0 => 'No', 1 => 'Yes', 100 => '[any]'])->label($attributeDefinition->name);
                     break;
-                case 'dictionary':
+                case Attribute::ATTRIBUTE_TYPE_DICTIONARY:
                     $dictionary = GoodsAttributeDictionaryDefinition::getDefinitionsFor($attributeDefinition, true);
                     $options = [];
                     foreach ($dictionary as $key => $item){

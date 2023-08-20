@@ -4,6 +4,7 @@
  * @var \yii\web\View $this
  * @var \common\models\GoodsAttributeDictionaryDefinition[] $definitions
  * @var \common\models\Category $category
+ * @var array $types
  */
 
 use yii\widgets\DetailView;
@@ -15,7 +16,10 @@ $this->title = "Attribute '{$model->name}' of category '{$category->name}'"; ?>
     'attributes' => [
         'id:integer',
         'name',
-        'type',
+        [
+                'attribute' => 'type',
+            'value' => $types[$model->type]
+        ],
         'price',
         [
             'label' => 'Category',

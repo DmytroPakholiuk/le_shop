@@ -5,13 +5,14 @@ use PhpParser\Node\Expr\BinaryOp\BooleanAnd;
 use yii\base\InvalidValueException;
 use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
+use yii\db\Expression;
 
 /**
  * @property string $name
  * @property int $id
  * @property string $created_at
  * @property string $updated_at
- * @property string $type
+ * @property int $type
  * @property int $category_id
  * @property-read GoodsAttributeValue[] $attributeValues
  * @property-read Category $category
@@ -26,6 +27,12 @@ class Attribute extends \yii\db\ActiveRecord
         return 'attributes';
     }
 
+    public const ATTRIBUTE_TYPE_TEXT = 0;
+    public const ATTRIBUTE_TYPE_INTEGER = 1;
+    public const ATTRIBUTE_TYPE_FLOAT = 2;
+    public const ATTRIBUTE_TYPE_BOOLEAN = 3;
+    public const ATTRIBUTE_TYPE_DICTIONARY = 4;
+
     /**
      * returns array of strings describing possible attribute types
      *
@@ -34,11 +41,11 @@ class Attribute extends \yii\db\ActiveRecord
     public static function getPossibleTypes(): array
     {
         return [
-            'text',
-            'integer',
-            'float',
-            'boolean',
-            'dictionary'
+            self::ATTRIBUTE_TYPE_TEXT => 'text',
+            self::ATTRIBUTE_TYPE_INTEGER => 'integer',
+            self::ATTRIBUTE_TYPE_FLOAT => 'float',
+            self::ATTRIBUTE_TYPE_BOOLEAN => 'boolean',
+            self::ATTRIBUTE_TYPE_DICTIONARY => 'dictionary'
         ];
     }
 
@@ -48,10 +55,10 @@ class Attribute extends \yii\db\ActiveRecord
     public function rules(): array
     {
         return [
-            [['name', 'type'], 'string'],
+            [['name'], 'string'],
             [['name', 'type'], 'required'],
             ['type', function($value){
-                return in_array(strtolower($value), self::getPossibleTypes());
+                return in_array($value, array_keys(self::getPossibleTypes()));
             }],
             [['created_at','updated_at'], 'safe'],
         ];
@@ -64,42 +71,58 @@ class Attribute extends \yii\db\ActiveRecord
     public function newGoodsAttributeValue(): GoodsAttributeValue
     {
         switch ($this->type){
-            case 'text':
+            case self::ATTRIBUTE_TYPE_TEXT:
                 return new GoodsAttributeTextValue();
-            case 'integer':
+            case self::ATTRIBUTE_TYPE_INTEGER:
                 return new GoodsAttributeIntegerValue();
-            case 'float':
+            case self::ATTRIBUTE_TYPE_FLOAT:
                 return new GoodsAttributeFloatValue();
-            case 'boolean':
+            case self::ATTRIBUTE_TYPE_BOOLEAN:
                 return new GoodsAttributeBooleanValue();
-            case 'dictionary':
+            case self::ATTRIBUTE_TYPE_DICTIONARY:
                 return new GoodsAttributeDictionaryValue();
             default:
                 throw new InvalidValueException("This Attribute's type is unacceptable ({$this->type})");
         }
     }
 
+    public static function getAttributesForCategory(Category|null $category, $asArray = false): array
+    {
+        $categoryIds = [];
+        while ($category !== null){
+            $categoryIds[] = $category->id;
+            $category = $category->parent;
+        }
+
+        $attributes = Attribute::find()->where(['in', 'category_id', $categoryIds])
+            ->orWhere(['is', 'category_id', new Expression('null')]);
+        if ($asArray){
+            $attributes->asArray();
+        }
+        return $attributes->all();
+    }
+
     public static function getValueFor(int $attributeId, string $type, int $goodsId): GoodsAttributeValue|null
     {
         $value = null;
         switch ($type){
-            case 'text':
+            case self::ATTRIBUTE_TYPE_TEXT:
                 $value = GoodsAttributeTextValue::find()->where(['attribute_id' => $attributeId])
                     ->andWhere(['goods_id' => $goodsId])->one();
                 break;
-            case 'integer':
+            case self::ATTRIBUTE_TYPE_INTEGER:
                 $value = GoodsAttributeIntegerValue::find()->where(['attribute_id' => $attributeId])
                     ->andWhere(['goods_id' => $goodsId])->one();
                 break;
-            case 'float':
+            case self::ATTRIBUTE_TYPE_FLOAT:
                 $value = GoodsAttributeFloatValue::find()->where(['attribute_id' => $attributeId])
                     ->andWhere(['goods_id' => $goodsId])->one();
                 break;
-            case 'boolean':
+            case self::ATTRIBUTE_TYPE_BOOLEAN:
                 $value = GoodsAttributeBooleanValue::find()->where(['attribute_id' => $attributeId])
                     ->andWhere(['goods_id' => $goodsId])->one();
                 break;
-            case 'dictionary':
+            case self::ATTRIBUTE_TYPE_DICTIONARY:
                 $value = GoodsAttributeDictionaryValue::find()
                     ->where(['attribute_id' => $attributeId])
                     ->andWhere(['goods_id' => $goodsId])->one();
@@ -121,15 +144,15 @@ class Attribute extends \yii\db\ActiveRecord
     public function getAttributeValues(): ActiveQuery
     {
         switch ($this->type){
-            case 'text':
+            case self::ATTRIBUTE_TYPE_TEXT:
                 return $this->getTextValues();
-            case 'integer':
+            case self::ATTRIBUTE_TYPE_INTEGER:
                 return $this->getIntegerValues();
-            case 'float':
+            case self::ATTRIBUTE_TYPE_FLOAT:
                 return $this->getFloatValues();
-            case 'boolean':
+            case self::ATTRIBUTE_TYPE_BOOLEAN:
                 return $this->getBooleanValues();
-            case 'dictionary':
+            case self::ATTRIBUTE_TYPE_DICTIONARY:
                 return $this->getDictionaryValues();
             default:
                 throw new InvalidValueException("This Attribute's type is unacceptable ({$this->type})");
