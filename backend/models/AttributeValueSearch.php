@@ -63,18 +63,18 @@ class AttributeValueSearch extends Model
      * populates $this->searchAttributeValues
      * @return void
      */
-    private function populateSearchValues()
+    private function populateSearchValues(): void
     {
         foreach ($this->searchAttributeDefinitions as $definition){
             // we filter out the 'empty' values to save resources on searching and intersecting search results
             $worthSearching = false;
             switch ($definition->type){
-                case 'text':
+                case Attribute::ATTRIBUTE_TYPE_TEXT:
                     $worthSearching = !empty($this->searchValues[$definition->id]); break;
-                case ($definition->type == 'integer' || $definition->type == 'float'):
+                case ($definition->type == Attribute::ATTRIBUTE_TYPE_INTEGER || $definition->type == Attribute::ATTRIBUTE_TYPE_FLOAT):
                     $worthSearching = !empty($this->searchValues[$definition->id]['from']) ||
                         !empty($this->searchValues[$definition->id]['to']); break;
-                case ($definition->type == 'boolean' || $definition->type == 'dictionary'):
+                case ($definition->type == Attribute::ATTRIBUTE_TYPE_BOOLEAN || $definition->type == Attribute::ATTRIBUTE_TYPE_DICTIONARY):
                     $worthSearching = $this->searchValues[$definition->id] != 100;
             }
             if ($worthSearching){
@@ -92,10 +92,10 @@ class AttributeValueSearch extends Model
     private function findValues(Attribute $attribute): array
     {
         switch ($attribute->type){
-            case 'text':
+            case Attribute::ATTRIBUTE_TYPE_TEXT:
                 return GoodsAttributeTextValue::find()->select('goods_id')->where(['like', 'value', $this->searchValues[$attribute->id]])
                     ->andWhere(['attribute_id' => $attribute->id])->asArray()->all();
-            case 'integer':
+            case Attribute::ATTRIBUTE_TYPE_INTEGER:
                 $values = GoodsAttributeIntegerValue::find()->select('goods_id')->where(['attribute_id' => $attribute->id]);
                 if (!empty($this->searchValues[$attribute->id]['from'])){
                     $values->andWhere(['>', 'value', $this->searchValues[$attribute->id]['from']]);
@@ -104,7 +104,7 @@ class AttributeValueSearch extends Model
                     $values->andWhere(['<', 'value', $this->searchValues[$attribute->id]['to']]);
                 }
                 return $values->asArray()->all();
-            case 'float':
+            case Attribute::ATTRIBUTE_TYPE_FLOAT:
                 $values = GoodsAttributeFloatValue::find()->select('goods_id')->where(['attribute_id' => $attribute->id]);
                 if (!empty($this->searchValues[$attribute->id]['from'])){
                     $values->andWhere(['>', 'value', $this->searchValues[$attribute->id]['from']]);
@@ -113,13 +113,13 @@ class AttributeValueSearch extends Model
                     $values->andWhere(['<', 'value', $this->searchValues[$attribute->id]['to']]);
                 }
                 return $values->asArray()->all();
-            case 'boolean':
+            case Attribute::ATTRIBUTE_TYPE_BOOLEAN:
                 $values = GoodsAttributeBooleanValue::find()->select('goods_id')->where(['attribute_id' => $attribute->id]);
                 if ($this->searchValues[$attribute->id] != 100){
                     $values->andWhere(['value' => $this->searchValues[$attribute->id]]);
                 }
                 return $values->asArray()->all();
-            case 'dictionary':
+            case Attribute::ATTRIBUTE_TYPE_DICTIONARY:
                 $values = GoodsAttributeDictionaryValue::find()->select('goods_id')->where(['attribute_id' => $attribute->id]);
                 if ($this->searchValues[$attribute->id] != 100){
                     $values->andWhere(['value' => $this->searchValues[$attribute->id]]);
@@ -134,7 +134,7 @@ class AttributeValueSearch extends Model
      * makes an array of goods ids that match all the searches
      * @return void
      */
-    private function pickGoods()
+    private function pickGoods(): void
     {
         foreach ($this->foundAttributeValues as &$valueCollection){
             $idArray = [];
@@ -153,7 +153,7 @@ class AttributeValueSearch extends Model
      * @param ActiveDataProvider $dataProvider
      * @return void
      */
-    public function search(ActiveDataProvider $dataProvider)
+    public function search(ActiveDataProvider $dataProvider): void
     {
         /**
          * @var Query $query
