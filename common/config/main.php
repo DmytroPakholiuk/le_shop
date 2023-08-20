@@ -11,6 +11,9 @@ return [
         'cache' => [
             'class' => \yii\caching\FileCache::class,
         ],
+        'AuthManager' => [
+            'class' => 'yii\rbac\DbManager'
+        ],
 
         'rabbit' => [
             'class' => \common\components\AMQPManager::class,
