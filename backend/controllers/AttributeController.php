@@ -157,9 +157,8 @@ class AttributeController extends \yii\web\Controller
      */
     public function actionGetCategoryAttributes(int $id, int $goodsId = 0)
     {
-        $category = Category::findOne($id) ?? throw new NotFoundHttpException();
-        $attributes = Attribute::find()->where(['category_id' => $id])
-            ->orWhere(['is', 'category_id', new Expression('null')])->asArray()->all();
+        $category = Category::findOne($id) ?? null;
+        $attributes = Attribute::getAttributesForCategory($category, true);
         foreach ($attributes as $key => &$attribute){
             if ($attribute['type'] == Attribute::ATTRIBUTE_TYPE_DICTIONARY){
                 if (!empty($attribute['definitions'] = GoodsAttributeDictionaryDefinition::find())){

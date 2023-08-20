@@ -5,6 +5,7 @@ use PhpParser\Node\Expr\BinaryOp\BooleanAnd;
 use yii\base\InvalidValueException;
 use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
+use yii\db\Expression;
 
 /**
  * @property string $name
@@ -83,6 +84,22 @@ class Attribute extends \yii\db\ActiveRecord
             default:
                 throw new InvalidValueException("This Attribute's type is unacceptable ({$this->type})");
         }
+    }
+
+    public static function getAttributesForCategory(Category|null $category, $asArray = false): array
+    {
+        $categoryIds = [];
+        while ($category !== null){
+            $categoryIds[] = $category->id;
+            $category = $category->parent;
+        }
+
+        $attributes = Attribute::find()->where(['in', 'category_id', $categoryIds])
+            ->orWhere(['is', 'category_id', new Expression('null')]);
+        if ($asArray){
+            $attributes->asArray();
+        }
+        return $attributes->all();
     }
 
     public static function getValueFor(int $attributeId, string $type, int $goodsId): GoodsAttributeValue|null
