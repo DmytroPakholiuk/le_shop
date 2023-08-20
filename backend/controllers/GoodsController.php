@@ -72,7 +72,8 @@ class GoodsController extends \yii\web\Controller
         $get = \Yii::$app->request->get();
         $searchModel = new GoodsSearch();
 
-        $category = isset($get['GoodsSearch']['category_id']) ? Category::findOne($get['GoodsSearch']['category_id']) : null;
+        $category = isset($get['GoodsSearch']['category_id']) && !empty($get['GoodsSearch']['category_id']) ?
+            Category::findOne($get['GoodsSearch']['category_id']) : null;
 
 //        $attributeDefinitionsQuery = Attribute::find()->where(['is', 'category_id', new Expression('null')]);
 //        if (isset($get['GoodsSearch']['category_id']) && $get['GoodsSearch']['category_id'] != null){
