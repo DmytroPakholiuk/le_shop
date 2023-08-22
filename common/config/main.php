@@ -11,8 +11,8 @@ return [
         'cache' => [
             'class' => \yii\caching\FileCache::class,
         ],
-        'AuthManager' => [
-            'class' => 'yii\rbac\DbManager'
+        'authManager' => [
+            'class' => \yii\rbac\DbManager::class
         ],
 
         'rabbit' => [

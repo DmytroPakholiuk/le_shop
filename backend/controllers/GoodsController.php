@@ -31,7 +31,7 @@ class GoodsController extends \yii\web\Controller
                 'rules' => [
                     [
                         'actions' => ['create', 'index', 'view', 'update', 'delete-attribute',
-                            'delete-image', 'upload-image', 'goods-list', 'find-by-audio', 'vue-test',
+                            'delete-image', 'upload-image', 'goods-list', 'vue-test',
                             'get-main-goods-thumbnail', 'get-main-goods-thumbnails'],
                         'allow' => true,
                         'roles' => ['@'],
@@ -144,21 +144,21 @@ class GoodsController extends \yii\web\Controller
         }
     }
 
-    /**
-     * @return \yii\web\Response
-     */
-    public function actionDeleteAttribute()
-    {
-        $goodsId = \Yii::$app->request->post('goodsId');
-        $attributeId = \Yii::$app->request->post('attributeId');
-        $goodsAttribute = GoodsAttributeValue::findOne(['goods_id' => $goodsId, 'attribute_id' => $attributeId]);
-        $goodsAttribute->is_deleted = 1;
-        $goodsAttribute->save();
-
-        return $this->asJson([
-            'message' => 'Attribute deleted'
-        ]);
-    }
+//    /**
+//     * @return \yii\web\Response
+//     */
+//    public function actionDeleteAttribute()
+//    {
+//        $goodsId = \Yii::$app->request->post('goodsId');
+//        $attributeId = \Yii::$app->request->post('attributeId');
+//        $goodsAttribute = GoodsAttributeValue::findOne(['goods_id' => $goodsId, 'attribute_id' => $attributeId]);
+//        $goodsAttribute->is_deleted = 1;
+//        $goodsAttribute->save();
+//
+//        return $this->asJson([
+//            'message' => 'Attribute deleted'
+//        ]);
+//    }
 
     /**
      * @return \yii\web\Response
@@ -171,26 +171,26 @@ class GoodsController extends \yii\web\Controller
     }
 
 
-    public function actionUploadImage()
-    {
-        $goods_id = (int)\Yii::$app->request->post('goods_id');
-        var_dump(\Yii::$app->request->isPjax);
-        var_dump(\Yii::$app->request->post());die();
-        if (!($goods_id === 'null')){
-            $model = Goods::findOne($goods_id);
-//            var_dump($model);die;
-        } else {
-            throw new BadRequestHttpException();
-//            $model = new Goods();
-        }
-        $model->imageFiles = UploadedFile::getInstances($model, 'imageFiles');
-//        var_dump($model->imageFiles);
-        if (!$model->upload()) {
-                \Yii::$app->session->setFlash('error', 'could not save images');
-        }
-//        return $this->asJson([]);
-        return $this->render('update', ['model' => $model]);
-    }
+//    public function actionUploadImage()
+//    {
+//        $goods_id = (int)\Yii::$app->request->post('goods_id');
+//        var_dump(\Yii::$app->request->isPjax);
+//        var_dump(\Yii::$app->request->post());die();
+//        if (!($goods_id === 'null')){
+//            $model = Goods::findOne($goods_id);
+////            var_dump($model);die;
+//        } else {
+//            throw new BadRequestHttpException();
+////            $model = new Goods();
+//        }
+//        $model->imageFiles = UploadedFile::getInstances($model, 'imageFiles');
+////        var_dump($model->imageFiles);
+//        if (!$model->upload()) {
+//                \Yii::$app->session->setFlash('error', 'could not save images');
+//        }
+////        return $this->asJson([]);
+//        return $this->render('update', ['model' => $model]);
+//    }
 
     /**
      * returns a JSON about main thumbnail of selected item
