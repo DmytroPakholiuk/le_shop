@@ -2,8 +2,7 @@ let childMap = {};
 let permissionSearch = $('#permissionSearch');
 let permissionItems = $('.permission-item');
 
-// populateChildrenMap()
-// paintSelected()
+populateChildrenMap()
 
 function search(){
     let query = permissionSearch.val();
@@ -48,7 +47,6 @@ function populateChildrenMap()
 
 function paintSelected()
 {
-    console.log(childMap)
     let i = 0;
     let paintNames = [];
     for (let childMapKey in childMap) {
@@ -59,7 +57,6 @@ function paintSelected()
             i++;
         }
     }
-    console.log(paintNames)
     eachitem: for (let permission of permissionItems) {
         for (let paintName of paintNames) {
             permission = $(permission)
@@ -72,11 +69,29 @@ function paintSelected()
         }
     }
 }
-//
-// function repaintSelection(name)
-// {
-//     if
-// }
+
+function repaintSelection(name)
+{
+    let selectedElement = $('#Permissions\\[' + name + '\\]')
+    if (selectedElement.is(':checked')){
+        $.ajax({
+            'url': '/rbac/role/get-all-children-permissions',
+            'method': 'GET',
+            'data': {
+                // 1: '',
+                'names': {0: name}
+            },
+            'success': function (ressponse){
+                console.log(ressponse);
+                childMap[name] = ressponse[name];
+                paintSelected();
+            }
+        })
+    } else {
+        delete childMap[name];
+        paintSelected();
+    }
+}
 
 
 

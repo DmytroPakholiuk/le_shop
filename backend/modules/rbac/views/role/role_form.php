@@ -24,7 +24,7 @@ $form = ActiveForm::begin(); ?>
 <div class="card">
     <div class="card-body">
         Info: You only have to check direct children. Red color shows the rule applied to permission.
-<!--        Blue means the permission is available as a deep child-->
+        Blue means the permission is available as a deep child
     </div>
 </div>
 
@@ -48,7 +48,7 @@ foreach ($permissions as $permission){
         isset($childPermissions[$permission->name]),
         [
             'id' => "Permissions[{$permission->name}]",
-//            'onchange' => "repaintSelection({$permission->name})"
+            'onchange' => "repaintSelection('{$permission->name}')"
 //            'class' => 'form-control',
         ]);
 //    $labelStyle = isset($fullPermissions[$permission->name]) ? 'color: blue;' : '';
