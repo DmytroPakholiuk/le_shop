@@ -42,6 +42,7 @@ class m230821_183354_create_goods_permissions extends Migration
         $goodsAuthorRule = new GoodsAuthorRule();
         $permUpdateOwn->ruleName = $goodsAuthorRule->name;
         $auth->add($goodsAuthorRule);
+        $auth->update('goods_update_own', $permUpdateOwn);
 
         $permWrite = $auth->createPermission('goods_write_any');
         $permWrite->description = 'Permission to create and update any goods items';

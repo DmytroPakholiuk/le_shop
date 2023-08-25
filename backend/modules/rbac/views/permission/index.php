@@ -12,7 +12,7 @@ use yii\grid\ActionColumn;
 use yii\grid\GridView;
 use yii\helpers\Html;
 
-$this->title = 'Role list'; ?>
+$this->title = 'Permission list'; ?>
 
 
 <?php echo GridView::widget([
