@@ -30,12 +30,21 @@ class GoodsController extends \yii\web\Controller
                 'class' => AccessControl::class,
                 'rules' => [
                     [
-                        'actions' => ['create', 'index', 'view', 'update', 'delete-attribute',
-                            'delete-image', 'upload-image', 'goods-list', 'vue-test',
+                        'actions' => ['index', 'view', 'goods-list', 'vue-test',
                             'get-main-goods-thumbnail', 'get-main-goods-thumbnails'],
                         'allow' => true,
-                        'roles' => ['@'],
+                        'roles' => ['goods_read'],
                     ],
+                    [
+                        'actions' => ['create'],
+                        'allow' => true,
+                        'roles' => ['goods_create']
+                    ],
+                    [
+                        'actions' => ['update', 'delete-attribute', 'delete-image', 'upload-image'],
+                        'allow' => true,
+                        'roles' => ['goods_update_all', 'goods_update_own']
+                    ]
                 ],
             ],
         ];

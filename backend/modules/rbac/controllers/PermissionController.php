@@ -4,9 +4,34 @@ namespace backend\modules\rbac\controllers;
 
 use backend\modules\rbac\models\Item;
 use backend\modules\rbac\models\ItemSearch;
+use yii\filters\AccessControl;
 
 class PermissionController extends \yii\web\Controller
 {
+    /**
+     * @return array[]
+     */
+    public function behaviors()
+    {
+        return [
+            'access' => [
+                'class' => AccessControl::class,
+                'rules' => [
+                    [
+                        'actions' => ['index'],
+                        'allow' => true,
+                        'roles' => ['rbac_read'],
+                    ],
+                    [
+                        'actions' => ['update'],
+                        'allow' => true,
+                        'roles' => ['rbac_write']
+                    ]
+                ],
+            ],
+        ];
+    }
+
     public function actionIndex()
     {
         $searchModel = new ItemSearch();

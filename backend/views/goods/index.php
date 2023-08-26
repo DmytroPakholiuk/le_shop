@@ -55,8 +55,7 @@ $this->title = 'Goods List';
                     return 'Yes';
                 }
             },
-            'filter' => Html::dropDownList('GoodsSearch[available]', $searchModel->available,
-                [0 => 'No', 1 => 'Yes', 100 => '[any]'], ['class' => 'form-control'])
+            'filter' => [0 => 'No', 1 => 'Yes'],
         ],
 //        [
 //            'attribute' => 'category.name',

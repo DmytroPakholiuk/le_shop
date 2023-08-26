@@ -4,6 +4,7 @@ namespace backend\modules\rbac\controllers;
 
 use backend\modules\rbac\models\Item;
 use backend\modules\rbac\models\ItemSearch;
+use yii\filters\AccessControl;
 use yii\helpers\Url;
 use yii\web\Controller;
 
@@ -12,6 +13,30 @@ use yii\web\Controller;
  */
 class RoleController extends Controller
 {
+    /**
+     * @return array[]
+     */
+    public function behaviors()
+    {
+        return [
+            'access' => [
+                'class' => AccessControl::class,
+                'rules' => [
+                    [
+                        'actions' => ['index', 'get-all-children-permissions'],
+                        'allow' => true,
+                        'roles' => ['rbac_read'],
+                    ],
+                    [
+                        'actions' => ['create', 'update', 'delete', 'get-all-children-permissions'],
+                        'allow' => true,
+                        'roles' => ['rbac_write']
+                    ]
+                ],
+            ],
+        ];
+    }
+
     /**
      * Renders the index view for the module
      * @return string
@@ -121,25 +146,6 @@ class RoleController extends Controller
             }
         }
         return $this->asJson($responseArray);
-    }
-
-    /**
-     * a testing action. You can send the permission name via query string. It looks like a question and I find that funny
-     * @param string $permission
-     * @return void
-     */
-    public function actionCanI(string $permission)
-    {
-        $auth = \Yii::$app->authManager;
-        var_dump(\Yii::$app->user->can($permission));die();
-    }
-
-    public function actionTest()
-    {
-        $auth = \Yii::$app->authManager;
-//        $auth->getPermissionsByRole('SuperUser');
-        var_dump($auth->getChildren('SuperUser'));die();
-//        var_dump($auth->getPermissionsByRole('SuperUser'));die();
     }
 
 }

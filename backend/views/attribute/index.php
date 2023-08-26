@@ -10,6 +10,7 @@
 use kartik\daterange\DateRangePicker;
 use yii\grid\ActionColumn;
 use yii\helpers\Html;
+use yii\web\JsExpression;
 
 //var_dump($searchModel->type);die();
 
@@ -23,16 +24,40 @@ $this->title = 'Attribute definition list'; ?>
         'id',
         'name',
         [
-            'attribute' => 'category.name',
-            'label' => 'Category'
+            'attribute' => 'category_id',
+            'label' => 'Category',
+            'value' => function(\common\models\Attribute $model) {
+                return $model?->category?->name;
+            },
+            'filter' => \kartik\select2\Select2::widget([
+                'model' => $searchModel,
+                'attribute' => 'category_id',
+                'initValueText' => $searchModel?->category?->name ?? '',
+                'options' => [
+                    'placeholder' => 'Start entering category:',
+                ],
+                'pluginOptions' => [
+                    'allowClear' => true,
+                    'minimumInputLength' => 2,
+                    'ajax' => [
+                        'url' => \yii\helpers\Url::to('/category/category-list'),
+                        'dataType' => 'json',
+                        'data' => new JsExpression('function(params) { return {q:params.term}; }')
+                    ],
+                ]
+            ]),
         ],
         [
             'attribute' => 'type',
-            'filter' => Html::dropDownList('AttributeSearch[type]',
-                $searchModel->type,
-                $types,
-                ['class' => 'form-control']
-            )
+            'filter' => $types,
+//                Html::dropDownList('AttributeSearch[type]',
+//                $searchModel->type,
+//                $types,
+//                ['class' => 'form-control']
+//            ),
+            'value' => function(\common\models\Attribute $model) use ($types){
+                return $types[$model->type];
+            }
         ],
         [
             'attribute' => 'created_at',
