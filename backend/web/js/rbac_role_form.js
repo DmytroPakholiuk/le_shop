@@ -74,17 +74,17 @@ function repaintSelection(name)
 {
     let selectedElement = $('#Permissions\\[' + name + '\\]')
     if (selectedElement.is(':checked')){
+        selectedElement.prop('disabled', true);
         $.ajax({
             'url': '/rbac/role/get-all-children-permissions',
             'method': 'GET',
             'data': {
-                // 1: '',
                 'names': {0: name}
             },
             'success': function (ressponse){
-                console.log(ressponse);
                 childMap[name] = ressponse[name];
                 paintSelected();
+                selectedElement.prop('disabled', false);
             }
         })
     } else {

@@ -12,7 +12,7 @@ class ItemSearch extends Item
     public function rules()
     {
         return [
-            [['name', 'rule_name'], 'string']
+            [['name', 'rule_name', 'created_at', 'updated_at'], 'string']
         ];
     }
 
@@ -41,8 +41,8 @@ class ItemSearch extends Item
         $query->andFilterWhere(['like', 'name', $this->name]);
         $query->andFilterWhere(['like', 'rule_name', $this->rule_name]);
 
-//        $this->filterDate($this->created_at, 'created_at', $query, true);
-//        $this->filterDate($this->updated_at, 'updated_at', $query, true);
+        $this->filterDate($this->created_at, 'created_at', $query, true);
+        $this->filterDate($this->updated_at, 'updated_at', $query, true);
 //        //
         return $dataProvider;
     }

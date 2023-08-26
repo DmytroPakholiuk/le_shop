@@ -27,6 +27,7 @@ class GoodsSearch extends \common\models\Goods
             [['id', 'available', 'category_id', 'author_id'], 'integer'],
             [['name'], 'string'],
             [['price', 'price_from', 'price_to'], 'double'],
+            [['created_at', 'updated_at'], 'string']
 //            [['category.name'], 'safe']
         ];
     }
@@ -64,7 +65,6 @@ class GoodsSearch extends \common\models\Goods
             }
 
 //            $this->filterDate($this->created_between, 'created_at', $query);
-
             $this->filterDate($this->created_at, 'created_at', $query);
             $this->filterDate($this->updated_at, 'updated_at', $query);
 
