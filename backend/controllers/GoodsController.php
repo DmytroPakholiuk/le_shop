@@ -153,22 +153,6 @@ class GoodsController extends \yii\web\Controller
         }
     }
 
-//    /**
-//     * @return \yii\web\Response
-//     */
-//    public function actionDeleteAttribute()
-//    {
-//        $goodsId = \Yii::$app->request->post('goodsId');
-//        $attributeId = \Yii::$app->request->post('attributeId');
-//        $goodsAttribute = GoodsAttributeValue::findOne(['goods_id' => $goodsId, 'attribute_id' => $attributeId]);
-//        $goodsAttribute->is_deleted = 1;
-//        $goodsAttribute->save();
-//
-//        return $this->asJson([
-//            'message' => 'Attribute deleted'
-//        ]);
-//    }
-
     /**
      * @return \yii\web\Response
      */

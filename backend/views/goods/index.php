@@ -24,8 +24,6 @@ $this->title = 'Goods List';
 
 <?php echo $this->render('search', ['model' => $searchModel, 'attributeDefinitions' => $attributeDefinitions, 'form' => $form]); ?>
 
-
-
 <?php echo \yii\grid\GridView::widget([
     'dataProvider' => $dataProvider,
     'filterModel' => $searchModel,

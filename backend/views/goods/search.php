@@ -51,10 +51,7 @@ use common\models\Attribute;
                     foreach ($dictionary as $key => $item){
                         $options[$key] = $item['value'];
                     }
-//                    $options[''] = '[any]';
-//                    $options[''] = '';
                     $options = array_merge(['' => ''], $options);
-//                    array_unshift()
                     echo $form->field($model->attributeValueSearch, "searchValues[{$attributeDefinition->id}]")
                         ->dropDownList($options)->label($attributeDefinition->name);
             }
