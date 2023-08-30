@@ -24,8 +24,6 @@ $this->title = 'Goods List';
 
 <?php echo $this->render('search', ['model' => $searchModel, 'attributeDefinitions' => $attributeDefinitions, 'form' => $form]); ?>
 
-
-
 <?php echo \yii\grid\GridView::widget([
     'dataProvider' => $dataProvider,
     'filterModel' => $searchModel,
@@ -55,8 +53,7 @@ $this->title = 'Goods List';
                     return 'Yes';
                 }
             },
-            'filter' => Html::dropDownList('GoodsSearch[available]', $searchModel->available,
-                [0 => 'No', 1 => 'Yes', 100 => '[any]'], ['class' => 'form-control'])
+            'filter' => [0 => 'No', 1 => 'Yes'],
         ],
 //        [
 //            'attribute' => 'category.name',

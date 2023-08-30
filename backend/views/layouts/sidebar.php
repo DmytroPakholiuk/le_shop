@@ -60,8 +60,11 @@
                     ['label' => 'Orders', 'url' => '/order/index'],
                     ['label' => 'Categories', 'url' => '/category/index'],
                     ['label' => 'Attribute Definitions', 'url' => '/attribute/index'],
+                    ['label' => 'Users', 'url' => '/user/index'],
 
                     ['label' => 'RBAC', 'header' => true],
+                    ['label' => 'Roles', 'url' => '/rbac/role/index'],
+                    ['label' => 'Permissions', 'url' => '/rbac/permission/index'],
 
 //                    ['label' => 'LABELS', 'header' => true],
 //                    ['label' => 'Important', 'iconStyle' => 'far', 'iconClassAdded' => 'text-danger'],

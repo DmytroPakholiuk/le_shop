@@ -1,66 +1,29 @@
 <?php
 
+
 /**
  * @var \yii\data\ActiveDataProvider $dataProvider
- * @var \backend\models\AttributeSearch $searchModel
+ * @var \backend\modules\rbac\models\ItemSearch $searchModel
  * @var yii\web\View $this
- * @var array $types
  */
 
 use kartik\daterange\DateRangePicker;
 use yii\grid\ActionColumn;
+use yii\grid\GridView;
 use yii\helpers\Html;
-use yii\web\JsExpression;
 
-//var_dump($searchModel->type);die();
-
-$this->title = 'Attribute definition list'; ?>
+$this->title = 'Role list'; ?>
 
 
-<?php echo \yii\grid\GridView::widget([
+<?php echo GridView::widget([
     'dataProvider' => $dataProvider,
     'filterModel' => $searchModel,
     'columns' => [
-        'id',
         'name',
-        [
-            'attribute' => 'category_id',
-            'label' => 'Category',
-            'value' => function(\common\models\Attribute $model) {
-                return $model?->category?->name;
-            },
-            'filter' => \kartik\select2\Select2::widget([
-                'model' => $searchModel,
-                'attribute' => 'category_id',
-                'initValueText' => $searchModel?->category?->name ?? '',
-                'options' => [
-                    'placeholder' => 'Start entering category:',
-                ],
-                'pluginOptions' => [
-                    'allowClear' => true,
-                    'minimumInputLength' => 2,
-                    'ajax' => [
-                        'url' => \yii\helpers\Url::to('/category/category-list'),
-                        'dataType' => 'json',
-                        'data' => new JsExpression('function(params) { return {q:params.term}; }')
-                    ],
-                ]
-            ]),
-        ],
-        [
-            'attribute' => 'type',
-            'filter' => $types,
-//                Html::dropDownList('AttributeSearch[type]',
-//                $searchModel->type,
-//                $types,
-//                ['class' => 'form-control']
-//            ),
-            'value' => function(\common\models\Attribute $model) use ($types){
-                return $types[$model->type];
-            }
-        ],
+        'rule_name',
         [
             'attribute' => 'created_at',
+            'format' => 'datetime',
             'filter' => DateRangePicker::widget([
                 'language' => 'uk-UK',
                 'model' => $searchModel,
@@ -84,6 +47,7 @@ $this->title = 'Attribute definition list'; ?>
         ],
         [
             'attribute' => 'updated_at',
+            'format' => 'datetime',
             'filter' => DateRangePicker::widget([
                 'language' => 'uk-UK',
                 'model' => $searchModel,
@@ -106,10 +70,12 @@ $this->title = 'Attribute definition list'; ?>
             ]),
         ],
         [
-                'class' => ActionColumn::class,
+            'class' => ActionColumn::class,
+            'template' => '{update} {delete}'
         ]
     ],
 
 ]); ?>
 <br>
-<a href = <?php echo \yii\helpers\Url::to(['attribute/create']); ?>>Create a new attribute definition</a>
+<a href = <?php echo \yii\helpers\Url::to(['/rbac/role/create']); ?>>Create a new role</a>
+

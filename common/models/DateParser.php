@@ -28,7 +28,7 @@ trait DateParser
      *
      * Method to apply filter of dates from DatePicker`s request string
      */
-    public function filterDate($range, $colName, Query $query): void
+    public function filterDate($range, $colName, Query $query, bool $inInteger = false): void
     {
         if ($range){
             $arrRange = $this->explodeTime($range);
@@ -36,6 +36,10 @@ trait DateParser
             $before = $arrRange[1] ?? null;
 
             if ($after !== null && $before !== null) {
+                if ($inInteger) {
+                    $after = strtotime($after);
+                    $before = strtotime($before);
+                }
                 $query->andWhere(['between', $colName, $after, $before]);
             }
 //            $query->andFilterWhere(['>=', $colName, $after]);

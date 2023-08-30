@@ -4,7 +4,8 @@
     </a>
     <h1 align="center">Yii 2 Advanced Project Template</h1>
     <br>
-</p>
+
+[//]: # (</p>)
 
 Yii 2 Advanced Project Template is a skeleton [Yii 2](http://www.yiiframework.com/) application best for
 developing complex Web applications with multiple tiers.
@@ -20,6 +21,18 @@ Documentation is at [docs/guide/README.md](docs/guide/README.md).
 [![Latest Stable Version](https://img.shields.io/packagist/v/yiisoft/yii2-app-advanced.svg)](https://packagist.org/packages/yiisoft/yii2-app-advanced)
 [![Total Downloads](https://img.shields.io/packagist/dt/yiisoft/yii2-app-advanced.svg)](https://packagist.org/packages/yiisoft/yii2-app-advanced)
 [![build](https://github.com/yiisoft/yii2-app-advanced/workflows/build/badge.svg)](https://github.com/yiisoft/yii2-app-advanced/actions?query=workflow%3Abuild)
+
+INSTALLATION
+------------
+To install, you will need to:
+<ol>
+    <li>Clone from the repository</li>
+    <li>Run <code>php init</code> </li>
+    <li>Run <code>composer install</code> </li>
+    <li>Configure db and other things in your main-local configs</li>
+    <li>Run <code>php yii migrate</code> for migrations</li>
+    <li>Run <code>php yii migrate-rbac</code> for RBAC migrations</li>
+</ol>
 
 DIRECTORY STRUCTURE
 -------------------

@@ -43,7 +43,7 @@ use common\models\Attribute;
                     break;
                 case Attribute::ATTRIBUTE_TYPE_BOOLEAN:
                     echo $form->field($model->attributeValueSearch, "searchValues[{$attributeDefinition->id}]")
-                        ->dropDownList([0 => 'No', 1 => 'Yes', 100 => '[any]'])->label($attributeDefinition->name);
+                        ->dropDownList(['' => '', 0 => 'No', 1 => 'Yes'])->label($attributeDefinition->name);
                     break;
                 case Attribute::ATTRIBUTE_TYPE_DICTIONARY:
                     $dictionary = GoodsAttributeDictionaryDefinition::getDefinitionsFor($attributeDefinition, true);
@@ -51,7 +51,7 @@ use common\models\Attribute;
                     foreach ($dictionary as $key => $item){
                         $options[$key] = $item['value'];
                     }
-                    $options[100] = '[any]';
+                    $options = array_merge(['' => ''], $options);
                     echo $form->field($model->attributeValueSearch, "searchValues[{$attributeDefinition->id}]")
                         ->dropDownList($options)->label($attributeDefinition->name);
             }

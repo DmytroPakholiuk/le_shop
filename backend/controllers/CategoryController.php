@@ -22,9 +22,14 @@ class CategoryController extends Controller
                 'class' => AccessControl::class,
                 'rules' => [
                     [
-                        'actions' => ['create', 'index', 'view', 'update', 'category-list'],
+                        'actions' => ['index', 'view', 'category-list'],
                         'allow' => true,
-                        'roles' => ['@'],
+                        'roles' => ['category_read'],
+                    ],
+                    [
+                        'actions' => ['create', 'update', 'category-list', 'delete'],
+                        'allow' => true,
+                        'roles' => ['category_write'],
                     ],
                 ],
             ],

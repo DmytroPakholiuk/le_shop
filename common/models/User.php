@@ -29,6 +29,15 @@ class User extends ActiveRecord implements IdentityInterface
     const STATUS_INACTIVE = 9;
     const STATUS_ACTIVE = 10;
 
+    public static function statuses(): array
+    {
+        return [
+            0 => 'Deleted',
+            9 => 'Inactive',
+            10 => 'Active'
+        ];
+    }
+
 
     /**
      * {@inheritdoc}

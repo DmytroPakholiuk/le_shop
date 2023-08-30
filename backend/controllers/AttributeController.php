@@ -7,11 +7,36 @@ use common\models\Attribute;
 use common\models\Category;
 use common\models\GoodsAttributeDictionaryDefinition;
 use yii\db\Expression;
+use yii\filters\AccessControl;
 use yii\helpers\ArrayHelper;
 use yii\web\NotFoundHttpException;
 
 class AttributeController extends \yii\web\Controller
 {
+    /**
+     * @return array[]
+     */
+    public function behaviors()
+    {
+        return [
+            'access' => [
+                'class' => AccessControl::class,
+                'rules' => [
+                    [
+                        'actions' => ['index', 'view', 'get-dictionary-definitions', 'get-category-attributes'],
+                        'allow' => true,
+                        'roles' => ['attribute_definition_read'],
+                    ],
+                    [
+                        'actions' => ['create', 'update', 'delete', 'get-dictionary-definitions', 'get-category-attributes'],
+                        'allow' => true,
+                        'roles' => ['attribute_definition_write'],
+                    ],
+                ],
+            ],
+        ];
+    }
+
     public function actionIndex()
     {
         $searchModel = new AttributeSearch();
@@ -20,7 +45,7 @@ class AttributeController extends \yii\web\Controller
         return $this->render('index', [
             'dataProvider' => $dataProvider,
             'searchModel' => $searchModel,
-            'types' => $searchModel->types()
+            'types' => Attribute::getPossibleTypes()
         ]);
     }
 
@@ -120,6 +145,10 @@ class AttributeController extends \yii\web\Controller
 
     }
 
+    /**
+     * @param $id
+     * @return string
+     */
     public function actionView($id)
     {
         $model = Attribute::findOne($id);
@@ -138,6 +167,12 @@ class AttributeController extends \yii\web\Controller
         ]);
     }
 
+    /**
+     * returns a json of dictionary definitions for attribute if it is of dictionary type
+     * @param $id
+     * @return \yii\web\Response
+     * @throws NotFoundHttpException
+     */
     public function actionGetDictionaryDefinitions($id)
     {
         $model = Attribute::findOne($id) ?? throw new NotFoundHttpException('attribute not found');
@@ -150,6 +185,8 @@ class AttributeController extends \yii\web\Controller
     }
 
     /**
+     * returns a json of attributes for a category. Also sends a 'value' field in each attribute if
+     * a valid goodsId is provided
      * @param int $id
      * @param int $goodsId
      * @return \yii\web\Response

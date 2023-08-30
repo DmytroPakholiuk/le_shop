@@ -75,7 +75,7 @@ class AttributeValueSearch extends Model
                     $worthSearching = !empty($this->searchValues[$definition->id]['from']) ||
                         !empty($this->searchValues[$definition->id]['to']); break;
                 case ($definition->type == Attribute::ATTRIBUTE_TYPE_BOOLEAN || $definition->type == Attribute::ATTRIBUTE_TYPE_DICTIONARY):
-                    $worthSearching = $this->searchValues[$definition->id] != 100;
+                    $worthSearching = !empty($this->searchValues[$definition->id]);
             }
             if ($worthSearching){
                 $this->foundAttributeValues[$definition->id] = $this->findValues($definition);

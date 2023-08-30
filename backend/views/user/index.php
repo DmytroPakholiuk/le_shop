@@ -2,65 +2,61 @@
 
 /**
  * @var \yii\data\ActiveDataProvider $dataProvider
- * @var \backend\models\AttributeSearch $searchModel
+ * @var \backend\models\UserSearch $searchModel
  * @var yii\web\View $this
- * @var array $types
+ * @var \yii\rbac\DbManager $auth
  */
 
 use kartik\daterange\DateRangePicker;
 use yii\grid\ActionColumn;
-use yii\helpers\Html;
+use yii\grid\GridView;
 use yii\web\JsExpression;
 
-//var_dump($searchModel->type);die();
+$this->title = 'User List'; ?>
 
-$this->title = 'Attribute definition list'; ?>
+<?php //var_dump($searchModel->roles); die(); ?>
 
-
-<?php echo \yii\grid\GridView::widget([
+<?php echo GridView::widget([
     'dataProvider' => $dataProvider,
     'filterModel' => $searchModel,
     'columns' => [
         'id',
-        'name',
+        'username',
+        'email',
         [
-            'attribute' => 'category_id',
-            'label' => 'Category',
-            'value' => function(\common\models\Attribute $model) {
-                return $model?->category?->name;
+            'label' => 'Roles',
+            'value' => function(\common\models\User $model) use ($auth){
+                $roles = $auth->getRolesByUser($model->id);
+                $value = '';
+                foreach ($roles as $role){
+                    $value .= "<div class='badge badge-info' style='margin-right: 10px'>{$role->name}</div>";
+                }
+                return $value;
             },
-            'filter' => \kartik\select2\Select2::widget([
-                'model' => $searchModel,
-                'attribute' => 'category_id',
-                'initValueText' => $searchModel?->category?->name ?? '',
-                'options' => [
-                    'placeholder' => 'Start entering category:',
-                ],
-                'pluginOptions' => [
-                    'allowClear' => true,
-                    'minimumInputLength' => 2,
-                    'ajax' => [
-                        'url' => \yii\helpers\Url::to('/category/category-list'),
-                        'dataType' => 'json',
-                        'data' => new JsExpression('function(params) { return {q:params.term}; }')
-                    ],
-                ]
-            ]),
-        ],
-        [
-            'attribute' => 'type',
-            'filter' => $types,
-//                Html::dropDownList('AttributeSearch[type]',
-//                $searchModel->type,
-//                $types,
-//                ['class' => 'form-control']
-//            ),
-            'value' => function(\common\models\Attribute $model) use ($types){
-                return $types[$model->type];
-            }
+            'filter' => false,
+//                \kartik\select2\Select2::widget([
+//                'name' => 'UserSearch[roles]',
+//                'options' => [
+//                    'placeholder' => 'Start entering roles:',
+//                    'multiple' => true
+//                ],
+//                'pluginOptions' => [
+////                    'tags' => $searchModel->roles,
+//                    'value' => $searchModel->roles,
+//                    'allowClear' => true,
+//                    'minimumInputLength' => 2,
+//                    'ajax' => [
+//                        'url' => \yii\helpers\Url::to('/category/category-list'),
+//                        'dataType' => 'json',
+//                        'data' => new JsExpression('function(params) { return {q:params.term}; }')
+//                    ],
+//                ]
+//            ]),
+            'format' => 'html'
         ],
         [
             'attribute' => 'created_at',
+            'format' => 'datetime',
             'filter' => DateRangePicker::widget([
                 'language' => 'uk-UK',
                 'model' => $searchModel,
@@ -84,6 +80,7 @@ $this->title = 'Attribute definition list'; ?>
         ],
         [
             'attribute' => 'updated_at',
+            'format' => 'datetime',
             'filter' => DateRangePicker::widget([
                 'language' => 'uk-UK',
                 'model' => $searchModel,
@@ -106,10 +103,11 @@ $this->title = 'Attribute definition list'; ?>
             ]),
         ],
         [
-                'class' => ActionColumn::class,
+            'class' => ActionColumn::class,
         ]
-    ],
-
+    ]
 ]); ?>
-<br>
-<a href = <?php echo \yii\helpers\Url::to(['attribute/create']); ?>>Create a new attribute definition</a>
+
+<?php echo \yii\helpers\Html::a('Create a new User', '/user/create', ['class' => 'btn btn-primary']); ?>
+
+
