@@ -31,7 +31,8 @@
         "enqueue/amqp-tools": "*",
         "enqueue/amqp-lib": "*",
         "php-amqplib/php-amqplib": "*",
-        "hail812/yii2-adminlte3": "~1.1"
+        "hail812/yii2-adminlte3": "~1.1",
+        "symfony/dotenv": "4.4.20"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.1.0",
