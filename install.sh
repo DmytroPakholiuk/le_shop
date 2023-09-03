@@ -84,13 +84,14 @@ function makeDocker() {
 }
 
 function buildLeView() {
-    docker-compose exec le_shop_node /bin/bash -c "cd client && npm install && npm run build";
+    docker exec le_shop_node /bin/bash -c "cd client && npm install && npm run build";
 }
 
 function buildLeShopPhp() {
     output "Setting up php with composer" info
 
-    docker-compose exec le_shop_php /bin/bash -c "composer install --ignore-platform-reqs &&
+    docker exec le_shop_php /bin/bash -c "composer install --ignore-platform-reqs &&
+      php init --env=Development &&
       php yii migrate --interactive=0 &&
       php yii migrate-rbac --interactive=0
     "

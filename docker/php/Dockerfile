@@ -8,6 +8,9 @@ RUN apt-get update --fix-missing \
         && docker-php-ext-install pdo_pgsql pdo_mysql bcmath sockets gd zip \
         && docker-php-ext-install intl ldap
 
+RUN pecl install mongodb \
+    && docker-php-ext-enable mongodb
+
 RUN pecl install imagick \
     && docker-php-ext-enable imagick
 
