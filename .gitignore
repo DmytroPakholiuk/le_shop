@@ -44,3 +44,11 @@ phpunit.phar
 
 # .env of this project
 .env
+
+# log files
+backend-access.log
+backend-error.log
+frontend-access.log
+frontend-error.log
+
+install.example.sh

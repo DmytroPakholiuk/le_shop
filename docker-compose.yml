@@ -11,7 +11,7 @@ services:
     container_name: le_shop_nginx
     image: nginx:latest
     ports:
-      - 20080:80
+      - 10080:80
 #    environment:
     networks:
       le_shop_network:
@@ -34,6 +34,17 @@ services:
       - .:/var/www/le_shop
     working_dir: /var/www/le_shop
 
+  node:
+    container_name: le_shop_node
+    image: node:18
+    networks:
+      le_shop_network:
+        ipv4_address: 130.10.1.4
+    volumes:
+      - ./le_view:/var/www/le_shop/le_view
+    working_dir: /var/www/le_shop/le-view
+
+
   pgsql:
     container_name: le_shop_pgsql
     image: postgres:13.12
@@ -47,7 +58,7 @@ services:
       - PGTZ=GMT+2
     networks:
       le_shop_network:
-         ipv4_address: 130.10.1.4
+         ipv4_address: 130.10.1.5
     volumes:
       - le_shop_pg_data:/var/lib/postgresql/data:rw
 #      - ./docker/postgres/entrypoint/:/docker-entrypoint-initdb.d/ - можемо кидати потрібні ініціалізуючі скрипти
