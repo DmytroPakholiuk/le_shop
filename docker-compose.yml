@@ -11,7 +11,7 @@ services:
     container_name: le_shop_nginx
     image: nginx:latest
     ports:
-      - 10080:80
+      - 20080:80
 #    environment:
     networks:
       le_shop_network:
