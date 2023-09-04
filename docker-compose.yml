@@ -33,7 +33,7 @@ services:
     image: node:18
     volumes:
       - ./le_view:/var/www/le_shop/le_view
-    working_dir: /var/www/le_shop/le-view
+    working_dir: /var/www/le_shop/le_view
 
 
   pgsql:
