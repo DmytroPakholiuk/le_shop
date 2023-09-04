@@ -12,15 +12,15 @@ class m230126_131011_category_seeder extends Migration
      */
     public function safeUp()
     {
-        for ($i=0; $i < 10; $i++){
-            $category = new \common\models\Category();
-            $category->name = "test category no.".($i+1);
-            $category->description = "this category was created for simple testing purposes";
-
-            if(!$category->save()){
-                throw new \yii\db\Exception("the simple test category could not be saved");
-            }
-        }
+//        for ($i=0; $i < 10; $i++){
+//            $category = new \common\models\Category();
+//            $category->name = "test category no.".($i+1);
+//            $category->description = "this category was created for simple testing purposes";
+//
+//            if(!$category->save()){
+//                throw new \yii\db\Exception("the simple test category could not be saved");
+//            }
+//        }
     }
 
     /**
@@ -28,10 +28,10 @@ class m230126_131011_category_seeder extends Migration
      */
     public function safeDown()
     {
-        $categories = \common\models\Category::find()->where(['like', 'name', 'test category'])->all();
-        foreach ($categories as $category){
-            $category->delete();
-        }
+//        $categories = \common\models\Category::find()->where(['like', 'name', 'test category'])->all();
+//        foreach ($categories as $category){
+//            $category->delete();
+//        }
     }
 
     /*

@@ -19,6 +19,8 @@ services:
     volumes:
       - .:/var/www/le_shop
       - ./docker/nginx/le_shop.conf:/etc/nginx/conf.d/le_shop.conf
+    depends_on:
+      - php
 
   php:
 #    image: php:8.1-fpm
@@ -33,6 +35,8 @@ services:
     volumes:
       - .:/var/www/le_shop
     working_dir: /var/www/le_shop
+    depends_on:
+      - pgsql
 
   node:
     container_name: le_shop_node
