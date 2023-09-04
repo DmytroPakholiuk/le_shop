@@ -8,6 +8,17 @@ return [
     ],
     'vendorPath' => dirname(dirname(__DIR__)) . '/vendor',
     'components' => [
+//        'mongodb' => [
+//            'class' => '\yii\mongodb\Connection',
+//            'dsn' => getenv('LE_SHOP_MONGODB_DSN'),
+//        ],
+        'db' => [
+            'class' => \yii\db\Connection::class,
+            'dsn' => getenv('LE_SHOP_DOCKER_DB_DSN'),
+            'username' => getenv('LE_SHOP_DOCKER_DB_USER'),
+            'password' => getenv('LE_SHOP_DOCKER_DB_PASSWORD'),
+            'charset' => 'utf8',
+        ],
         'cache' => [
             'class' => \yii\caching\FileCache::class,
         ],

@@ -1,38 +1,57 @@
 version: '3.2'
 
+
 services:
 
-  frontend:
-    build: frontend
+  nginx:
+    container_name: le_shop_nginx
+    image: nginx:latest
     ports:
-      - 20080:80
+      - ${DOCKER_NGINX_PORT:-20080}:80
     volumes:
-      # Re-use local composer cache via host-volume
-      - ~/.composer-docker/cache:/root/.composer/cache:delegated
-      # Mount source-code for development
-      - ./:/app
+      - .:/var/www/le_shop
+      - ./docker/nginx/le_shop.conf:/etc/nginx/conf.d/le_shop.conf
+    depends_on:
+      - php
 
-  backend:
-    build: backend
+  php:
+#    image: php:8.1-fpm
+    container_name: le_shop_php
     ports:
-      - 21080:80
+      - ${DOCKER_PHP_PORT:-19000}:9000
+    build:
+      context: ./docker/php
     volumes:
-      # Re-use local composer cache via host-volume
-      - ~/.composer-docker/cache:/root/.composer/cache:delegated
-      # Mount source-code for development
-      - ./:/app
+      - .:/var/www/le_shop
+    working_dir: /var/www/le_shop
+    depends_on:
+      - pgsql
 
-  mysql:
-    image: mysql:5.7
+  node:
+    container_name: le_shop_node
+    command: bash -c "npm install && npm run build"
+    image: node:18
+    volumes:
+      - ./le_view:/var/www/le_shop/le_view
+    working_dir: /var/www/le_shop/le_view
+
+
+  pgsql:
+    container_name: le_shop_pgsql
+    image: postgres:13.12
+    ports:
+      - ${DOCKER_PGSQL_PORT:-15432}:5432
     environment:
-      - MYSQL_ROOT_PASSWORD=verysecret
-      - MYSQL_DATABASE=yii2advanced
-      - MYSQL_USER=yii2advanced
-      - MYSQL_PASSWORD=secret
+      - POSTGRES_DB=${LE_SHOP_DOCKER_DB_DB}
+      - POSTGRES_USER=${LE_SHOP_DOCKER_DB_USER}
+      - POSTGRES_PASSWORD=${LE_SHOP_DOCKER_DB_PASSWORD}
+      - TZ=GMT+2
+      - PGTZ=GMT+2
+    volumes:
+      - le_shop_pg_data:/var/lib/postgresql/data:rw
+#      - ./docker/postgres/entrypoint/:/docker-entrypoint-initdb.d/ - можемо кидати потрібні ініціалізуючі скрипти
 
-  #pgsql:
-  #  image: postgres:9.5
-  #  environment:
-  #    - POSTGRES_DB=yii2advanced
-  #    - POSTGRES_USER=yii2advanced
-  #    - POSTGRES_PASSWORD=secret
+volumes:
+  le_shop_pg_data:
+    external:
+      name: le_shop_pg_data
