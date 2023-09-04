@@ -7,7 +7,6 @@ OUT_COLOR_RED='\033[0;31m'
 OUT_COLOR_GREEN='\033[0;32m'
 OUT_COLOR_BLUE='\033[0;34m'
 OUT_NO_COLOR='\033[0m'
-#CI_PROJECT_DIR='/builds/gomer/lisa'
 
 # вывод цветного сообщения
 function output() {
@@ -59,22 +58,11 @@ function makeDocker() {
     output "docker-compose.yml not found. Can not continue." error
     return ${error}
   fi
-  if ! [[ -f './docker/.bash_history' ]]; then
-    touch ./docker/.bash_history
-  fi
-
   if ! (docker volume inspect le_shop_pg_data >/dev/null); then
     docker volume create --name=le_shop_pg_data
   fi
-#  if ! (docker volume inspect splitter-mysql-data >/dev/null); then
-#    docker volume create --name=splitter-mysql-data
-#  fi
 
-  if ! (docker network inspect le_shop_network >/dev/null); then
-    docker network create --driver=bridge --subnet=130.10.1.0/24 le_shop_network
-  fi
-
-  if ! USER_ID=$(id -u ${USER}) GROUP_ID=$(id -g ${USER}) docker-compose up -d; then
+  if ! docker-compose up -d; then
     output "docker-compose could not" error
     return ${error}
   fi
@@ -109,10 +97,15 @@ function checkHosts() {
       sudo /bin/bash -c "echo -e '\n${HOSTS}' >> /etc/hosts";
       output "${HOSTS} have been added successfully to /etc/hosts." success
     fi
+    output "The sites are available at \n " info
+    output "backend.le.shop:20080 " info
+    output 'le.shop:20080 ' info
+    output 'view.le.shop:20080 ' info
 }
 
 
 function fullInstall() {
+    copyEnv
     if ! makeDocker; then
         return
     fi
@@ -121,29 +114,27 @@ function fullInstall() {
     checkHosts
 }
 
+function start() {
+    docker-compose up -d
+}
+
+function copyEnv() {
+  if ! [[ -f '.env' ]]; then
+      cp .example.env .env
+  fi
+}
+
 function showInstallMenu() {
   INSTALL='Full project installation'
   START='Start the containers'
   LE_VIEW_BUILD='Build le view'
   LE_SHOP_PHP_BUILD='Set up php of le shop with composer'
-#  SPLITTER_COMPOSER_INSTALL='Запустить composer install для Splitter'
-#  SPLITTER_MIGRATE='Запустить миграции для Splitter'
-#  LISA_COMPOSER_INSTALL='Запустить composer install для Lisa'
-#  LISA_MIGRATE='Запустить миграции для Lisa'
-#  LISA_NPM='Сбилдить npm'
-#  LISA_UNITS='Запустить юниты'
 
   options=(
       "${INSTALL}"
       "${START}"
       "${LE_VIEW_BUILD}"
       "${LE_SHOP_PHP_BUILD}"
-#      "${SPLITTER_COMPOSER_INSTALL}"
-#      "${SPLITTER_MIGRATE}"
-#      "${LISA_COMPOSER_INSTALL}"
-#      "${LISA_MIGRATE}"
-#      "${LISA_NPM}"
-#      "${LISA_UNITS}"
   )
 
     select opt in "${options[@]}"; do
@@ -165,34 +156,6 @@ function showInstallMenu() {
         buildLeShopPhp
         return
         ;;
-#      ${LE_VIEW_BUILD})
-#        buildLeView
-#        return
-#        ;;
-#      ${SPLITTER_COMPOSER_INSTALL})
-#        splitterComposerInstall
-#        return
-#        ;;
-#      ${SPLITTER_MIGRATE})
-#        splitterMigrate
-#        return
-#        ;;
-#      ${LISA_COMPOSER_INSTALL})
-#        lisaComposerInstall
-#        return
-#        ;;
-#      ${LISA_MIGRATE})
-#        lisaMigrate
-#        return
-#        ;;
-#      ${LISA_NPM})
-#        buildNpm
-#        return
-#        ;;
-#      ${LISA_UNITS})
-#        lisaUnits
-#        return
-#        ;;
       *)
     output 'Choose one of the shown options:' error
     showInstallMenu
