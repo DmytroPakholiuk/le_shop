@@ -52,3 +52,8 @@ frontend-access.log
 frontend-error.log
 
 install.example.sh
+
+composer.lock
+package-lock.json
+
+le_view/package-lock.json
