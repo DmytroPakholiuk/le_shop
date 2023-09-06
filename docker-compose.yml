@@ -29,7 +29,10 @@ services:
 
   node:
     container_name: le_shop_node
-    command: bash -c "npm install && npm run build"
+#    command: bash -c "npm install; npm update && npm run build"
+    command: bash -c "npm run dev"
+    ports:
+      - ${DOCKER_NPM_PORT:-23000}:3000
     image: node:18
     volumes:
       - ./le_view:/var/www/le_shop/le_view

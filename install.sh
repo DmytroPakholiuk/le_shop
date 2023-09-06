@@ -72,7 +72,13 @@ function makeDocker() {
 }
 
 function buildLeView() {
-    docker exec le_shop_node /bin/bash -c "cd client && npm install && npm run build";
+    docker-compose up -d node
+    docker exec le_shop_node /bin/bash -c "npm run build";
+}
+
+function installLeView() {
+    docker-compose up -d node
+    docker exec le_shop_node /bin/bash -c "npm install; npm update && run build";
 }
 
 function buildLeShopPhp() {
@@ -109,7 +115,7 @@ function fullInstall() {
     if ! makeDocker; then
         return
     fi
-    buildLeView
+    installLeView
     buildLeShopPhp
     checkHosts
 }
