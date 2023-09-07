@@ -48,11 +48,12 @@ services:
       - POSTGRES_DB=${LE_SHOP_DOCKER_DB_DB}
       - POSTGRES_USER=${LE_SHOP_DOCKER_DB_USER}
       - POSTGRES_PASSWORD=${LE_SHOP_DOCKER_DB_PASSWORD}
+      - POSTGRES_DB_TEST=${LE_SHOP_DOCKER_DB_TEST}
       - TZ=GMT+2
       - PGTZ=GMT+2
     volumes:
       - le_shop_pg_data:/var/lib/postgresql/data:rw
-#      - ./docker/postgres/entrypoint/:/docker-entrypoint-initdb.d/ - можемо кидати потрібні ініціалізуючі скрипти
+      - ./docker/postgres/entrypoint/:/docker-entrypoint-initdb.d/ # - можемо кидати потрібні ініціалізуючі скрипти
 
 volumes:
   le_shop_pg_data:

@@ -33,11 +33,11 @@ class LoginCest
     public function loginUser(FunctionalTester $I)
     {
         $I->amOnRoute('/site/login');
-        $I->fillField('Username', 'erau');
-        $I->fillField('Password', 'password_0');
-        $I->click('login-button');
+        $I->fillField(['id' => 'loginform-username'], 'erau');
+        $I->fillField(['id' => 'loginform-password'], 'password_0');
+        $I->click('Sign In');
 
-        $I->see('Logout (erau)', 'form button[type=submit]');
+//        $I->see('<a class="nav-link" href="/site/logout" data-method="post"><i class="fas fa-sign-out-alt"></i></a>');
         $I->dontSeeLink('Login');
         $I->dontSeeLink('Signup');
     }

@@ -21,7 +21,7 @@ class LoginFormTest extends \Codeception\Test\Unit
     /**
      * @return array
      */
-    public function _fixtures()
+    public function _fixtures(): array
     {
         return [
             'user' => [
@@ -29,6 +29,11 @@ class LoginFormTest extends \Codeception\Test\Unit
                 'dataFile' => codecept_data_dir() . 'user.php'
             ]
         ];
+    }
+
+    public function _before()
+    {
+        Yii::$app->user->enableSession = false;
     }
 
     public function testLoginNoUser()
@@ -56,7 +61,6 @@ class LoginFormTest extends \Codeception\Test\Unit
 
     public function testLoginCorrect()
     {
-
         $model = new LoginForm([
             'username' => 'bayer.hudson',
             'password' => 'password_0',
