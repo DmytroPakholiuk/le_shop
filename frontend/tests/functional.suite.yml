@@ -5,3 +5,6 @@ modules:
         - Filesystem
         - Yii2
         - Asserts
+
+params:
+    - .env
