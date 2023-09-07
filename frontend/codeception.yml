@@ -15,4 +15,4 @@ modules:
             configFile: 'config/codeception-local.php'
 
 params:
-    - .env
+    - ../.env

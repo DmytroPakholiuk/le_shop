@@ -144,8 +144,7 @@ function generateUnitTest() {
 
     read -p "Enter the test name (e.g. model/LoginForm): " TEST_NAME
 
-    docker exec le_shop_php /bin/bash -c "cd ${CHOSEN_DIR} &&
-        ../vendor/bin/codecept g:test unit ${TEST_NAME}
+    docker exec le_shop_php /bin/bash -c "vendor/bin/codecept --config=${CHOSEN_DIR} g:test unit ${TEST_NAME}
     "
 
 }
