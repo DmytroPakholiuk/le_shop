@@ -10,7 +10,7 @@ namespace common\models;
  * @property-read Goods $goods
  * @property string $created_at
  * @property string $updated_at
- * @property int $is_deleted
+// * @property int $is_deleted
  */
 abstract class GoodsAttributeValue extends \yii\db\ActiveRecord
 {
@@ -28,7 +28,7 @@ abstract class GoodsAttributeValue extends \yii\db\ActiveRecord
     public function rules(): array
     {
         return [
-            [['goods_id', 'attribute_id', 'is_deleted'], 'integer'],
+            [['goods_id', 'attribute_id'], 'integer'],
             [['attribute_id', 'goods_id'], 'required'],
             [['created_at','updated_at'], 'safe'],
         ];

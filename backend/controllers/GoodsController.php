@@ -112,7 +112,7 @@ class GoodsController extends \yii\web\Controller
             if (!$model->upload()) {
                 \Yii::$app->session->setFlash('error', 'could not save images');
             }
-            $attributes = \Yii::$app->request->post('goodsAttributes');
+            $attributes = \Yii::$app->request->post('GoodsAttributeValue');
             $model->configureAttributes($attributes);
             return $this->redirect(['/goods/view', 'id' => $model->id]);
         }
