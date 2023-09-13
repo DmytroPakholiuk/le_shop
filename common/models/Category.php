@@ -37,4 +37,8 @@ class Category extends \yii\db\ActiveRecord
     public function getParent(){
         return $this->hasOne(Category::class, ['id' => 'parent_id']);
     }
+
+    public function getChildren(){
+        return $this->hasMany(Category::class, ['parent_id' => 'id']);
+    }
 }
