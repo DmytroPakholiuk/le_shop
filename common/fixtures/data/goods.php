@@ -31,5 +31,16 @@
         'author_id' => 2,
         'created_at' => '2023-09-06 19:34:31',
         'updated_at' => '2023-09-06 19:34:31'
+    ],
+    'goods4' => [
+        'id' => 4,
+        'name' => 'Goods item 4',
+        'description' => 'This one has no attributes',
+        'price' => 420.69,
+        'available' => true,
+        'category_id' => 2,
+        'author_id' => 2,
+        'created_at' => '2023-09-06 19:34:31',
+        'updated_at' => '2023-09-06 19:34:31'
     ]
 ];

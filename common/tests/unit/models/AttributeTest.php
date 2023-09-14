@@ -148,7 +148,7 @@ class AttributeTest extends \Codeception\Test\Unit
 
         //can get value of attribute for child category
         $valueForChild = Attribute::getValueFor($model->id, $model->type, $goodsIdChildCategory);
-        verify($valueForChild)->equals(GoodsAttributeBooleanValue::findOne(1));
+        verify($valueForChild)->equals(GoodsAttributeBooleanValue::findOne(['goods_id' => 2, 'attribute_id' => 4]));
     }
 
     public function testGetValueStaticForDictionary()
@@ -163,7 +163,7 @@ class AttributeTest extends \Codeception\Test\Unit
 
         //can get value of attribute for child category
         $valueForChild = Attribute::getValueFor($model->id, $model->type, $goodsIdChildCategory);
-        verify($valueForChild)->equals(GoodsAttributeDictionaryValue::findOne(1));
+        verify($valueForChild)->equals(GoodsAttributeDictionaryValue::findOne(['goods_id' => 2, 'attribute_id' => 5]));
     }
 
     public function testGetValueText()
@@ -216,7 +216,7 @@ class AttributeTest extends \Codeception\Test\Unit
         $attribute->category_id = 1;
         $attribute->type = Attribute::ATTRIBUTE_TYPE_TEXT;
 
-        verify($attribute->validate())->false();
+        verify($attribute->save())->false();
     }
 
     public function testInsertWithIncorrectType()
@@ -227,7 +227,7 @@ class AttributeTest extends \Codeception\Test\Unit
         $attribute->category_id = 1;
         $attribute->type = 'sdfsdfsdf';
 
-        verify($attribute->validate())->false();
+        verify($attribute->save())->false();
     }
 
     public function testInsertWithInexistingCategoryId()
@@ -239,5 +239,16 @@ class AttributeTest extends \Codeception\Test\Unit
         $attribute->type = Attribute::ATTRIBUTE_TYPE_TEXT;
 
         verify($attribute->save())->false();
+    }
+
+    public function testInsertCorrect()
+    {
+        $attribute = new Attribute();
+        $attribute->id = 103;
+        $attribute->name = 'foo';
+        $attribute->category_id = 1;
+        $attribute->type = Attribute::ATTRIBUTE_TYPE_TEXT;
+
+        verify($attribute->save())->true();
     }
 }
