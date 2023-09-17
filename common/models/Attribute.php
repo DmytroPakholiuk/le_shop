@@ -57,10 +57,9 @@ class Attribute extends \yii\db\ActiveRecord
         return [
             [['name'], 'string'],
             [['name', 'type'], 'required'],
-            ['type', function($value){
-                return in_array($value, array_keys(self::getPossibleTypes()));
-            }],
+            [['type'], 'in', 'range' => array_keys(self::getPossibleTypes())],
             [['created_at','updated_at'], 'safe'],
+            [['category_id'], 'exist', 'targetClass' => Category::class, 'targetAttribute' => ['category_id' => 'id']]
         ];
     }
 

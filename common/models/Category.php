@@ -11,6 +11,7 @@ namespace common\models;
  * @property string $created_at
  * @property string $updated_at
  * @property-read Category $parent
+ * @property-read Category[] $children
  */
 class Category extends \yii\db\ActiveRecord
 {
@@ -24,6 +25,7 @@ class Category extends \yii\db\ActiveRecord
             [['name'], 'required',],
             [['created_at','updated_at'], 'safe'],
             [['status', 'parent_id'], 'integer'],
+            ['parent_id', 'exist']
         ];
     }
 
@@ -36,5 +38,9 @@ class Category extends \yii\db\ActiveRecord
     }
     public function getParent(){
         return $this->hasOne(Category::class, ['id' => 'parent_id']);
+    }
+
+    public function getChildren(){
+        return $this->hasMany(Category::class, ['parent_id' => 'id']);
     }
 }

@@ -4,13 +4,14 @@ namespace common\models;
 /**
  * An abstract class fit for manipulation of attribute values of any type
  *
+ * @property integer $id
  * @property integer $goods_id
  * @property integer $attribute_id
  * @property-read Attribute $attributeDefinition
  * @property-read Goods $goods
  * @property string $created_at
  * @property string $updated_at
- * @property int $is_deleted
+// * @property int $is_deleted
  */
 abstract class GoodsAttributeValue extends \yii\db\ActiveRecord
 {
@@ -23,15 +24,39 @@ abstract class GoodsAttributeValue extends \yii\db\ActiveRecord
     }
 
     /**
+     * @param $asArray
+     * @return string[]
+     *
+     * the PK of attribute values is defined by a combination of goods_id of goods it belongs to
+     * and attribute_id of attribute definition it represents
+     */
+    public static function primaryKey($asArray = false)
+    {
+        return ['goods_id', 'attribute_id'];
+    }
+
+    /**
      * @return array
      */
     public function rules(): array
     {
         return [
-            [['goods_id', 'attribute_id', 'is_deleted'], 'integer'],
+            [['goods_id', 'attribute_id'], 'integer'],
             [['attribute_id', 'goods_id'], 'required'],
             [['created_at','updated_at'], 'safe'],
+            ['goods_id', 'exist', 'targetClass' => Goods::class, 'targetAttribute' => ['goods_id' => 'id']],
+            ['attribute_id', 'exist', 'targetClass' => Attribute::class, 'targetAttribute' => ['attribute_id' => 'id']],
         ];
+    }
+
+    public function beforeValidate()
+    {
+        $count = static::find()->where([
+            'attribute_id' => $this->attribute_id,
+            'goods_id' => $this->goods_id
+        ])->count();
+
+        return $this->isNewRecord ? $count < 1 : $count == 1;
     }
 
 //    public static function primaryKey()

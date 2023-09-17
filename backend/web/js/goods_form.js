@@ -158,37 +158,40 @@ function renderAttributeInput(item)
     // default validator
     let validator = function (){return true};
     switch (item.type){
-        case 'text':
+        case 0:
             tag = '<input type="text">';
             eventType = 'input'
             break;
-        case 'integer':
+        case 1:
             tag = '<input type="text">';
             eventType = 'input';
             validator = function () {
                 return /^\d*$/.test(attributeInput.val());
             };
             break;
-        case 'float':
+        case 2:
             tag = '<input type="text">';
             eventType = 'input';
             validator = function () {
                 return /^\d*[.,]?\d*$/.test(attributeInput.val());
             };
             break;
-        case 'boolean':
+        case 3:
             tag = '<select>';
             eventType = 'change';
             options[0] = 'Ні';
             options[1] = 'Так';
             break;
-        case 'dictionary':
+        case 4:
             tag = '<select>';
             eventType = 'change';
             // gives values, retreived from item to hydrate options
             for (let definition of item.definitions) {
                 options[definition.id] = definition.value;
             }
+            break;
+        default:
+            console.log('asdsadadasdad')
     }
 
     // renders input based on tag

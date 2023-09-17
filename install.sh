@@ -87,10 +87,65 @@ function buildLeShopPhp() {
     docker exec le_shop_php /bin/bash -c "composer install --ignore-platform-reqs &&
       php init --env=Development &&
       php yii migrate --interactive=0 &&
-      php yii migrate-rbac --interactive=0
+      php yii migrate-rbac --interactive=0 &&
+      php yii_test migrate --interactive=0
     "
 
     output "Setup successful" success
+
+}
+
+function runUnits() {
+    output "Running units" info
+
+    docker exec le_shop_php /bin/bash -c "php yii_test migrate --interactive=0 &&
+        vendor/bin/codecept run unit -c frontend ;
+        vendor/bin/codecept run unit -c backend ;
+        vendor/bin/codecept run unit -c common
+    "
+}
+
+function generateUnitTest() {
+  output 'Please select the directory to create test in:'
+
+    FRONTEND_DIR='frontend'
+    BACKEND_DIR='backend'
+    COMMON_DIR='common'
+
+    CHOSEN_DIR=''
+
+    options=(
+      "${FRONTEND_DIR}"
+      "${BACKEND_DIR}"
+      "${COMMON_DIR}"
+    )
+
+    select opt in "${options[@]}"; do
+      case ${opt} in
+      ${FRONTEND_DIR})
+        CHOSEN_DIR="${FRONTEND_DIR}"
+        break
+        ;;
+      ${BACKEND_DIR})
+        CHOSEN_DIR="${BACKEND_DIR}"
+        break
+        ;;
+      ${COMMON_DIR})
+        CHOSEN_DIR="${COMMON_DIR}"
+        break
+        ;;
+      *)
+        output 'Choose one of the shown options:' error
+        generateUnitTest
+        break
+        ;;
+      esac
+    done
+
+    read -p "Enter the test name (e.g. model/LoginForm): " TEST_NAME
+
+    docker exec le_shop_php /bin/bash -c "vendor/bin/codecept --config=${CHOSEN_DIR} g:test unit ${TEST_NAME}
+    "
 
 }
 
@@ -107,6 +162,8 @@ function checkHosts() {
     output "backend.le.shop:20080 " info
     output 'le.shop:20080 ' info
     output 'view.le.shop:20080 ' info
+    output 'Also a development server for Vuetify is running on: ' success
+    output 'view.le.shop:23000 ' info
 }
 
 
@@ -135,12 +192,16 @@ function showInstallMenu() {
   START='Start the containers'
   LE_VIEW_BUILD='Build le view'
   LE_SHOP_PHP_BUILD='Set up php of le shop with composer'
+  RUN_UNITS='Run codeception unit tests'
+  GENERATE_UNIT='Generate a new unit test'
 
   options=(
       "${INSTALL}"
       "${START}"
       "${LE_VIEW_BUILD}"
       "${LE_SHOP_PHP_BUILD}"
+      "${RUN_UNITS}"
+      "${GENERATE_UNIT}"
   )
 
     select opt in "${options[@]}"; do
@@ -160,6 +221,14 @@ function showInstallMenu() {
         ;;
       ${LE_SHOP_PHP_BUILD})
         buildLeShopPhp
+        return
+        ;;
+      ${RUN_UNITS})
+        runUnits
+        return
+        ;;
+      ${GENERATE_UNIT})
+        generateUnitTest
         return
         ;;
       *)

@@ -53,7 +53,7 @@ $this->registerJsFile('/js/goods_view.js');
          * @var \common\models\GoodsAttributeValue $attributeValue
          */
         $attributeValue = $attribute['value'];
-        if ($attributeValue !== null && !$attributeValue->is_deleted){
+        if ($attributeValue !== null){
             $config['attributes'][] = [
                 'label' => $attributeDefinition->name,
                 'format' => 'raw',
