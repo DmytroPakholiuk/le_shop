@@ -149,9 +149,22 @@ function generateUnitTest() {
 
 }
 
+function initialiseApi() {
+  output "generating api laravel encryption key" info
+    cd api && php artisan key:generate
+  output "key generation successful" success
+
+  output "updating laravel packages" info
+    composer update
+  output "updating laravel packages successful" success
+
+  cd ..
+
+}
+
 ######################################
 function checkHosts() {
-    HOSTS='127.0.0.1 backend.le.shop le.shop view.le.shop'
+    HOSTS='127.0.0.1 backend.le.shop le.shop view.le.shop api.le.shop'
     if grep "${HOSTS}" /etc/hosts | grep -v '^#'; then
       echo "${HOSTS} уже присутствуют в /etc/hosts"
     else
@@ -162,6 +175,7 @@ function checkHosts() {
     output "backend.le.shop:20080 " info
     output 'le.shop:20080 ' info
     output 'view.le.shop:20080 ' info
+    output 'api.le.shop:20080 ' info
     output 'Also a development server for Vuetify is running on: ' success
     output 'view.le.shop:23000 ' info
 }
@@ -174,6 +188,7 @@ function fullInstall() {
     fi
     installLeView
     buildLeShopPhp
+    initialiseApi
     checkHosts
 }
 
