@@ -151,14 +151,22 @@ function generateUnitTest() {
 
 function initialiseApi() {
   output "generating api laravel encryption key" info
-    cd api && php artisan key:generate
+    docker exec le_shop_php bash -c "cd api && php artisan key:generate"
   output "key generation successful" success
 
   output "updating laravel packages" info
-    composer update
+    docker exec le_shop_php bash -c "composer update"
   output "updating laravel packages successful" success
 
-  cd ..
+  output "running laravel migrations" info
+    docker exec le_shop_php bash -c "php artisan migrate"
+  output "laravel migrations successful" success
+
+  output "installing laravel passport" info
+    docker exec le_shop_php bash -c "php artisan passport:install"
+  output "laravel passport installation successful" success
+
+  docker exec le_shop_php bash -c "cd .."
 
 }
 
