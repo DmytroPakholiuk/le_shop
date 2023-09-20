@@ -48,6 +48,8 @@ class Goods extends \yii\db\ActiveRecord
             [['created_at', 'updated_at'], 'safe'],
             [['name', 'price'], 'required'],
             [['imageFiles'], 'file', 'skipOnEmpty' => true, 'extensions' => 'png, jpg', 'maxFiles' => 4],
+            [['author_id'], 'exist', 'targetClass' => FrontendUser::class, 'targetAttribute' => ['author_id' => 'id']],
+            [['category_id'], 'exist', 'targetClass' => Category::class, 'targetAttribute' => ['category_id' => 'id']]
         ];
     }
 

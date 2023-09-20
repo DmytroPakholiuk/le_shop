@@ -106,7 +106,7 @@ class GoodsController extends \yii\web\Controller
     {
         $model = new Goods();
         if ($model->load(\Yii::$app->request->post()) && $model->validate()){
-            $model->author_id = \Yii::$app->user->id;
+//            $model->author_id = \Yii::$app->user->id;
             $model->save();
             $model->imageFiles = UploadedFile::getInstances($model, 'imageFiles');
             if (!$model->upload()) {
