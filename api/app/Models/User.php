@@ -8,6 +8,16 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Passport\HasApiTokens;
 
+/**
+ * @property int $id
+ * @property string $name
+ * @property string $email
+ * @property int email_verified_at
+ * @property string $password
+ * @property string $remember_token
+ * @property int $created_at
+ * @property int $updated_at
+ */
 class User extends Authenticatable
 {
     use HasFactory, Notifiable, HasApiTokens;
