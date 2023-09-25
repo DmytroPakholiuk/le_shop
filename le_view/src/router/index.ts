@@ -19,16 +19,16 @@ const routes = [
         name: 'Category',
         component: () => import(/* webpackChunkName: "home" */ '@/views/Category.vue'),
       },
-      {
-        path: 'login',
-        name: 'Login',
-        component: () => import(/* webpackChunkName: "home" */ '@/views/Login.vue'),
-      },
-      {
-        path: 'signup',
-        name: 'Signup',
-        component: () => import(/* webpackChunkName: "home" */ '@/views/Signup.vue'),
-      },
+      // {
+      //   path: 'login',
+      //   name: 'Login',
+      //   component: () => import(/* webpackChunkName: "home" */ '@/views/Login.vue'),
+      // },
+      // {
+      //   path: 'signup',
+      //   name: 'Signup',
+      //   component: () => import(/* webpackChunkName: "home" */ '@/views/Signup.vue'),
+      // },
       {
         path: 'auth',
         name: 'Auth',

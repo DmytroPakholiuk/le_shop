@@ -166,6 +166,11 @@ function initialiseApi() {
     docker exec le_shop_php bash -c "php artisan passport:install"
   output "laravel passport installation successful" success
 
+#  output "creating oauth2 client record" info
+#    docker exec le_shop_php bash -c "php artisan passport:client --personal"
+#  output "laravel passport installation successful" success
+# TODO change the command to be uninteractive
+
   docker exec le_shop_php bash -c "cd .."
 
 }

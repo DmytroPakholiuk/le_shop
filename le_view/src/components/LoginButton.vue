@@ -7,10 +7,12 @@
 <script>
 import crypto from 'crypto-js';
 import axios from "axios";
+import {useAuthStore} from "@/store/auth";
 
 export default {
   data() {
     return {
+      authStore: useAuthStore(),
       email: '',
       password: '',
       state: '',
@@ -19,8 +21,9 @@ export default {
   },
   computed: {
     loginUrl() {
-      return 'http://api.le.shop:20080/oauth/authorize?client_id=4' +
-        '&redirect_uri=http://view.le.shop:23000/auth' +
+      return this.authStore.apiUrl +
+        '/oauth/authorize?client_id=' + this.authStore.clientId +
+        '&redirect_uri=' + this.authStore.clientUrl + '/auth' +
         '&response_type=code' +
         '&scope=*' +
         '&state=' + this.state +
@@ -31,9 +34,8 @@ export default {
 
   mounted() {
     window.addEventListener('message', (e) => {
-      console.log("asdsadasd")
       console.log(e.data.data)
-      if (e.origin !== 'http://view.le.shop:23000' || ! Object.keys(e.data.data).includes('access_token')) {
+      if (e.origin !== this.authStore.clientUrl || ! Object.keys(e.data.data).includes('access_token')) {
         return;
       }
 
@@ -41,7 +43,7 @@ export default {
       console.log(e.data.data)
       // axios.setToken(access_token, token_type);
 
-      axios.get('http://api.le.shop:20080/api/user', {
+      axios.get( this.authStore.apiUrl + '/api/user', {
         headers: {
           "Authorization": "Bearer " + access_token
         }
@@ -75,10 +77,12 @@ export default {
     }
   },
 
-  name: "Login"
+  name: "LoginButton"
 }
 </script>
 
 <style scoped>
-
+  button {
+    margin: 15px
+  }
 </style>

@@ -6,8 +6,12 @@
 
 <script>
 import axios from "axios"
+import {useAuthStore} from "@/store/auth";
 
 export default {
+  data: () => ({
+    authStore: useAuthStore()
+  }),
   mounted() {
     const urlParams = new URLSearchParams(window.location.search);
     const code = urlParams.get('code');
@@ -20,7 +24,7 @@ export default {
         let params = {
           grant_type: 'authorization_code',
           client_id: 4,
-          redirect_uri: 'http://view.le.shop:23000/auth',
+          redirect_uri: this.authStore.clientUrl + '/auth',
           code_verifier: window.localStorage.getItem('verifier'),
           code
         }

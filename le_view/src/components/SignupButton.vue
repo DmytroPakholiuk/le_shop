@@ -69,10 +69,12 @@ export default {
     }
   },
 
-  name: "Signup"
+  name: "SignupButton"
 }
 </script>
 
 <style scoped>
-
+  button {
+    margin: 15px
+  }
 </style>
