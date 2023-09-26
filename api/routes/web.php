@@ -18,7 +18,8 @@ Route::get('/', function () {
 });
 
 Route::view('login', 'login');
-Route::post('login', [\App\Http\Controllers\AuthController::class, 'login'])->name('login');
+Route::post('login', [\App\Http\Controllers\AuthController::class, 'login'])
+    ->name('login');
 
 Route::view('signup', 'signup');//->middleware();
-Route::post('signup', 'AuthController@login')->name('signup');
+Route::post('signup', [\App\Http\Controllers\AuthController::class, 'signup'])->name('signup');

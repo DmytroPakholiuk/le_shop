@@ -2,25 +2,35 @@
     <a href="https://github.com/yiisoft" target="_blank">
         <img src="https://avatars0.githubusercontent.com/u/993323" height="100px">
     </a>
-    <h1 align="center">Yii 2 Advanced Project Template</h1>
+    <h1 align="center">Welcome to the abomination called "Le Shop"</h1>
     <br>
 
 [//]: # (</p>)
 
-Yii 2 Advanced Project Template is a skeleton [Yii 2](http://www.yiiframework.com/) application best for
-developing complex Web applications with multiple tiers.
+The main carcass of the project is [Yii 2](http://www.yiiframework.com/) advanced template.
 
 The template includes three tiers: front end, back end, and console, each of which
 is a separate Yii application.
 
-The template is designed to work in a team development environment. It supports
-deploying the application in different environments.
+Le Shop also has Laravel framework in <code>api/</code> directory, which is supposed to provide 
+stateless REST api to the resources.
 
-Documentation is at [docs/guide/README.md](docs/guide/README.md).
+In <code>le_view</code> directory you will find a Vuetify project.
 
-[![Latest Stable Version](https://img.shields.io/packagist/v/yiisoft/yii2-app-advanced.svg)](https://packagist.org/packages/yiisoft/yii2-app-advanced)
-[![Total Downloads](https://img.shields.io/packagist/dt/yiisoft/yii2-app-advanced.svg)](https://packagist.org/packages/yiisoft/yii2-app-advanced)
-[![build](https://github.com/yiisoft/yii2-app-advanced/workflows/build/badge.svg)](https://github.com/yiisoft/yii2-app-advanced/actions?query=workflow%3Abuild)
+When deployed in Docker, backend app, frontend app, Laravel API and 
+Vuetify are hosted on the same server but different subdomains:
+
+<ol>
+    <li><code>backend.le.shop:20080</code> - an admin panel for Le Shop. Pure Yii, classic request-response model</li>
+    <li><code>le.shop:20080</code> - a frontend Yii 2 tier of the project. Not developed at all, hence basically useless </li>
+    <li><code>api.le.shop:20080</code> - RESTful (?) API built on Laravel. Some security concerns were too hard to implement
+        myself, so they might have been omitted</li>
+    <li><code>view.le.shop:20080</code> - a Vuetify app. this one is built and deployed on nginx server. Actual building
+        takes time, so it does not often show the current state of things.</li>
+    <li><code>view.le.shop:23000</code> - a Vuetify app. this one is deployed on Vite development server with hot module reloading. </li>
+</ol>
+
+
 
 INSTALLATION
 ------------
@@ -29,10 +39,19 @@ To install, you will need to:
     <li>Clone from the repository</li>
     <li>Run <code>php init</code> </li>
     <li>Run <code>composer install</code> </li>
+    <li>Run <code>composer install</code> for api folder </li>
     <li>Configure db and other things in your main-local configs</li>
     <li>Run <code>php yii migrate</code> for migrations</li>
     <li>Run <code>php yii migrate-rbac</code> for RBAC migrations</li>
+    <li>Run <code>php artisan migrate</code> in api directory for Laravel migrations</li>
+    <li>The hardest part is to register Vuetify client for LAravel API. You will need to 
+        run <code>php artisan passport:client --personal</code> and properly configure it in Vuetify app.</li>
 </ol>
+
+<i>It is probable that I made some mistakes making those instructions as I have not done it manually for a while</i>
+
+Alternatively, if you have Linux you can just run install.sh and choose 
+the first option. It will deploy the project in docker-compose
 
 DIRECTORY STRUCTURE
 -------------------
