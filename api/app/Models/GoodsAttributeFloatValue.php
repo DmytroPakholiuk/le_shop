@@ -7,7 +7,7 @@ namespace App\Models;
  */
 class GoodsAttributeFloatValue extends GoodsAttributeValue
 {
-    public $table = "attributes_float";
+    protected $table = "attributes_float";
 
     public function getValue(): float
     {

@@ -7,7 +7,7 @@ namespace App\Models;
  */
 class GoodsAttributeTextValue extends GoodsAttributeValue
 {
-    public $table = "attributes_text";
+    protected $table = "attributes_text";
 
     public function getValue(): string
     {

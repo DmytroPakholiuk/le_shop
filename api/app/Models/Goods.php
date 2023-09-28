@@ -28,8 +28,16 @@ class Goods extends Model
 {
     use HasFactory;
 
-    public $table = "goods";
+    protected $table = "goods";
 
+    protected $fillable = [
+        "name",
+        "description",
+        "price",
+        "available",
+        "category_id",
+        "author_id"
+    ];
 
     public function category(): BelongsTo
     {

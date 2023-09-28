@@ -7,7 +7,7 @@ namespace App\Models;
  */
 class GoodsAttributeIntegerValue extends GoodsAttributeValue
 {
-    public $table = "attributes_integer";
+    protected $table = "attributes_integer";
 
     public function getValue(): int
     {

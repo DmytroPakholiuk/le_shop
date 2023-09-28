@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  */
 class GoodsAttributeDictionaryValue extends GoodsAttributeValue
 {
-    public $table = "attributes_dictionary_values";
+    protected $table = "attributes_dictionary_values";
 
     public function getValue(): int
     {

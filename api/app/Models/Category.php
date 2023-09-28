@@ -22,7 +22,17 @@ class Category extends Model
 {
     use HasFactory;
 
-    public $table = "categories";
+    protected $table = "categories";
+
+    protected $fillable = [
+        "name",
+        "description",
+        "status",
+        "parent_id",
+        "created_at",
+        "updated_at" // todo: decide how to better enable showing those fields while shielding them from unwanted input
+    ];
+    protected $dateFormat = "Y-m-d h:m:s";
 
     public function goods(): HasMany
     {

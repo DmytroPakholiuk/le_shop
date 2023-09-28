@@ -7,7 +7,7 @@ namespace App\Models;
  */
 class GoodsAttributeBooleanValue extends GoodsAttributeValue
 {
-    public $table = "attributes_boolean";
+    protected $table = "attributes_boolean";
 
     public function getValue(): bool
     {

@@ -21,6 +21,13 @@ abstract class GoodsAttributeValue extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        "goods_id",
+        "attribute_id",
+        "value"
+    ];
+    public $timestamps = false;
+
     /**
      * Allows to read the value from this record even if it is just known as an abstract GoodsAttributeValue object
      * @return mixed

@@ -17,7 +17,13 @@ class GoodsAttributeDictionaryDefinition extends Model
 {
     use HasFactory;
 
-    public $table = "attributes_dictionary_definitions";
+    protected $table = "attributes_dictionary_definitions";
+    public $timestamps = false;
+
+    protected $fillable = [
+        "attribute_id",
+        "value"
+    ];
 
     public function attributeDefinition(): BelongsTo
     {

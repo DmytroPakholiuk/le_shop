@@ -21,7 +21,9 @@ class GoodsImage extends Model
 {
     use HasFactory;
 
-    public $table = "goods_images";
+    protected $table = "goods_images";
+
+    protected $fillable = [];
 
     public function goods()
     {

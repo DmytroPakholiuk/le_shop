@@ -26,7 +26,8 @@ class GoodsAttributeDefinition extends Model
     public const ATTRIBUTE_TYPE_BOOLEAN = 3;
     public const ATTRIBUTE_TYPE_DICTIONARY = 4;
 
-    public $table = "attributes";
+    protected $table = "attributes";
+    public $timestamps = false;
 
 
     /**
