@@ -52,6 +52,7 @@ services:
       - TZ=GMT+2
       - PGTZ=GMT+2
     volumes:
+      - .:/var/www/le_shop
       - le_shop_pg_data:/var/lib/postgresql/data:rw
       - ./docker/postgres/entrypoint/:/docker-entrypoint-initdb.d/ # - можемо кидати потрібні ініціалізуючі скрипти
 

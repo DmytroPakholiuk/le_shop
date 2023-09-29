@@ -75,6 +75,9 @@ trait FilterModelTrait
     {
         if (in_array($operator, $query->operators)){
             if ($value !== null){
+                if (in_array($operator, ["like", "ilike", "like binary", "not like"])){
+                    $value = "%" . $value . "%";
+                }
                 $query->where($column, $operator, $value);
             }
         } else {

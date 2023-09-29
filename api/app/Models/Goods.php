@@ -8,6 +8,9 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 
 /**
+ * @mixin \Illuminate\Database\Eloquent\Builder
+ * @mixin \Illuminate\Database\Query\Builder
+ *
  * @property int $id
  * @property string $name
  * @property string $description
@@ -31,12 +34,16 @@ class Goods extends Model
     protected $table = "goods";
 
     protected $fillable = [
+        "id",
         "name",
         "description",
         "price",
         "available",
         "category_id",
-        "author_id"
+        "author_id",
+        "created_at",
+        "updated_at",
+        "author_id" // todo: same security concerns as with categories: find a way to show all safely
     ];
 
     public function category(): BelongsTo
