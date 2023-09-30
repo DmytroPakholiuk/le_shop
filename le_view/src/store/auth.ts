@@ -8,6 +8,9 @@ export const useAuthStore = defineStore('auth', {
 
     clientId: 4,
 
+    state: "",
+    code: "",
+    accessToken: ""
   }),
   actions: {
 

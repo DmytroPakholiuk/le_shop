@@ -19,13 +19,13 @@ export default {
 
     if (code && state) {
       console.log(state)
-      console.log(window.localStorage.getItem('state'))
-      if (state === window.localStorage.getItem('state')) {
+      console.log(window.opener.state)
+      if (state === window.opener.state) {
         let params = {
           grant_type: 'authorization_code',
           client_id: 4,
           redirect_uri: this.authStore.clientUrl + '/auth',
-          code_verifier: window.localStorage.getItem('verifier'),
+          code_verifier: window.opener.verifier,
           code
         }
 
@@ -33,8 +33,8 @@ export default {
           .then(resp => {
             resp = JSON.parse(JSON.stringify(resp))
             window.opener.postMessage(resp);
-            localStorage.removeItem('state');
-            localStorage.removeItem('verifier');
+            // localStorage.removeItem('state');
+            // localStorage.removeItem('verifier');
             window.close();
           })
           .catch(e => {

@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <button @click.prevent="openLoginWindow">Login</button>
+    <button @click="login">Login</button>
   </div>
 </template>
 
@@ -52,15 +52,39 @@ export default {
       })
     });
 
-    this.state = this.createRandomString(40);
-    const verifier = this.createRandomString(128);
+    // if (! window.localStorage.getItem('state') || ! window.localStorage.getItem('verifier')){
+    //
+    //   this.state = this.createRandomString(40);
+    //   const verifier = this.createRandomString(128);
+    //
+    //   console.log(this.state)
+    //
+    //   this.challenge = this.base64Url(crypto.SHA256(verifier));
+    //   window.localStorage.setItem('state', this.state);
+    //   window.localStorage.setItem('verifier', verifier);
+    // }
 
-    this.challenge = this.base64Url(crypto.SHA256(verifier));
-    window.localStorage.setItem('state', this.state);
-    window.localStorage.setItem('verifier', verifier);
   },
 
   methods: {
+    login() {
+      this.state = this.createRandomString(40);
+      const verifier = this.createRandomString(128);
+
+
+      this.challenge = this.base64Url(crypto.SHA256(verifier));
+      // window.localStorage.setItem('state', this.state);
+      // window.localStorage.setItem('verifier', verifier);
+      //
+      // console.log(this.state)
+      // console.log(window.localStorage.getItem('state'))
+
+      window.state = this.state
+      window.verifier = verifier
+
+      this.openLoginWindow();
+    },
+
     openLoginWindow() {
       window.open(this.loginUrl, 'popup', 'width=700,height=700');
     },
