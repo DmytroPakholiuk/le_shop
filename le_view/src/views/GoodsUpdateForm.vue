@@ -47,10 +47,13 @@
 </template>
 
 <script>
-import axios from "axios";
+import {useAppStore} from "@/store/app";
+import {useAuthStore} from "@/store/auth";
 
 export default {
   data: () => ({
+    appStore: useAppStore(),
+    authStore: useAuthStore(),
     inputData: {
       id: 0,
       name: "",
@@ -107,8 +110,11 @@ export default {
         available: this.inputData.available.valueBool,
         category_id: this.inputData.category_id
       }
-      axios.put(`http://api.le.shop:20080/api/goods/${data.id}`, data,
+      this.authStore.axios.put(`http://api.le.shop:20080/api/goods/${data.id}`, data,
         {
+          headers: {
+            "Authorization": "Bearer " + this.authStore.accessToken
+          }
           // we should include the auth token here. But also better todo send the auth header all the time
         }).then(resp => {
         console.log(resp)
@@ -117,7 +123,7 @@ export default {
 
     receiveGoods(id)
     {
-      axios.get(`http://api.le.shop:20080/api/goods/${id}`,
+      this.authStore.axios.get(`http://api.le.shop:20080/api/goods/${id}`,
         {
 
         }).then(resp => {

@@ -10,16 +10,17 @@
   },
   "dependencies": {
     "@mdi/font": "7.0.96",
+    "axios": "^1.5.0",
     "core-js": "^3.29.0",
+    "crypto-js": "~4.1.1",
+    "dotenv": "^16.3.*",
     "pinia": "^2.0.0",
+    "pinia-plugin-persistedstate": "^3.2.0",
     "roboto-fontface": "*",
     "vue": "^3.2.0",
     "vue-router": "^4.0.0",
     "vuetify": "^3.0.0",
-    "webfontloader": "^1.0.0",
-    "crypto-js": "~4.1.1",
-    "axios": "^1.5.0",
-    "dotenv": "^16.3.*"
+    "webfontloader": "^1.0.0"
   },
   "devDependencies": {
     "@babel/types": "^7.21.4",

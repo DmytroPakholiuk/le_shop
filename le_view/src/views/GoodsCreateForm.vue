@@ -42,10 +42,12 @@
 </template>
 
 <script>
-import axios from "axios";
+
+import {useAuthStore} from "@/store/auth";
 
 export default {
   data: () => ({
+    authStore: useAuthStore(),
     inputData: {
       id: 0,
       name: "",
@@ -94,6 +96,7 @@ export default {
   }),
   methods: {
     sendData(){
+      console.log(this.authStore.axios.defaults)
       let data = {
         // id: this.inputData.id,
         name: this.inputData.name,
@@ -102,7 +105,7 @@ export default {
         available: this.inputData.available.valueBool,
         category_id: this.inputData.category_id
       }
-      axios.post("http://api.le.shop:20080/api/goods", data,
+      this.authStore.axios.post("http://api.le.shop:20080/api/goods", data,
         {
           // we should include the auth token here. But also better todo send the auth header all the time
         }).then(resp => {

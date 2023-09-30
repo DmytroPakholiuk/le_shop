@@ -6,12 +6,13 @@
 
 <script>
 import crypto from 'crypto-js';
-import axios from "axios";
 import {useAuthStore} from "@/store/auth";
+import {useAppStore} from "@/store/app";
 
 export default {
   data() {
     return {
+      appStore: useAppStore(),
       authStore: useAuthStore(),
       email: '',
       password: '',
@@ -43,9 +44,12 @@ export default {
       console.log(e.data.data)
       // axios.setToken(access_token, token_type);
 
-      axios.get( this.authStore.apiUrl + '/api/user', {
+      this.authStore.axios.defaults.headers.common['Authorization'] = "Bearer " + access_token;
+      this.authStore.accessToken = access_token;
+
+      this.authStore.axios.get( this.authStore.apiUrl + '/api/user', {
         headers: {
-          "Authorization": "Bearer " + access_token
+          // "Authorization": "Bearer " + access_token
         }
       }).then(resp => {
           console.log(resp);
