@@ -1,5 +1,5 @@
 <template>
-  <v-footer border absolute="{{false}}" app>
+  <v-footer border :absolute="false" app>
     Footer
   </v-footer>
 </template>
@@ -11,7 +11,6 @@ export default {
 </script>
 
 <script setup>
-  import {ref} from "vue";
 
 </script>
 

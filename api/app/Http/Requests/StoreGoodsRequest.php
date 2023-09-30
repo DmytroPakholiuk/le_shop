@@ -26,7 +26,7 @@ class StoreGoodsRequest extends FormRequest
         return [
             "name" => "string|required|max:255",
             "description" => "string",
-            "price" => "required|decimal:2",
+            "price" => "required|decimal:0,2",
             "available" => "required|boolean",
             "category_id" => "exists:categories,id",
         ];

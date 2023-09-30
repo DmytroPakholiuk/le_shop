@@ -38,7 +38,7 @@ class GoodsController extends Controller
             $goods->author_id = Auth::id();
             $goods->save();
 
-            return redirect("/api/goods/{$goods->id}");
+            return ["data" => $goods];
         } catch (\Throwable $exception) {
             echo $exception->getTraceAsString();die();
         }
@@ -69,10 +69,11 @@ class GoodsController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateGoodsRequest $request, Goods $goods)
+    public function update(UpdateGoodsRequest $request)
     {
         try {
             $data = $request->validated();
+            $goods = Goods::findOrFail($data["id"]);
 
             // I don't trust the mass-insertion yet.
             $goods->name = $data["name"];
@@ -83,12 +84,9 @@ class GoodsController extends Controller
             $goods->author_id = Auth::id();
             $goods->save();
 
-            // while it is kinda how it is supposed to work, I still cannot manually test this route.
-            // It requires putting a lot of effort in building Vue components to complete the job
-            // todo: think of a good solution to this problem
-
-            return redirect("/api/goods/{$goods->id}");
+            return ["data" => $goods];
         } catch (\Throwable $exception) {
+            echo $exception->getMessage();
             echo $exception->getTraceAsString();die();
         }
     }

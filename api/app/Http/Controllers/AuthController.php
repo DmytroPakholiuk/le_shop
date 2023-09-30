@@ -14,11 +14,11 @@ class AuthController extends Controller
     {
         // TODO finish transferring login process to API
         if (auth()->guard()->attempt($request->only('email', 'password'))) {
-            if (! $request->post("redirect") == null) {
+//            if (! $request->post("redirect") == null) {
                 return redirect()->intended();
-            }
-            $response->header("Access-Control-Allow-Origin", "*");
-            return redirect($request->post("redirect"));
+//            }
+//            $response->header("Access-Control-Allow-Origin", "*");
+//            return redirect($request->post("redirect"));
         }
 
         throw new \Exception('There was some error while trying to log you in. ');

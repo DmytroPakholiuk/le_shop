@@ -33,6 +33,16 @@ const routes = [
         path: 'auth',
         name: 'Auth',
         component: () => import(/* webpackChunkName: "home" */ '@/views/Auth.vue'),
+      },
+      {
+        path: 'goods/create',
+        name: 'GoodsCreate',
+        component: () => import(/* webpackChunkName: "home" */ '@/views/GoodsCreateForm.vue'),
+      },
+      {
+        path: "goods/:id/update",
+        name: "goodsUpdate",
+        component: () => import(/* webpackChunkName: "home" */ '@/views/GoodsUpdateForm.vue')
       }
     ],
   },

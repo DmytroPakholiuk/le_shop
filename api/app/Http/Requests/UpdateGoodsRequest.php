@@ -17,6 +17,7 @@ class UpdateGoodsRequest extends FormRequest
      */
     public function authorize(): bool
     {
+        return true;
         $this->goods = Goods::find($this->request->get("id"));
         return Auth::check() && $this?->goods->author_id == Auth::id();
     }
@@ -29,9 +30,10 @@ class UpdateGoodsRequest extends FormRequest
     public function rules(): array
     {
         return [
+            "id" => "exists:goods,id",
             "name" => "string|required|max:255",
             "description" => "string",
-            "price" => "required|decimal:2",
+            "price" => "required|decimal:0,2",
             "available" => "required|boolean",
             "category_id" => "exists:categories,id",
         ];
