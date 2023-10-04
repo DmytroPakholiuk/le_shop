@@ -43,6 +43,11 @@ const routes = [
         path: "goods/:id/update",
         name: "goodsUpdate",
         component: () => import(/* webpackChunkName: "home" */ '@/views/GoodsUpdateForm.vue')
+      },
+      {
+        path: "unauthorized",
+        name: "unauthorized",
+        component: () => import(/* webpackChunkName: "home" */ '@/views/Unauthorized.vue')
       }
     ],
   },

@@ -35,11 +35,16 @@
 
     />
 
-    <v-text-field
-      v-model="inputData.category_id"
+    <v-autocomplete
       name="category_id"
-      label="Category Id"
-
+      id="category_input"
+      label="Category"
+      :items="inputData.categoryVariants"
+      item-title="name"
+      item-value="id"
+      @input="fetchCategories"
+      v-model="inputData.category"
+      return-object
     />
 
     <v-btn @click="sendData" text="Submit"/>
@@ -64,7 +69,8 @@ export default {
         {valueText: "No", valueBool: 0},
         {valueText: "Yes", valueBool: 1}
       ],
-      category_id: "",
+      category: {id: null, name: null},
+      categoryVariants: [],
       author_id: "",
     },
 
@@ -108,9 +114,10 @@ export default {
         description: this.inputData.description,
         price: this.inputData.price,
         available: this.inputData.available.valueBool,
-        category_id: this.inputData.category_id
+        category_id: this.inputData.category.id
       }
-      this.authStore.axios.put(`http://api.le.shop:20080/api/goods/${data.id}`, data,
+      this.authStore.axios.put( this.authStore.apiUrl +`/api/goods/${data.id}`,
+        data,
         {
           headers: {
             "Authorization": "Bearer " + this.authStore.accessToken
@@ -121,7 +128,23 @@ export default {
       })
     },
 
-    receiveGoods(id)
+    fetchCategories(event)
+    {
+      this.authStore.axios.get(this.authStore.apiUrl + "/api/categories?"
+        + "per_page=10&"
+        + "name=" + event.target.value,
+        {
+          headers: {
+            "Authorization": "Bearer " + this.authStore.accessToken
+          }
+          // we should include the auth token here. But also better todo send the auth header all the time
+        }).then(resp => {
+        console.log(resp.data.data)
+        this.inputData.categoryVariants = resp.data.data
+      })
+    },
+
+    fetchGoods(id)
     {
       this.authStore.axios.get(`http://api.le.shop:20080/api/goods/${id}`,
         {
@@ -137,6 +160,17 @@ export default {
           this.inputData.category_id = goodsData.category_id
           console.log(resp)
           console.log(resp.data.data)
+
+          this.authStore.axios.get(this.authStore.apiUrl + "/api/categories/" + goodsData.category_id,
+            {
+              headers: {
+                "Authorization": "Bearer " + this.authStore.accessToken
+              }
+            }).then(resp => {
+            let data = resp.data.data
+            this.inputData.category = {name: data.name, id: data.id}
+          })
+
       })
     }
   },
@@ -145,11 +179,11 @@ export default {
       () => this.$route.params,
       (toParams, previousParams) => {
         // react to route changes...
-        this.receiveGoods(toParams.id)
+        this.fetchGoods(toParams.id)
       }
     )
 
-    this.receiveGoods(this.$route.params.id)
+    this.fetchGoods(this.$route.params.id)
     // this.inputData.id = this.$route.params.id
   },
   name: "GoodsUpdateForm"

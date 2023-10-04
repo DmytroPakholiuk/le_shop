@@ -30,11 +30,16 @@
 
     />
 
-    <v-text-field
-      v-model="inputData.category_id"
+    <v-autocomplete
       name="category_id"
-      label="Category Id"
-
+      id="category_input"
+      label="Category"
+      :items="inputData.categoryVariants"
+      item-title="name"
+      item-value="id"
+      @input="getCategories"
+      v-model="inputData.category"
+      return-object
     />
 
     <v-btn @click="sendData" text="Submit"/>
@@ -59,7 +64,8 @@ export default {
         {valueText: "Yes", valueBool: 1}
       ],
       // todo: think how to get such bool values more reusable
-      category_id: "",
+      category: {id: null, name: null},
+      categoryVariants: [],
       author_id: "",
     },
 
@@ -96,20 +102,36 @@ export default {
   }),
   methods: {
     sendData(){
-      console.log(this.authStore.axios.defaults)
       let data = {
         // id: this.inputData.id,
         name: this.inputData.name,
         description: this.inputData.description,
         price: this.inputData.price,
         available: this.inputData.available.valueBool,
-        category_id: this.inputData.category_id
+        category_id: this.inputData.category.id
       }
-      this.authStore.axios.post("http://api.le.shop:20080/api/goods", data,
-        {
-          // we should include the auth token here. But also better todo send the auth header all the time
-        }).then(resp => {
+      this.authStore.axios.post( this.authStore.apiUrl + "/api/goods", data, {
+        headers: {
+          "Authorization": "Bearer " + this.authStore.accessToken
+        }
+        // we should include the auth token here. But also better todo send the auth header all the time
+      }).then(resp => {
           console.log(resp)
+      })
+    },
+
+    getCategories(event) {
+      this.authStore.axios.get(this.authStore.apiUrl + "/api/categories?"
+        + "per_page=10&"
+        + "name=" + event.target.value,
+        {
+        headers: {
+          "Authorization": "Bearer " + this.authStore.accessToken
+        }
+        // we should include the auth token here. But also better todo send the auth header all the time
+      }).then(resp => {
+        console.log(resp.data.data)
+        this.inputData.categoryVariants = resp.data.data
       })
     }
   },

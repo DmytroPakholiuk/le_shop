@@ -30,7 +30,7 @@ Route::prefix("categories")->controller(CategoryController::class)->group(functi
 });
 
 Route::prefix("goods")->controller(GoodsController::class)->group(function () {
-    Route::post("/", "store");
+    Route::post("/", "store")->middleware('auth:api');
     Route::put("/{id}", "update")->middleware('auth:api');
     Route::get("/", "index");
     Route::get("/{goods}", function (Goods $goods) {

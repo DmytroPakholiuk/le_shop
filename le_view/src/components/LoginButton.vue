@@ -46,6 +46,9 @@ export default {
 
       this.authStore.axios.defaults.headers.common['Authorization'] = "Bearer " + access_token;
       this.authStore.accessToken = access_token;
+      this.authStore.tokenType = token_type;
+      this.authStore.tokenExpiresIn = expires_in;
+      this.authStore.refreshToken = refresh_token;
 
       this.authStore.axios.get( this.authStore.apiUrl + '/api/user', {
         headers: {

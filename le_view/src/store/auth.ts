@@ -2,10 +2,11 @@
 import { defineStore } from 'pinia'
 import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
 import axios from "axios";
+import {ref} from "vue";
 
 
 const axiosInstance = axios.create()
-if (window.localStorage.getItem("LeShopAuth")){
+if (window.localStorage.getItem("LeShopAuth") != null) {
   axiosInstance.defaults.headers.common['Authorization'] = "Bearer " + localStorage.getItem("LeShopAuth")
 }
 export const useAuthStore = defineStore('auth', {
@@ -18,6 +19,9 @@ export const useAuthStore = defineStore('auth', {
     state: "",
     code: "",
     accessToken: "",
+    refreshToken: "",
+    tokenType: "",
+    tokenExpiresIn: "",
 
     axios: axiosInstance
 
@@ -25,5 +29,8 @@ export const useAuthStore = defineStore('auth', {
   actions: {
 
   },
+  // created() {
+  //
+  // },
   persist: true,
 })
