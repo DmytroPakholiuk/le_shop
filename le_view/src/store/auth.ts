@@ -1,9 +1,6 @@
 // User and authentication data
 import { defineStore } from 'pinia'
-import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
 import axios from "axios";
-import {ref} from "vue";
-
 
 const axiosInstance = axios.create()
 if (window.localStorage.getItem("LeShopAuth") != null) {
@@ -16,6 +13,7 @@ export const useAuthStore = defineStore('auth', {
 
     clientId: 4,
 
+    isAuthenticated: false,
     state: "",
     code: "",
     accessToken: "",

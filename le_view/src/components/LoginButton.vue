@@ -49,6 +49,7 @@ export default {
       this.authStore.tokenType = token_type;
       this.authStore.tokenExpiresIn = expires_in;
       this.authStore.refreshToken = refresh_token;
+      this.authStore.isAuthenticated = true;
 
       this.authStore.axios.get( this.authStore.apiUrl + '/api/user', {
         headers: {

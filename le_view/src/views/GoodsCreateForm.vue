@@ -107,7 +107,7 @@ export default {
         name: this.inputData.name,
         description: this.inputData.description,
         price: this.inputData.price,
-        available: this.inputData.available.valueBool,
+        available: this.inputData.available,
         category_id: this.inputData.category.id
       }
       this.authStore.axios.post( this.authStore.apiUrl + "/api/goods", data, {
@@ -116,7 +116,9 @@ export default {
         }
         // we should include the auth token here. But also better todo send the auth header all the time
       }).then(resp => {
-          console.log(resp)
+        console.log(resp)
+        let data = resp.data.data
+        this.$router.push({ path: `/goods/${data.id}`})
       })
     },
 

@@ -125,6 +125,8 @@ export default {
           // we should include the auth token here. But also better todo send the auth header all the time
         }).then(resp => {
         console.log(resp)
+        let data = resp.data.data
+        this.$router.push({ path: `/goods/${data.id}`})
       })
     },
 

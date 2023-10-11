@@ -48,6 +48,16 @@ const routes = [
         path: "unauthorized",
         name: "unauthorized",
         component: () => import(/* webpackChunkName: "home" */ '@/views/Unauthorized.vue')
+      },
+      {
+        path: "goods",
+        name: "goodsList",
+        component: () => import(/* webpackChunkName: "home" */ '@/views/GoodsList.vue')
+      },
+      {
+        path: "goods/:id",
+        name: "goodsView",
+        component: () => import(/* webpackChunkName: "home" */ '@/views/GoodsView.vue')
       }
     ],
   },
