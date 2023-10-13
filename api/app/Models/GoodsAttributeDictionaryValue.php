@@ -12,14 +12,24 @@ class GoodsAttributeDictionaryValue extends GoodsAttributeValue
 {
     protected $table = "attributes_dictionary_values";
 
+
+    /**
+     * @inheritDoc
+     * @return string
+     */
+    public static function getTypeName(): string
+    {
+        return "dictionary";
+    }
+
     public function getValue(): int
     {
         return $this->value;
     }
 
-    public function getPresentableValue(): string
+    public static function getPresentableValueFor(mixed $value): string
     {
-        return $this->dictionaryDefinition->value;
+        return GoodsAttributeDictionaryDefinition::findOrFail($value)->value;
     }
 
     public function dictionaryDefinition(): HasOne

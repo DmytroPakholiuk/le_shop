@@ -7,6 +7,15 @@ namespace common\models;
  */
 class GoodsAttributeDictionaryValue extends GoodsAttributeValue
 {
+    /**
+     * @inheritDoc
+     * @return string
+     */
+    public static function getTypeName(): string
+    {
+        return "dictionary";
+    }
+
     public static function tableName(): ?string
     {
         return 'attributes_dictionary_values';

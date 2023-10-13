@@ -2,11 +2,18 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
+use Illuminate\Database\Query\JoinClause;
+use Illuminate\Support\Facades\DB;
 
 /**
+ * @mixin \Illuminate\Database\Eloquent\Builder
+ * @mixin \Illuminate\Database\Query\Builder
+ *
  * @property string $name
  * @property int $id
  * @property string $created_at
@@ -18,64 +25,44 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
  */
 class GoodsAttributeDefinition extends Model
 {
-    use HasFactory;
-
-    public const ATTRIBUTE_TYPE_TEXT = 0;
-    public const ATTRIBUTE_TYPE_INTEGER = 1;
-    public const ATTRIBUTE_TYPE_FLOAT = 2;
-    public const ATTRIBUTE_TYPE_BOOLEAN = 3;
-    public const ATTRIBUTE_TYPE_DICTIONARY = 4;
+//    use HasFactory;
 
     protected $table = "attributes";
     public $timestamps = false;
 
-
-    /**
-     * returns array of strings describing possible attribute types
-     *
-     * @return string[]
-     */
-    public static function getPossibleTypes(): array
+    public static function getAttributesForCategory(Category|null $category): Collection
     {
-        return [
-            self::ATTRIBUTE_TYPE_TEXT => 'text',
-            self::ATTRIBUTE_TYPE_INTEGER => 'integer',
-            self::ATTRIBUTE_TYPE_FLOAT => 'float',
-            self::ATTRIBUTE_TYPE_BOOLEAN => 'boolean',
-            self::ATTRIBUTE_TYPE_DICTIONARY => 'dictionary'
-        ];
-    }
-
-
-    /**
-     * Returns a new instance of GoodsAttributeValue according to the type of this attribute
-     * @return GoodsAttributeValue
-     */
-    public function newGoodsAttributeValue(): GoodsAttributeValue
-    {
-        switch ($this->type){
-            case self::ATTRIBUTE_TYPE_TEXT:
-                return new GoodsAttributeTextValue();
-            case self::ATTRIBUTE_TYPE_INTEGER:
-                return new GoodsAttributeIntegerValue();
-            case self::ATTRIBUTE_TYPE_FLOAT:
-                return new GoodsAttributeFloatValue();
-            case self::ATTRIBUTE_TYPE_BOOLEAN:
-                return new GoodsAttributeBooleanValue();
-            case self::ATTRIBUTE_TYPE_DICTIONARY:
-                return new GoodsAttributeDictionaryValue();
-            default:
-                throw new \Exception("This Attribute's type is unacceptable ({$this->type})");
+        $categoryIds = [];
+        while ($category !== null){
+            $categoryIds[] = $category->id;
+            $category = $category->parent;
         }
+
+        $attributes = GoodsAttributeDefinition::whereIn('category_id', $categoryIds)
+            ->orWhereNull('category_id');
+
+        return $attributes->get();
     }
 
-    public function attributeValues(): MorphTo
-    {
-        return $this->morphTo();
-    }
+//    public function attributeValues(): MorphTo
+//    {
+//        return $this->morphTo();
+//    }
 
     public function category()
     {
         return $this->belongsTo(Category::class, "category_id", "id");
+    }
+
+
+    /**
+     * Returns AttributeValue of appropriate type
+     *
+     * @return HasMany
+     * @throws \Exception
+     */
+    public function attributeValues(): HasMany
+    {
+        return $this->hasMany(GoodsAttributeValueFactory::getClassByType($this->type), 'attribute_id', 'id');
     }
 }

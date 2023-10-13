@@ -6,6 +6,15 @@ namespace common\models;
  */
 class GoodsAttributeTextValue extends GoodsAttributeValue
 {
+    /**
+     * @inheritDoc
+     * @return string
+     */
+    public static function getTypeName(): string
+    {
+        return "text";
+    }
+
     public static function tableName(): ?string
     {
         return 'attributes_text';

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AttributeController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\GoodsController;
 use App\Models\Category;
@@ -29,6 +30,12 @@ Route::prefix("categories")->controller(CategoryController::class)->group(functi
     })->whereNumber("category");
 });
 
+Route::prefix("goods/{goodsId}/attributes")->controller(AttributeController::class)->group(function () {
+    Route::get("/", function (Request $request, AttributeController $controller, $goodsId) {
+        return $controller->indexForGoods($request, $goodsId);
+    });
+})->whereNumber("goodsId");
+
 Route::prefix("goods")->controller(GoodsController::class)->group(function () {
     Route::post("/", "store")->middleware('auth:api');
     Route::put("/{id}", "update")->middleware('auth:api');
@@ -38,6 +45,4 @@ Route::prefix("goods")->controller(GoodsController::class)->group(function () {
     })->whereNumber("goods");
     Route::get("/random", "random");
 });
-
-
 

@@ -9,13 +9,23 @@ class GoodsAttributeBooleanValue extends GoodsAttributeValue
 {
     protected $table = "attributes_boolean";
 
+
+    /**
+     * @inheritDoc
+     * @return string
+     */
+    public static function getTypeName(): string
+    {
+        return "boolean";
+    }
+
     public function getValue(): bool
     {
         return $this->value;
     }
 
-    public function getPresentableValue(): string
+    public static function getPresentableValueFor(mixed $value): string
     {
-        return $this->getValue() ? "Yes" : "No";
+        return $value ? "Yes" : "No";
     }
 }

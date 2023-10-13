@@ -43,7 +43,7 @@ class GoodsController extends \yii\web\Controller
                     [
                         'actions' => ['update', 'delete-attribute', 'delete-image', 'upload-image'],
                         'allow' => true,
-                        'roles' => ['goods_update_all', 'goods_update_own']
+                        'roles' => ['goods_update_any', 'goods_update_own']
                     ]
                 ],
             ],

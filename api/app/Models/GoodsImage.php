@@ -7,6 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 
 
 /**
+ * @mixin \Illuminate\Database\Eloquent\Builder
+ * @mixin \Illuminate\Database\Query\Builder
+ *
  * @property int $id
  * @property string $path
  * @property int $size

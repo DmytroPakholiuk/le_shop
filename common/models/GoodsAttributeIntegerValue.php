@@ -6,6 +6,15 @@ namespace common\models;
  */
 class GoodsAttributeIntegerValue extends GoodsAttributeValue
 {
+    /**
+     * @inheritDoc
+     * @return string
+     */
+    public static function getTypeName(): string
+    {
+        return "integer";
+    }
+
     public static function tableName(): ?string
     {
         return 'attributes_integer';

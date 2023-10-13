@@ -6,6 +6,15 @@ namespace common\models;
  */
 class GoodsAttributeFloatValue extends GoodsAttributeValue
 {
+    /**
+     * @inheritDoc
+     * @return string
+     */
+    public static function getTypeName(): string
+    {
+        return "float";
+    }
+
     public static function tableName(): ?string
     {
         return 'attributes_float';

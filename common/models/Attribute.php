@@ -101,6 +101,8 @@ class Attribute extends \yii\db\ActiveRecord
         return $attributes->all();
     }
 
+    //TODO: move such initializing code away to some sort of factory.
+    // See GoodsAttributeValueFactory in Laravel api part of the project
     public static function getValueFor(int $attributeId, string $type, int $goodsId): GoodsAttributeValue|null
     {
         $value = null;

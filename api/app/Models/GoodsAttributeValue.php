@@ -9,6 +9,9 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
 /**
  * An abstract class fit for manipulation of attribute values of any type
  *
+ * @mixin \Illuminate\Database\Eloquent\Builder
+ * @mixin \Illuminate\Database\Query\Builder
+ *
  * @property integer $id
  * @property integer $goods_id
  * @property integer $attribute_id
@@ -34,13 +37,25 @@ abstract class GoodsAttributeValue extends Model
      */
     public abstract function getValue(): mixed;
 
+
+    /**
+     * It should return the name of the attribute type this class is of.
+     * @return string
+     */
+    public abstract static function getTypeName(): string;
+
     /**
      * Returns a human-readable string that represents value of this attribute record
      * @return string
      */
     public function getPresentableValue(): string
     {
-        return "{$this->getValue()}";
+        return self::getPresentableValueFor($this->getValue());
+    }
+
+    public static function getPresentableValueFor(mixed $value): string
+    {
+        return "{$value}";
     }
 
     public function goods(): MorphMany
