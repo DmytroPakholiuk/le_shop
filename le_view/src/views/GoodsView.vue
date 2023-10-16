@@ -64,10 +64,10 @@ export default {
     this.fetchGoods(this.$route.params.id)
     // this.inputData.id = this.$route.params.id
 
-    // this.authStore.axios.post(this.authStore.apiUrl + "/api/goods/6/attributes", {
-    //   attribute_id: 1,
+    // this.authStore.axios.post(this.authStore.apiUrl + "/api/goods/31/attributes", {
+    //   attribute_id: 5,
     //   goods_id: 31,
-    //   value: "fuck the french"
+    //   value: 3
     // }, {
     //   headers: {
     //     Authorization: "Bearer " + this.authStore.accessToken

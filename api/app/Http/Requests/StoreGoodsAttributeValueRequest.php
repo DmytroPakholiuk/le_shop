@@ -5,10 +5,9 @@ namespace App\Http\Requests;
 use App\Models\Goods;
 use App\Models\GoodsAttributeDefinition;
 use App\Models\GoodsAttributeValueFactory;
-use App\Models\User;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Request;
 use Illuminate\Validation\Validator;
 
 class StoreGoodsAttributeValueRequest extends FormRequest
@@ -21,7 +20,9 @@ class StoreGoodsAttributeValueRequest extends FormRequest
     public function authorize(): bool
     {
         $this->goods = Goods::find($this->request->get("goods_id"));
-        return Auth::check() && $this?->goods->author_id == Auth::id();
+        return Auth::check() &&
+            $this->request->get("goods_id") == \request()->goodsId &&
+            $this?->goods->author_id == Auth::id();
     }
 
     /**
@@ -52,9 +53,6 @@ class StoreGoodsAttributeValueRequest extends FormRequest
                     \Illuminate\Support\Facades\Request::post("value"), $attribute
                 );
             },
-//            function(Validator $validator) {
-//
-//            }
         ];
     }
 
