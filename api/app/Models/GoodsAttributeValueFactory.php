@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Query\Builder;
 use Illuminate\Database\Query\JoinClause;
 use Illuminate\Support\Facades\DB;
 use stdClass;
@@ -94,7 +95,7 @@ class GoodsAttributeValueFactory
     /**
      * @throws \Exception
      */
-    public static function getValueFor(int $attributeId, int $type, int $goodsId): stdClass|null
+    public static function getValueJoinFor(int $attributeId, int $type, int $goodsId): stdClass|null
     {
         $value = null;
         $class = self::getClassByType($type);
@@ -117,6 +118,22 @@ class GoodsAttributeValueFactory
          * @var stdClass $value
          */
         $value->presrntableValue = call_user_func($class . "::getPresentableValueFor", $value->value);
+
+        return $value;
+    }
+
+    public static function getValueFor(int $attributeId, int $type, int $goodsId): GoodsAttributeValue|null
+    {
+        $class = self::getClassByType($type);
+        /**
+         * @var Builder $query
+         * @var GoodsAttributeValue|null $value
+         */
+        $query = call_user_func($class . "::where", [
+            "attribute_id" => $attributeId,
+            "goods_id" => $goodsId
+        ]);
+        $value = $query->first();
 
         return $value;
     }

@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Validation\Validator;
 
 /**
  * An abstract class fit for manipulation of attribute values of any type
@@ -23,6 +24,18 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
 abstract class GoodsAttributeValue extends Model
 {
     use HasFactory;
+
+    /**
+     * This function is used to validate the value. Conventional validation rules might be insufficient
+     * to implement separate validation logic for different types. So overwrite this method to perform additional value
+     * validation
+     * @param Validator $validator
+     * @return bool
+     */
+    public static function validateValue(Validator $validator, mixed $value, GoodsAttributeDefinition $attributeDefinition = null): bool
+    {
+        return true;
+    }
 
     protected $fillable = [
         "goods_id",

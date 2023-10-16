@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Database\Query\JoinClause;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\Validator;
 
 /**
  * @mixin \Illuminate\Database\Eloquent\Builder
@@ -22,6 +23,7 @@ use Illuminate\Support\Facades\DB;
  * @property int $category_id
  * @property-read GoodsAttributeValue[] $attributeValues
  * @property-read Category $category
+ * @property-read string $typeName
  */
 class GoodsAttributeDefinition extends Model
 {
@@ -48,6 +50,11 @@ class GoodsAttributeDefinition extends Model
 //    {
 //        return $this->morphTo();
 //    }
+
+    public function getTypeNameAttribute()
+    {
+        return GoodsAttributeValueFactory::getPossibleTypeNames()[$this->type];
+    }
 
     public function category()
     {

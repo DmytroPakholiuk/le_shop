@@ -23,8 +23,9 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::prefix("categories")->controller(CategoryController::class)->group(function () {
-    Route::get("/", "index");
+Route::prefix("categories")->group(function () {
+    Route::get("/", [CategoryController::class, "index"]);
+    Route::get("/{category}/attributes", [AttributeController::class, "attributesForCategory"])->whereNumber("category");
     Route::get("/{category}", function (Category $category) {
         return ["data" => $category];
     })->whereNumber("category");
@@ -34,6 +35,7 @@ Route::prefix("goods/{goodsId}/attributes")->controller(AttributeController::cla
     Route::get("/", function (Request $request, AttributeController $controller, $goodsId) {
         return $controller->indexForGoods($request, $goodsId);
     });
+    Route::post("/", "storeGoodsAttribute")->middleware("auth:api");
 })->whereNumber("goodsId");
 
 Route::prefix("goods")->controller(GoodsController::class)->group(function () {
@@ -44,5 +46,11 @@ Route::prefix("goods")->controller(GoodsController::class)->group(function () {
         return ["data" => $goods];
     })->whereNumber("goods");
     Route::get("/random", "random");
+});
+
+Route::prefix("attributes")->group(function () {
+    Route::get("/{id}/dictionary-definitions", [AttributeController::class, "getDictionaryDefinitions"])
+        ->whereNumber("id");
+
 });
 

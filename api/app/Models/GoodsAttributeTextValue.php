@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use Illuminate\Validation\Validator;
+
 /**
  * @property string $value
  */
@@ -16,6 +18,11 @@ class GoodsAttributeTextValue extends GoodsAttributeValue
     public static function getTypeName(): string
     {
         return "text";
+    }
+
+    public static function validateValue(Validator $validator, mixed $value, GoodsAttributeDefinition $attributeDefinition = null): bool
+    {
+        return $validator->validateString("value", $value);
     }
 
     public function getValue(): string

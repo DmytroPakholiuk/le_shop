@@ -2,6 +2,9 @@
 
 namespace App\Models;
 
+
+use Illuminate\Validation\Validator;
+
 /**
  * @property bool $value
  */
@@ -22,6 +25,11 @@ class GoodsAttributeBooleanValue extends GoodsAttributeValue
     public function getValue(): bool
     {
         return $this->value;
+    }
+
+    public static function validateValue(Validator $validator, mixed $value, GoodsAttributeDefinition $attributeDefinition = null): bool
+    {
+        return $validator->validateBoolean("value", $value);
     }
 
     public static function getPresentableValueFor(mixed $value): string
