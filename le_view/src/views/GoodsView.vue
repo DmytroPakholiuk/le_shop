@@ -22,6 +22,9 @@
             />
           </v-btn>
         </div>
+        <div v-for="attribute in attributes" :key="attribute.id">
+          {{attribute.name}} : {{attribute.presentableValue}}
+        </div>
       </div>
       <div class="v-col">
         <v-img class="mx-auto"
@@ -39,7 +42,9 @@ export default {
   data: () => ({
     authStore: useAuthStore(),
     goods: {},
+    attributes: {},
   }),
+
   methods: {
     fetchGoods(id)
     {
@@ -49,9 +54,33 @@ export default {
         }
       }).then(resp => {
         this.goods = resp.data.data
+        this.fetchGoodsAttributes(id)
       })
+    },
+
+    fetchGoodsAttributes(goodsId)
+    {
+      this.authStore.axios.get(this.authStore.apiUrl + "/api/goods/" + goodsId + "/attributes", {
+        headers: {
+          Authorization: "Bearer " + this.authStore.accessToken
+        }
+      }).then(resp => {
+        this.attributes = this.deleteEmptyAttributes(resp.data.data);
+      })
+    },
+
+    deleteEmptyAttributes(attributeArray)
+    {
+      for (const attributeIndex in attributeArray) {
+        if (attributeArray[attributeIndex] === null){
+          delete attributeArray[attributeIndex];
+        }
+      }
+
+      return attributeArray;
     }
   },
+
   mounted() {
     this.$watch(
       () => this.$route.params,

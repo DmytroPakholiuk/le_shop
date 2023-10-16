@@ -109,15 +109,17 @@ class GoodsAttributeValueFactory
                 "category_id"
             ])->where(["attributes.id" => $attributeId])
             ->join($valueTable,
-            function (JoinClause $join) use ($valueTable, $goodsId) {
-            $join->on("attributes.id", "=", "{$valueTable}.attribute_id")
-                ->where(["goods_id" => $goodsId]);
+                function (JoinClause $join) use ($valueTable, $goodsId) {
+                    $join->on("attributes.id", "=", "{$valueTable}.attribute_id")
+                    ->where(["goods_id" => $goodsId]);
             })->first();
 
-        /**
-         * @var stdClass $value
-         */
-        $value->presrntableValue = call_user_func($class . "::getPresentableValueFor", $value->value);
+        if (! is_null($value)){
+            /**
+             * @var stdClass $value
+             */
+            $value->presentableValue = call_user_func($class . "::getPresentableValueFor", $value->value);
+        }
 
         return $value;
     }
