@@ -155,15 +155,19 @@ function initialiseApi() {
   output "key generation successful" success
 
   output "updating laravel packages" info
-    docker exec le_shop_php bash -c "composer update"
+    docker exec le_shop_php bash -c "cd api && composer update"
   output "updating laravel packages successful" success
 
   output "running laravel migrations" info
-    docker exec le_shop_php bash -c "php artisan migrate"
+    docker exec le_shop_php bash -c "cd api && php artisan migrate"
+  output "laravel migrations successful" success
+
+  output "running laravel migrations" info
+    docker exec le_shop_php bash -c "cd api && php artisan migrate --database='pgsqlTest'"
   output "laravel migrations successful" success
 
   output "installing laravel passport" info
-    docker exec le_shop_php bash -c "php artisan passport:install"
+    docker exec le_shop_php bash -c "cd api && php artisan passport:install"
   output "laravel passport installation successful" success
 
   output "creating oauth2 client record" info
