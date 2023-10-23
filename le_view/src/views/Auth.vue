@@ -19,7 +19,7 @@ export default {
 
     if (code && state) {
       console.log(state)
-      console.log(window.opener.state)
+      // console.log(window.opener.state)
       if (state === window.opener.state) {
         let params = {
           grant_type: 'authorization_code',

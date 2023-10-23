@@ -12,7 +12,7 @@ use Illuminate\Validation\Validator;
 
 class StoreGoodsAttributeValueRequest extends FormRequest
 {
-    protected Goods $goods;
+    protected Goods|null $goods;
 
     /**
      * Determine if the user is authorized to make this request.
@@ -22,7 +22,7 @@ class StoreGoodsAttributeValueRequest extends FormRequest
         $this->goods = Goods::find($this->request->get("goods_id"));
         return Auth::check() &&
             $this->request->get("goods_id") == \request()->goodsId &&
-            $this?->goods->author_id == Auth::id();
+            $this->goods?->author_id == Auth::id();
     }
 
     /**

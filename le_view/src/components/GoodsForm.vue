@@ -42,14 +42,21 @@
       return-object
     />
 
+    <goods-attribute-form
+      :goods="goods"
+      ref="goodsAttributeForm"
+    />
+
     <v-btn @click="sendData()" text="Submit"/>
   </v-form>
 </template>
 
 <script>
 import {useAuthStore} from "@/store/auth";
+import GoodsAttributeForm from "@/components/GoodsAttributeForm.vue";
 
 export default {
+  components: {GoodsAttributeForm},
   data: () => ({
     authStore: useAuthStore(),
     inputData: {
@@ -145,13 +152,18 @@ export default {
 
     sendData() {
       let payload = this.formData;
-      this.$emit("submitData", payload)
+      this.$emit("submitData", payload);
+      // this.sendAttributes()
+    },
+
+    sendAttributes(){
+      this.$refs.goodsAttributeForm.sendData()
     },
 
     updateInputs(goodsItem) {
       if (goodsItem !== undefined){
         const goods = goodsItem;
-        console.log("the goods now are: ", goods)
+        // console.log("the goods now are: ", goods)
         this.inputData.id = goods.id
         this.inputData.name = goods.name
         this.inputData.description = goods.description
@@ -164,7 +176,7 @@ export default {
         //this is an extremely weird fix for the problem.
         //the problem was:
         this.inputData.category = goods.category
-        console.log("the goods now are: ", this.inputData.available)
+        // console.log("the goods now are: ", this.inputData.available)
       }
 
     }

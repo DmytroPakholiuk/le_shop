@@ -106,15 +106,16 @@ class GoodsAttributeValueFactory
                 "name",
                 "{$valueTable}.value",
                 "type",
-                "category_id"
+                "category_id",
+                "goods_id"
             ])->where(["attributes.id" => $attributeId])
-            ->join($valueTable,
+            ->leftJoin($valueTable,
                 function (JoinClause $join) use ($valueTable, $goodsId) {
                     $join->on("attributes.id", "=", "{$valueTable}.attribute_id")
                     ->where(["goods_id" => $goodsId]);
             })->first();
 
-        if (! is_null($value)){
+        if (! is_null($value?->value)){
             /**
              * @var stdClass $value
              */
