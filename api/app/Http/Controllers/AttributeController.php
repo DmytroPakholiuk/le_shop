@@ -39,7 +39,7 @@ class AttributeController extends Controller
 
     public function attributesForCategory(Category $category)
     {
-        return GoodsAttributeDefinition::getAttributesForCategory($category);
+        return ["data" => GoodsAttributeDefinition::getAttributesForCategory($category)];
     }
 
     public function getDictionaryDefinitions(int $id)

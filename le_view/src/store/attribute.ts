@@ -1,7 +1,11 @@
 import { defineStore } from 'pinia'
+import {useAuthStore} from "@/store/auth";
+import {useGoodsStore} from "@/store/goods";
 
 export const useAttributeStore = defineStore('attribute', {
   state: () => ({
+    authStore: useAuthStore(),
+    goodsStore: useGoodsStore(),
     attributes: [
 
     ],
@@ -24,7 +28,26 @@ export const useAttributeStore = defineStore('attribute', {
 
 
       return exportData;
-    }
+    },
+
+    clearAttributes() {
+      this.attributes = []
+    },
+
+    fetchAttributesForCategory(categoryId) {
+      if (categoryId !== undefined){
+        this.authStore.axios.get(this.authStore.apiUrl + "/api/categories/" + categoryId + "/attributes",
+          {
+            headers: {
+              "Authorization": "Bearer " + this.authStore.accessToken
+            }
+          }).then(resp => {
+          const data = resp.data.data
+          this.attributes = data
+          console.log(this.attributes)
+        })
+      }
+    },
   },
   // created() {
   //

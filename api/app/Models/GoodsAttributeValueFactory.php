@@ -120,6 +120,9 @@ class GoodsAttributeValueFactory
              * @var stdClass $value
              */
             $value->presentableValue = call_user_func($class . "::getPresentableValueFor", $value->value);
+        } else {
+            $value->goods_id = $goodsId;
+            $value->presentableValue = null;
         }
 
         return $value;

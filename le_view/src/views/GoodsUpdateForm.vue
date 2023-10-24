@@ -1,7 +1,6 @@
 <template>
   <goods-form
     :is-new="true"
-    :goods="goods"
     ref="goodsForm"
     @submitData="sendData"
   />
@@ -55,12 +54,14 @@
 <script>
 import GoodsForm from "@/components/GoodsForm.vue";
 import {useAuthStore} from "@/store/auth";
+import {useGoodsStore} from "@/store/goods";
 
 export default {
   components: {GoodsForm},
   data: () => ({
     authStore: useAuthStore(),
-    goods: {},
+    goodsStore: useGoodsStore(),
+    // goods: {},
   }),
   // data: () => ({
   //   authStore: useAuthStore(),
@@ -173,34 +174,6 @@ export default {
     //   })
     // },
 
-    fetchGoods(id)
-    {
-      this.authStore.axios.get(`http://api.le.shop:20080/api/goods/${id}`,
-        {
-
-        }).then(resp => {
-          this.goods = resp.data.data
-          let goodsData = resp.data.data
-
-          // this.inputData.id = goodsData.id
-          // this.inputData.name = goodsData.name
-          // this.inputData.description = goodsData.description
-          // this.inputData.price = goodsData.price
-          // this.inputData.available = this.inputData.availableVariants.find(item => item.valueBool === Number(goodsData.available))
-          // this.inputData.category_id = goodsData.category_id
-
-          this.authStore.axios.get(this.authStore.apiUrl + "/api/categories/" + goodsData.category_id,
-            {
-              headers: {
-                "Authorization": "Bearer " + this.authStore.accessToken
-              }
-            }).then(resp => {
-            let data = resp.data.data
-            // this.inputData.category = {name: data.name, id: data.id}
-            this.goods.category = {name: data.name, id: data.id}
-          })
-      })
-    }
   },
 
   mounted() {
@@ -208,12 +181,11 @@ export default {
       () => this.$route.params,
       (toParams, previousParams) => {
         // react to route changes...
-        this.fetchGoods(toParams.id)
+        this.goodsStore.fetchGoods(toParams.id)
       }
     )
 
-    this.fetchGoods(this.$route.params.id)
-    // this.inputData.id = this.$route.params.id
+    this.goodsStore.fetchGoods(this.$route.params.id)
   },
   name: "GoodsUpdateForm"
 }

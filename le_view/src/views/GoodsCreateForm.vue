@@ -1,6 +1,7 @@
 <template>
   <goods-form
     :is-new="true"
+    ref="goodsForm"
     @submitData="sendData"
   />
 <!--  <v-form>-->
@@ -53,11 +54,14 @@
 <script>
 import {useAuthStore} from "@/store/auth";
 import GoodsForm from "@/components/GoodsForm.vue";
+import {useGoodsStore} from "@/store/goods";
 
 export default {
   components: {GoodsForm},
   data: () => ({
     authStore: useAuthStore(),
+    goodsStore: useGoodsStore(),
+    // goods: {}
   }),
   // data: () => ({
   //   authStore: useAuthStore(),

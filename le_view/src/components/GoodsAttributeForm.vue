@@ -21,12 +21,14 @@
 import {useAuthStore} from "@/store/auth";
 import GoodsAttributeField from "@/components/GoodsAttributeField.vue";
 import {useAttributeStore} from "@/store/attribute";
+import {useGoodsStore} from "@/store/goods";
 
 export default {
   components: {GoodsAttributeField},
   data: () => ({
     authStore: useAuthStore(),
-    attributeStore: useAttributeStore()
+    attributeStore: useAttributeStore(),
+    goodsStore: useGoodsStore(),
   }),
 
   methods: {
@@ -40,7 +42,7 @@ export default {
           }).then(resp => {
             let data = resp.data.data
             this.attributeStore.attributes = resp.data.data
-            console.log(this.attributeStore.attributes)
+            // console.log(this.attributeStore.attributes)
         })
       }
     },
@@ -72,12 +74,12 @@ export default {
     }
   },
 
-  props: {
-    goods: Object
-  },
+  // props: {
+  //   goods: Object
+  // },
 
   watch: {
-    goods: {
+    "goodsStore.goods": {
       handler(toParams, previousParams) {
         this.updateAttributeInputs(toParams)
       },
@@ -86,8 +88,8 @@ export default {
   },
 
   mounted() {
-    if (this.goods !== undefined){
-      this.fetchAttributesForGoods(this.goods.id)
+    if (this.goodsStore.goods !== undefined){
+      this.fetchAttributesForGoods(this.goodsStore.goods.id)
     }
   },
 

@@ -43,7 +43,6 @@
     />
 
     <goods-attribute-form
-      :goods="goods"
       ref="goodsAttributeForm"
     />
 
@@ -54,11 +53,13 @@
 <script>
 import {useAuthStore} from "@/store/auth";
 import GoodsAttributeForm from "@/components/GoodsAttributeForm.vue";
+import {useGoodsStore} from "@/store/goods";
 
 export default {
   components: {GoodsAttributeForm},
   data: () => ({
     authStore: useAuthStore(),
+    goodsStore: useGoodsStore(),
     inputData: {
       id: 0,
       name: "",
@@ -126,7 +127,7 @@ export default {
 
   props: {
     isNew: Boolean,
-    goods: Object
+    // goods: Object
   },
 
   emits: {
@@ -183,7 +184,7 @@ export default {
   },
 
   watch: {
-    goods: {
+    "goodsStore.goods": {
       handler(toParams, previousParams) {
         this.updateInputs(toParams)
       },
@@ -192,7 +193,7 @@ export default {
   },
 
   mounted() {
-    this.updateInputs(this.goods)
+    this.updateInputs(this.goodsStore.goods)
   }
 
 }
