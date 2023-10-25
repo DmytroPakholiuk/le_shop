@@ -32,23 +32,9 @@ export default {
   }),
 
   methods: {
-    fetchAttributesForGoods(goodsId) {
-      if (goodsId !== undefined){
-        this.authStore.axios.get(this.authStore.apiUrl + "/api/goods/" + goodsId + "/attributes",
-          {
-            headers: {
-              "Authorization": "Bearer " + this.authStore.accessToken
-            }
-          }).then(resp => {
-            let data = resp.data.data
-            this.attributeStore.attributes = resp.data.data
-            // console.log(this.attributeStore.attributes)
-        })
-      }
-    },
 
     updateAttributeInputs(goods) {
-      this.fetchAttributesForGoods(goods.id)
+      this.attributeStore.fetchAttributesForGoods(goods.id)
     },
 
     sendData() {
@@ -87,9 +73,10 @@ export default {
     },
   },
 
-  mounted() {
+  async mounted() {
+    // await this.attributeStore.fetchAttributesForCategory(this.goodsStore.category.id)
     if (this.goodsStore.goods !== undefined){
-      this.fetchAttributesForGoods(this.goodsStore.goods.id)
+      await this.attributeStore.fetchAttributesForGoods(this.goodsStore.goods.id)
     }
   },
 

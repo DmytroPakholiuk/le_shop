@@ -24,7 +24,6 @@ export const useAttributeStore = defineStore('attribute', {
       exportData.attribute_id = attribute.id;
       exportData.goods_id = attribute.goods_id;
       exportData.value = attribute.value;
-      console.log(exportData)
 
 
       return exportData;
@@ -34,7 +33,22 @@ export const useAttributeStore = defineStore('attribute', {
       this.attributes = []
     },
 
-    fetchAttributesForCategory(categoryId) {
+    async fetchAttributesForGoods(goodsId) {
+      if (goodsId !== undefined){
+        this.authStore.axios.get(this.authStore.apiUrl + "/api/goods/" + goodsId + "/attributes",
+          {
+            headers: {
+              "Authorization": "Bearer " + this.authStore.accessToken
+            }
+          }).then(resp => {
+          const data = resp.data.data
+          this.attributes = data;
+        })
+      }
+    },
+
+    async fetchAttributesForCategory(categoryId) {
+      // console.log("fetching attrs for category")
       if (categoryId !== undefined){
         this.authStore.axios.get(this.authStore.apiUrl + "/api/categories/" + categoryId + "/attributes",
           {

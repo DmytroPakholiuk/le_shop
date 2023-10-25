@@ -57,14 +57,18 @@ export default {
   watch: {
     value: {
       handler(newValue, oldValue) {
-        this.attributeStore.attributes[this.attribute.id].value = newValue
+        this.attributeStore.attributes[this.attribute.id].value = newValue.valueBool
       },
       deep: true
     }
   },
 
   mounted() {
-    this.value = this.availableVariants.find(value => {return value.valueBool == this.attribute.value})
+    this.value = this.availableVariants.find(value => {
+      return typeof this.attribute.value === 'object' ?
+       value.valueBool == this.attribute.value.valueBool :
+       value.valueBool == this.attribute.value
+    })
   }
 }
 </script>

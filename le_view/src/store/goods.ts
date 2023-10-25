@@ -4,7 +4,8 @@ import {useAuthStore} from "@/store/auth";
 export const useGoodsStore = defineStore('goods', {
   state: () => ({
     authStore: useAuthStore(),
-    goods: {}
+    goods: {},
+    category: {},
   }),
 
   actions: {
@@ -25,7 +26,7 @@ export const useGoodsStore = defineStore('goods', {
           }).then(resp => {
           const data = resp.data.data
           // this.inputData.category = {name: data.name, id: data.id}
-          this.goods.category = {name: data.name, id: data.id}
+          this.category = {name: data.name, id: data.id}
         })
       })
     }

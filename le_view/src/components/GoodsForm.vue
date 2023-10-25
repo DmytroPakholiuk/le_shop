@@ -27,6 +27,7 @@
       v-model="inputData.available"
       item-title="valueText"
       item-value="valueBool"
+      return-object
 
     />
 
@@ -115,9 +116,7 @@ export default {
         name: this.inputData.name,
         description: this.inputData.description,
         price: this.inputData.price,
-        available: this.inputData.available.valueBool === undefined ?
-         this.inputData.available : this.inputData.available.valueBool,
-        // this is also a kinda weird way to do this
+        available: this.inputData.available.valueBool,
         category_id: this.inputData.category.id
       };
     }
@@ -161,39 +160,42 @@ export default {
       this.$refs.goodsAttributeForm.sendData()
     },
 
-    updateInputs(goodsItem) {
-      if (goodsItem !== undefined){
-        const goods = goodsItem;
+    updateInputs() {
+      if (this.goodsStore.goods !== {}){
+        const goods = this.goodsStore.goods;
         // console.log("the goods now are: ", goods)
         this.inputData.id = goods.id
         this.inputData.name = goods.name
         this.inputData.description = goods.description
         this.inputData.price = goods.price
         this.inputData.available =
-          this.inputData.availableVariants.find(item => item.valueBool === Number(goods.available)) === undefined ?
-            this.inputData.availableVariants.find(item => item.valueBool === Number(goods.available)) :
-            this.inputData.availableVariants.find(item => item.valueBool === Number(goods.available)).valueBool
+          this.inputData.availableVariants.find(item => item.valueBool === Number(goods.available))
+          // this.inputData.availableVariants.find(item => item.valueBool === Number(goods.available)) === undefined ?
+          //   this.inputData.availableVariants.find(item => item.valueBool === Number(goods.available)) :
+          //   this.inputData.availableVariants.find(item => item.valueBool === Number(goods.available)).valueBool
 
-        //this is an extremely weird fix for the problem.
-        //the problem was:
-        this.inputData.category = goods.category
-        // console.log("the goods now are: ", this.inputData.available)
       }
-
     }
   },
 
   watch: {
     "goodsStore.goods": {
       handler(toParams, previousParams) {
-        this.updateInputs(toParams)
+        this.updateInputs()
       },
       deep: true
+    },
+    "goodsStore.category": {
+      handler(toParams, previousParams) {
+        if (this.goodsStore.category !== {}){
+          this.inputData.category = this.goodsStore.category
+        }
+      },
     }
   },
 
   mounted() {
-    this.updateInputs(this.goodsStore.goods)
+    this.updateInputs()
   }
 
 }

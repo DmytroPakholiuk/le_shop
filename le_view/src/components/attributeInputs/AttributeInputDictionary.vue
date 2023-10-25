@@ -54,7 +54,11 @@ export default {
   watch: {
     value: {
       handler(newValue, oldValue) {
-        this.attributeStore.attributes[this.attribute.id].value = newValue
+        if (newValue !== undefined) {
+          this.attributeStore.attributes[this.attribute.id].value = newValue.id
+        }
+        // console.log("attribute: ", this.attribute)
+        // console.log("value: ", newValue)
       },
       deep: true
     }
@@ -71,7 +75,9 @@ export default {
     ).then(resp => {
       this.availableVariants = resp.data.data
       this.value = this.availableVariants.find(value => {
-        return value.id === this.attribute.value
+        return typeof this.attribute.value === 'object' ?
+          value.id == this.attribute.value.id :
+          value.id == this.attribute.value
       })
     });
   }
