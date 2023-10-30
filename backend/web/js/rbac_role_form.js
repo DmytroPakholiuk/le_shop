@@ -58,6 +58,11 @@ function paintSelected()
         }
     }
     eachitem: for (let permission of permissionItems) {
+        if (paintNames.length === 0){
+            permission = $(permission)
+            permission.css('color', '');
+            continue eachitem;
+        }
         for (let paintName of paintNames) {
             permission = $(permission)
             if (paintName !== '' && permission.html().toLowerCase().includes(paintName.toLowerCase())) {

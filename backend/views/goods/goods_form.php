@@ -51,6 +51,24 @@ $form = ActiveForm::begin(); ?>
     ]
 ]) ?>
 
+<?= $form->field($model, 'author_id')->widget(Select2::class, [
+    'model' => $model,
+    'options' => [
+        'placeholder' => 'Start entering user:',
+        'onchange' => 'renderAttributeForm()',
+        'id' => 'authorPicker'
+
+    ],
+    'pluginOptions' => [
+        'minimumInputLength' => 3,
+        'ajax' => [
+            'url' => \yii\helpers\Url::to('/frontend-user/user-list'),
+            'dataType' => 'json',
+            'data' => new JsExpression('function(params) { return {q:params.term}; }')
+        ],
+    ]
+]) ?>
+
 <?php //echo Html::button('Add Attribute', ['class' => 'btn btn-primary', 'onclick' => 'addAttribute()']); ?>
 
 

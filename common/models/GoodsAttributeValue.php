@@ -15,6 +15,13 @@ namespace common\models;
  */
 abstract class GoodsAttributeValue extends \yii\db\ActiveRecord
 {
+
+    /**
+     * It should return the name of the attribute type this class is of.
+     * @return string
+     */
+    public abstract static function getTypeName(): string;
+
     /**
      * @return string|null
      */

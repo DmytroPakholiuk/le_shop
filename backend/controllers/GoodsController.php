@@ -43,7 +43,7 @@ class GoodsController extends \yii\web\Controller
                     [
                         'actions' => ['update', 'delete-attribute', 'delete-image', 'upload-image'],
                         'allow' => true,
-                        'roles' => ['goods_update_all', 'goods_update_own']
+                        'roles' => ['goods_update_any', 'goods_update_own']
                     ]
                 ],
             ],
@@ -106,7 +106,7 @@ class GoodsController extends \yii\web\Controller
     {
         $model = new Goods();
         if ($model->load(\Yii::$app->request->post()) && $model->validate()){
-            $model->author_id = \Yii::$app->user->id;
+//            $model->author_id = \Yii::$app->user->id;
             $model->save();
             $model->imageFiles = UploadedFile::getInstances($model, 'imageFiles');
             if (!$model->upload()) {

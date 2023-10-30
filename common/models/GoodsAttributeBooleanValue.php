@@ -6,6 +6,15 @@ namespace common\models;
  */
 class GoodsAttributeBooleanValue extends GoodsAttributeValue
 {
+    /**
+     * @inheritDoc
+     * @return string
+     */
+    public static function getTypeName(): string
+    {
+        return "boolean";
+    }
+
     public static function tableName(): ?string
     {
         return 'attributes_boolean';

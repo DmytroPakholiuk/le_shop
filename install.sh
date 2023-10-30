@@ -149,9 +149,47 @@ function generateUnitTest() {
 
 }
 
+function initialiseApi() {
+  output "generating api laravel encryption key" info
+    docker exec le_shop_php bash -c "cd api && php artisan key:generate"
+  output "key generation successful" success
+
+  output "updating laravel packages" info
+    docker exec le_shop_php bash -c "cd api && composer update"
+  output "updating laravel packages successful" success
+
+  output "running laravel migrations" info
+    docker exec le_shop_php bash -c "cd api && php artisan migrate"
+  output "laravel migrations successful" success
+
+  output "running laravel migrations" info
+    docker exec le_shop_php bash -c "cd api && php artisan migrate --database='pgsqlTest'"
+  output "laravel migrations successful" success
+
+  output "installing laravel passport" info
+    docker exec le_shop_php bash -c "cd api && php artisan passport:install"
+  output "laravel passport installation successful" success
+
+  output "creating oauth2 client record" info
+    # checking if this record exists already
+    QUERY_RESULT=$(docker exec -it le_shop_pgsql bash -c 'psql -d le_shop -U le_shop -c "select count(id) from oauth_clients where id=4 and personal_access_client=true"')
+    # if we didn't find the row with id=4 and personal_client, then we run a script which creates one for us.
+    if [ ! $(grep -c "(1 row)" ${QUERY_RESULT}) -eq 1 ]; then
+      docker exec -it le_shop_pgsql bash -c "psql -d le_shop -U le_shop -a -f /var/www/le_shop/docker/postgres/create_client.sql"
+    fi
+    # in the Vue's storage AuthStore the client credentials are hardcoded, there is no way to take them out to some
+    # .env file or anything, so we also hardcoded them in the insertion script... anyway, it is another todo: decouple this
+  output "oauth2 client created successfully" success
+  output "remember to check the Vue AuthStore to include the right info" error
+# TODO change the command to be fully uninteractive
+
+  docker exec le_shop_php bash -c "cd .."
+
+}
+
 ######################################
 function checkHosts() {
-    HOSTS='127.0.0.1 backend.le.shop le.shop view.le.shop'
+    HOSTS='127.0.0.1 backend.le.shop le.shop view.le.shop api.le.shop'
     if grep "${HOSTS}" /etc/hosts | grep -v '^#'; then
       echo "${HOSTS} уже присутствуют в /etc/hosts"
     else
@@ -162,6 +200,7 @@ function checkHosts() {
     output "backend.le.shop:20080 " info
     output 'le.shop:20080 ' info
     output 'view.le.shop:20080 ' info
+    output 'api.le.shop:20080 ' info
     output 'Also a development server for Vuetify is running on: ' success
     output 'view.le.shop:23000 ' info
 }
@@ -174,6 +213,7 @@ function fullInstall() {
     fi
     installLeView
     buildLeShopPhp
+    initialiseApi
     checkHosts
 }
 

@@ -25,7 +25,7 @@ class Category extends \yii\db\ActiveRecord
             [['name'], 'required',],
             [['created_at','updated_at'], 'safe'],
             [['status', 'parent_id'], 'integer'],
-            ['parent_id', 'exist']
+            ['parent_id', 'exist', "targetAttribute" => "id"]
         ];
     }
 

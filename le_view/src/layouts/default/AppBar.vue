@@ -8,11 +8,19 @@
 
         Le Shop
       </router-link>
+
     </v-app-bar-title>
+
+    <v-spacer/>
+
+    <login-button></login-button>
+    <signup-button></signup-button>
   </v-app-bar>
 </template>
 
 <script lang="ts" setup>
+  import LoginButton from "@/components/LoginButton.vue";
+  import SignupButton from "@/components/SignupButton.vue";
   import {useAppStore} from "@/store/app";
 
   const emit = defineEmits(['moveSlideBar'])
