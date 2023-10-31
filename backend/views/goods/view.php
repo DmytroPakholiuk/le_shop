@@ -16,24 +16,42 @@ $this->registerJsFile('/js/goods_view.js');
         'model' => $model,
         'attributes' => [
             'id:integer',
-            'name',
-            'description',
             [
-                'label' => 'is Available',
+                'label' => Yii::t("app/goods", 'name'),
+                'value' => $model->name
+            ],
+            [
+                'label' => Yii::t("app/goods", 'description'),
+                'value' => $model->description
+            ],
+            [
+                'label' => Yii::t("app/goods", 'is available'),
                 'value' => $model->available
             ],
-            'price',
             [
-                'label' => 'Category',
+                'value' => $model->price,
+                'label' => Yii::t("app/goods", 'price'),
+//                'format' => 'double'
+            ],
+            [
+                'label' => Yii::t("app/goods", 'category'),
                 'value' => $model->category->name ?? null
             ],
             [
-                'label' => 'Author',
+                'label' => Yii::t("app/goods", 'author'),
                 'value' => $model->author->username ?? null
             ],
             'target_credit_card',
-            'created_at:datetime',
-            'updated_at:datetime',
+            [
+                'value' => $model->created_at,
+                'label' => Yii::t("app/goods", 'created at'),
+                'format' => 'datetime'
+            ],
+            [
+                'value' => $model->updated_at,
+                'label' => Yii::t("app/goods", 'updated at'),
+                'format' => 'datetime'
+            ],
         ]
 ]); ?>
 

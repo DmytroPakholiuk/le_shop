@@ -13,7 +13,7 @@ use yii\helpers\Html;
 use yii\web\JsExpression;
 use yii\widgets\ActiveForm;
 
-$this->title = 'Goods List';
+$this->title = Yii::t("app/goods", 'Goods List');
 
 //$this->registerJsFile('/js/goods-index.js')?>
 
@@ -29,31 +29,36 @@ $this->title = 'Goods List';
     'filterModel' => $searchModel,
     'columns' => [
         'id',
-        'name',
+        [
+            'attribute' => 'name',
+            "label" => Yii::t("app/goods", "name")
+        ],
         [
             'attribute' => 'price',
+            'label' => Yii::t("app/goods", "price"),
             'filter' =>
                 "<div class = 'row'>"
                     . Html::input('text', 'GoodsSearch[price_from]', $searchModel->price_from, [
                             'class' => 'col form-control',
-                            'placeholder' => 'from',
+                            'placeholder' => Yii::t("app", 'from'),
                     ])
                     . Html::input('text', 'GoodsSearch[price_to]', $searchModel->price_to, [
                             'class' => 'col form-control',
-                            'placeholder' => 'to'
+                            'placeholder' => Yii::t("app", 'to'),
                     ])
                 . "</div>"
         ],
         [
             'attribute' => 'available',
+            "label" => Yii::t("app/goods", "available"),
             'value' => function(\common\models\Goods $model){
                 if ($model->available == 0){
-                    return 'No';
+                    return Yii::t('app', 'no');
                 } else {
-                    return 'Yes';
+                    return Yii::t('app', 'yes');
                 }
             },
-            'filter' => [0 => 'No', 1 => 'Yes'],
+            'filter' => [0 => Yii::t('app', 'no'), 1 => Yii::t('app', 'yes')],
         ],
 //        [
 //            'attribute' => 'category.name',
@@ -61,7 +66,7 @@ $this->title = 'Goods List';
 //        ],
         [
             'attribute' => 'category_id',
-            'label' => 'Category',
+            'label' => Yii::t("app/goods", "category"),
             'value' => function(\common\models\Goods $model) {
                 return $model?->category?->name;
             },
@@ -69,8 +74,9 @@ $this->title = 'Goods List';
                 'model' => $searchModel,
                 'attribute' => 'category_id',
                 'initValueText' => $searchModel?->category?->name ?? '',
+                'language' => 'uk-UK',
                 'options' => [
-                    'placeholder' => 'Start entering category:',
+                    'placeholder' => Yii::t("app/category", 'Start entering category'),
                 ],
                 'pluginOptions' => [
                     'allowClear' => true,
@@ -85,10 +91,11 @@ $this->title = 'Goods List';
         ],
         [
             'attribute' => 'author.username',
-            'label' => 'Author'
+            'label' => Yii::t("app/goods", 'author')
         ],
         [
             'attribute' => 'created_at',
+            'label' => Yii::t("app/goods", 'created at'),
             'filter' => DateRangePicker::widget([
                 'language' => 'uk-UK',
                 'model' => $searchModel,
@@ -112,6 +119,7 @@ $this->title = 'Goods List';
         ],
         [
             'attribute' => 'updated_at',
+            'label' => Yii::t("app/goods", 'updated at'),
             'filter' => DateRangePicker::widget([
                 'language' => 'uk-UK',
                 'model' => $searchModel,
@@ -142,4 +150,8 @@ $this->title = 'Goods List';
 
 <?php ActiveForm::end(); ?>
 <br>
-<a href = <?php echo \yii\helpers\Url::to(['goods/create']); ?>>Create a new item</a>
+<a href = <?php echo \yii\helpers\Url::to(['goods/create']); ?>>
+    <button class="btn btn-primary">
+        <?= Yii::t("app/goods", "Create a new item") ?>
+    </button>
+</a>

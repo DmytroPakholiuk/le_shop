@@ -20,6 +20,7 @@ $form = ActiveForm::begin(); ?>
 <?= $form->field($model, 'description')->textarea(); ?>
 
     <h3>Permissions</h3>
+    <?php echo Yii::t("app", "No") ?>
 
 <div class="card">
     <div class="card-body">

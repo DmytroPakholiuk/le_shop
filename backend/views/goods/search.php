@@ -18,7 +18,7 @@ use common\models\Attribute;
 
     <div class="post-search">
 
-    <h4> Search by Attributes: </h4>
+    <h4> <?= Yii::t("app/goods", "Search by Attributes") ?>: </h4>
     <?php
         foreach ($attributeDefinitions as $attributeDefinition){
             switch ($attributeDefinition->type){
@@ -33,17 +33,21 @@ use common\models\Attribute;
                             'options' => [
                                 'class' => 'col'
                             ]
-                        ])->input('text', ['placeholder' => 'from'])->label(false);
+                        ])->input('text', ['placeholder' => Yii::t("app", 'from')])->label(false);
                     echo $form->field($model->attributeValueSearch, "searchValues[{$attributeDefinition->id}][to]", [
                             'options' => [
                                 'class' => 'col'
                             ]
-                        ])->input('text', ['placeholder' => 'to'])->label(false);
+                        ])->input('text', ['placeholder' => Yii::t("app", 'to')])->label(false);
                     echo "</div>";
                     break;
                 case Attribute::ATTRIBUTE_TYPE_BOOLEAN:
                     echo $form->field($model->attributeValueSearch, "searchValues[{$attributeDefinition->id}]")
-                        ->dropDownList(['' => '', 0 => 'No', 1 => 'Yes'])->label($attributeDefinition->name);
+                        ->dropDownList([
+                            '' => '',
+                            0 => Yii::t("app", 'no'),
+                            1 => Yii::t("app", 'yes')
+                        ])->label($attributeDefinition->name);
                     break;
                 case Attribute::ATTRIBUTE_TYPE_DICTIONARY:
                     $dictionary = GoodsAttributeDictionaryDefinition::getDefinitionsFor($attributeDefinition, true);
@@ -59,8 +63,8 @@ use common\models\Attribute;
     ?>
 
         <div class="form-group">
-            <?= Html::submitButton('Find', ['class' => 'btn btn-info']) ?>
-            <?= Html::a('Clear', Url::to('/goods/index'), ['class' => 'btn btn-default']) ?>
+            <?= Html::submitButton(Yii::t("app", 'find'), ['class' => 'btn btn-info']) ?>
+            <?= Html::a(Yii::t("app", 'clear'), Url::to('/goods/index'), ['class' => 'btn btn-default']) ?>
         </div>
 
 
