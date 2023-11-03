@@ -14,11 +14,19 @@ use yii\widgets\ActiveForm;
 
 $form = ActiveForm::begin(['id' => 'category_create_form']);?>
 
-<?= $form->field($category, 'name')->textInput() ;?>
+<?= $form->field($category, 'name')->textInput()->label(Yii::t("app/category", "name")) ;?>
 
-<?= $form->field($category, 'description')->textarea();?>
+<?= $form->field($category, 'description')->textarea()->label(Yii::t("app/category", "description"));?>
 
-<?= $form->field($category, 'status')->dropDownList([0 => 'inactive', 1 => 'active', ], ['prompt' => 'Select status'])?>
+<?= $form->field($category, 'status')
+    ->dropDownList([
+        0 => Yii::t("app", 'inactive'),
+        1 => Yii::t("app", 'active'),
+        ],
+        [
+            'prompt' => Yii::t("app/category", 'Select status')
+        ])
+    ->label(Yii::t("app/category", "status"))?>
 
 <?php /*= $form->field($category, 'parent_id')->dropDownList($categories, ['prompt' => 'Select parent category'])->label('Parent category'); */?>
 
@@ -26,7 +34,7 @@ $form = ActiveForm::begin(['id' => 'category_create_form']);?>
     'model' => $category,
 //    'data' => $categories,
     'options' => [
-        'placeholder' => 'Start entering category:',
+        'placeholder' => Yii::t("app/category", 'Start entering category'),
 
         ],
 //    'data' => $dataList
@@ -38,10 +46,10 @@ $form = ActiveForm::begin(['id' => 'category_create_form']);?>
             'data' => new JsExpression('function(params) { return {q:params.term}; }')
             ],
         ]
-]) ?>
+])->label(Yii::t("app/category", "parent category")) ?>
 
 
 
-<?= Html::submitButton('submit', ['class' => 'btn btn-primary']);?>
+<?= Html::submitButton(Yii::t("app", 'submit'), ['class' => 'btn btn-primary']);?>
 
 <?php ActiveForm::end();?>

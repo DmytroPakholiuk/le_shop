@@ -8,7 +8,7 @@
  * @var array $userRoles
  */
 
-$this->title = 'Create a new User'; ?>
+$this->title = Yii::t("app/user", 'Create a new user'); ?>
 
 <?php echo $this->render('user_form', [
     'model' => $model,

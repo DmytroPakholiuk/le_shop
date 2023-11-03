@@ -8,10 +8,12 @@
  * @var array $userRoles
  */
 
-$this->title = 'Update User'; ?>
+$this->title = Yii::t("app/user", 'Update user'); ?>
 
-<h3> User <?php
-    echo $model->username;
+<h3> <?php
+    echo Yii::t("app/user", "User {username}", [
+            "username" => $model->username
+    ]);
     foreach ($userRoles as $role){
         echo "<div class='badge badge-info' style='margin-left: 10px'>{$role->name}</div>";
     }

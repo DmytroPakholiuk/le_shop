@@ -7,8 +7,8 @@ use common\models\Category;
  * @var yii\web\View $this
  */
 
-$this->title = 'Create a new category'?>
+$this->title = Yii::t("app/category", 'Create a new category')?>
 
-<h1>Create a new category</h1><br>
+<h1><?= Yii::t("app/category", 'Create a new category') ?></h1><br>
 
 <?= $this->render('category_form', ['category' => $category, 'categories' => $categories]); ?>

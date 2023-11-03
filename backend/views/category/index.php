@@ -11,21 +11,27 @@ use kartik\daterange\DateRangePicker;
 use yii\grid\ActionColumn;
 use yii\web\JsExpression;
 
-$this->title = 'Category List';?>
+$this->title = Yii::t("app/category", 'Category list');?>
 
-<h1>Category List</h1>
+<h1><?= Yii::t("app/category", 'Category list') ?></h1>
 
 <?php //echo $this->render('search', ['model' => $searchModel, 'categories' => $categories]);?>
 
 <?php echo \yii\grid\GridView::widget([
-        'dataProvider' => $dataProvider,
+    'dataProvider' => $dataProvider,
     'filterModel' => $searchModel,
     'columns' => [
             'id',
-        'name',
-        'description',
         [
-                'label' => 'status',
+            "attribute" => "name",
+            "label" => Yii::t("app/category", "name")
+        ],
+        [
+            "attribute" => "description",
+            "label" => Yii::t("app/category", "description")
+        ],
+        [
+                'label' => Yii::t("app/category", 'status'),
                 'attribute' => 'status',
                 'value' => function(\common\models\Category $model){
                     if ($model->status == 0){
@@ -43,17 +49,16 @@ $this->title = 'Category List';?>
         ],
         [
                 'attribute' => 'parent_id',
+                "label" => Yii::t("app/category", "parent category"),
                 'filter' => \kartik\select2\Select2::widget([
                     'model' => $searchModel,
                     'attribute' => 'parent_id',
                     'initValueText' => $searchModel->parent->name ?? '',
 
-//    'data' => $categories,
                     'options' => [
-                        'placeholder' => 'Start entering category:',
+                        'placeholder' => Yii::t("app/category", 'Start entering category'),
 
                     ],
-//    'data' => $dataList
                     'pluginOptions' => [
                         'allowClear' => true,
                         'minimumInputLength' => 2,
@@ -72,6 +77,7 @@ $this->title = 'Category List';?>
 //        'created_at:datetime',
         [
             'attribute' => 'created_at',
+            'label' => Yii::t("app/category", 'created at'),
             'filter' => DateRangePicker::widget([
                 'language' => 'uk-UK',
                 'model' => $searchModel,
@@ -95,6 +101,7 @@ $this->title = 'Category List';?>
         ],
         [
             'attribute' => 'updated_at',
+            'label' => Yii::t("app/category", 'updated at'),
             'filter' => DateRangePicker::widget([
                 'language' => 'uk-UK',
                 'model' => $searchModel,
@@ -122,4 +129,4 @@ $this->title = 'Category List';?>
     ]
 ]); ?>
 <br>
-<a href = <?php echo \yii\helpers\Url::to(['category/create']); ?>>Create a new category</a>
+<a href = <?php echo \yii\helpers\Url::to(['category/create']); ?>><?= Yii::t("app/category", "Create a new category") ?></a>

@@ -55,7 +55,7 @@ class CategoryController extends Controller
     {
         $category = Category::findOne($id);
 
-        return $this->render('detailed_view', ['category' => $category]);
+        return $this->render('view', ['category' => $category]);
     }
 
     /**

@@ -9,8 +9,8 @@ use yii\widgets\ActiveForm;
  * @var yii\web\View $this
  */
 
-$this->title = 'Update existing category'?>
+$this->title = Yii::t("app/category", 'Update existing category')?>
 
-<h1>Update existing category</h1><br>
+<h1><?= Yii::t("app/category", 'Update existing category') ?></h1><br>
 
 <?= $this->render('category_form', ['category' => $category, 'categories' => $categories]); ?>
