@@ -15,5 +15,6 @@
     "created at" => "створений",
     "updated at" => "оновлений",
     "Goods List" => "Список Товарів",
-    "Search by Attributes" => "Шукати по Атрибутам"
+    "Search by Attributes" => "Шукати по Атрибутам",
+    "Start entering goods" => "Введіть товар"
 ];

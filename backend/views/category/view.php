@@ -25,12 +25,12 @@ $this->title = Yii::t("app/category", 'Category') . ' #'.$category->id;?>
         ],
         [
             'value' => $category->created_at,
-            'label' => Yii::t("app/goods", 'created at'),
+            'label' => Yii::t("app/category", 'created at'),
             'format' => 'datetime'
         ],
         [
             'value' => $category->updated_at,
-            'label' => Yii::t("app/goods", 'updated at'),
+            'label' => Yii::t("app/category", 'updated at'),
             'format' => 'datetime'
         ],
     ]

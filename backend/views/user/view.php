@@ -47,12 +47,12 @@ $this->title = Yii::t("app/user", "User {username}", [
         ],
         [
             'value' => $model->created_at,
-            'label' => Yii::t("app/goods", 'created at'),
+            'label' => Yii::t("app/user", 'created at'),
             'format' => 'datetime'
         ],
         [
             'value' => $model->updated_at,
-            'label' => Yii::t("app/goods", 'updated at'),
+            'label' => Yii::t("app/user", 'updated at'),
             'format' => 'datetime'
         ],
     ]

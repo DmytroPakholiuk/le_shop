@@ -9,24 +9,38 @@
 
 use yii\widgets\DetailView;
 
-$this->title = "Attribute '{$model->name}' of category '{$category->name}'"; ?>
+$this->title = Yii::t("app/attribute", "Attribute '{name}' of category '{category}'", [
+    "name" => $model->name,
+    "category" => $model->category->name
+]); ?>
 
 <?php echo DetailView::widget([
     'model' => $model,
     'attributes' => [
         'id:integer',
-        'name',
+        [
+            "attribute" => 'name',
+            "label" => Yii::t("app/attribute", 'name')
+        ],
         [
                 'attribute' => 'type',
-            'value' => $types[$model->type]
+            'value' => $types[$model->type],
+            "label" => Yii::t("app/attribute", 'type')
         ],
-        'price',
         [
-            'label' => 'Category',
-            'value' => $category->name ?? "[All Categories]"
+            "label" => Yii::t("app/attribute", 'category'),
+            'value' => $category->name ?? "[All Categories]",
         ],
-        'created_at:datetime',
-        'updated_at:datetime',
+        [
+            'value' => $model->created_at,
+            'label' => Yii::t("app/attribute", 'created at'),
+            'format' => 'datetime'
+        ],
+        [
+            'value' => $model->updated_at,
+            'label' => Yii::t("app/attribute", 'updated at'),
+            'format' => 'datetime'
+        ],
     ]
 ]); ?>
 
