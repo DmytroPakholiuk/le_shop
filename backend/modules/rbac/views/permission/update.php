@@ -11,18 +11,18 @@
 
 use yii\widgets\ActiveForm;
 
-$this->title = 'Update existing role'; ?>
+$this->title = Yii::t("app/rbac", 'Update existing permission'); ?>
 
 <?php $form = ActiveForm::begin(); ?>
 
 
-<?= $form->field($model, 'name')->textInput(['disabled' => true]) ?>
+<?= $form->field($model, 'name')->textInput(['disabled' => true])->label(Yii::t("app/rbac", "name")) ?>
 
-<?= $form->field($model, 'description')->textarea(); ?>
+<?= $form->field($model, 'description')->textarea()->label(Yii::t("app/rbac", "description")); ?>
 
-<?= $form->field($model, 'rule_name')->textInput(['disabled' => true]) ?>
+<?= $form->field($model, 'rule_name')->textInput(['disabled' => true])->label(Yii::t("app/rbac", "rule name")) ?>
 
-<?= \yii\helpers\Html::submitButton('Submit', ['class' => 'btn btn-primary']); ?>
+<?= \yii\helpers\Html::submitButton(Yii::t("app", 'submit'), ['class' => 'btn btn-primary']); ?>
 
 <?php ActiveForm::end(); ?>
 

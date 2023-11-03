@@ -12,17 +12,24 @@ use yii\grid\ActionColumn;
 use yii\grid\GridView;
 use yii\helpers\Html;
 
-$this->title = 'Permission list'; ?>
+$this->title = Yii::t("app/rbac", 'Permission list'); ?>
 
 
 <?php echo GridView::widget([
     'dataProvider' => $dataProvider,
     'filterModel' => $searchModel,
     'columns' => [
-        'name',
-        'rule_name',
+        [
+            "attribute" => "name",
+            "label" => Yii::t("app/rbac", "name")
+        ],
+        [
+            "attribute" => "rule_name",
+            "label" => Yii::t("app/rbac", "rule name")
+        ],
         [
             'attribute' => 'created_at',
+            "label" => Yii::t("app/rbac", "created at"),
             'format' => 'datetime',
             'filter' => DateRangePicker::widget([
                 'language' => 'uk-UK',
@@ -48,6 +55,7 @@ $this->title = 'Permission list'; ?>
         [
             'attribute' => 'updated_at',
             'format' => 'datetime',
+            "label" => Yii::t("app/rbac", "updated at"),
             'filter' => DateRangePicker::widget([
                 'language' => 'uk-UK',
                 'model' => $searchModel,
@@ -77,5 +85,4 @@ $this->title = 'Permission list'; ?>
 
 ]); ?>
 <br>
-<a href = <?php echo \yii\helpers\Url::to(['/rbac/role/create']); ?>>Create a new role</a>
 

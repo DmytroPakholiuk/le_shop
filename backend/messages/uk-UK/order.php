@@ -1,4 +1,5 @@
 <?php return [
+    "Orders" => "Замовлення",
 //    "Update existing category" => "Оновити існуючу категорію",
     "Create a new order" => "Створити нове замовлення",
     "Order list" => "Список замовлень",

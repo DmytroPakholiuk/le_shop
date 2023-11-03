@@ -9,7 +9,7 @@
  * @var array $fullPermissions
  */
 
-$this->title = 'Create a new role'; ?>
+$this->title = Yii::t("app/rbac", 'Create a new role'); ?>
 
 <?php echo $this->render('role_form', [
     'model' => $model,

@@ -1,4 +1,6 @@
 <?php return [
+    "Attribute Definitions" => "Визначення Атрибутів",
+
     "Update existing attribute" => "Оновити існуючий атрибут",
     "Create a new attribute" => "Створити новий атрибут",
     "Attribute definition list" => "Список визначень атрибутів",

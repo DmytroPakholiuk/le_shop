@@ -1,4 +1,6 @@
 <?php return [
+    "Categories" => "Категорії",
+
     "Update existing category" => "Оновити існуючу категорію",
     "Create a new category" => "Створити нову категорію",
     "Category list" => "Список категорій",

@@ -12,18 +12,25 @@ use yii\grid\ActionColumn;
 use yii\grid\GridView;
 use yii\helpers\Html;
 
-$this->title = 'Role list'; ?>
+$this->title = Yii::t("app/rbac", 'Role list'); ?>
 
 
 <?php echo GridView::widget([
     'dataProvider' => $dataProvider,
     'filterModel' => $searchModel,
     'columns' => [
-        'name',
-        'rule_name',
+        [
+            "attribute" => "name",
+            "label" => Yii::t("app/rbac", 'name')
+        ],
+        [
+            "attribute" => "rule_name",
+            "label" => Yii::t("app/rbac", 'rule name')
+        ],
         [
             'attribute' => 'created_at',
             'format' => 'datetime',
+            "label" => Yii::t("app/rbac", 'created at'),
             'filter' => DateRangePicker::widget([
                 'language' => 'uk-UK',
                 'model' => $searchModel,
@@ -48,6 +55,7 @@ $this->title = 'Role list'; ?>
         [
             'attribute' => 'updated_at',
             'format' => 'datetime',
+            "label" => Yii::t("app/rbac", 'updated at'),
             'filter' => DateRangePicker::widget([
                 'language' => 'uk-UK',
                 'model' => $searchModel,
@@ -77,5 +85,5 @@ $this->title = 'Role list'; ?>
 
 ]); ?>
 <br>
-<a href = <?php echo \yii\helpers\Url::to(['/rbac/role/create']); ?>>Create a new role</a>
+<a href = <?php echo \yii\helpers\Url::to(['/rbac/role/create']); ?>><?= Yii::t("app/rbac", "Create a new role") ?></a>
 

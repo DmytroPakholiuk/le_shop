@@ -1,4 +1,6 @@
 <?php return [
+    "Goods" => "Товари",
+
     "id" => "id",
     "name" => "ім'я",
     "description" => "опис",
