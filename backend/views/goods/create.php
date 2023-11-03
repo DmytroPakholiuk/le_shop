@@ -7,8 +7,8 @@
  */
 
 
-$this->title = 'Create a new item'; ?>
+$this->title = Yii::t("app/goods", 'Create a new item'); ?>
 
-<h1>Create a new item</h1>
+<h1> <?= Yii::t("app/goods", "Create a new item") ?></h1>
 
 <?php echo $this->render('goods_form', ['model' => $model, 'categories' => $categories]); ?>

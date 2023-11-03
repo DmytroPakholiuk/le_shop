@@ -22,13 +22,15 @@ FontAwesomeAsset::register($this);
 
 $form = ActiveForm::begin(); ?>
 
-<?= $form->field($model, 'name'); ?>
+<?= $form->field($model, 'name')->label(Yii::t("app/goods", "name")); ?>
 
-<?= $form->field($model, 'description')->textarea(); ?>
+<?= $form->field($model, 'description')->textarea()->label(Yii::t("app/goods", "description")); ?>
 
-<?= $form->field($model, 'price'); ?>
+<?= $form->field($model, 'price')->label(Yii::t("app/goods", "price")); ?>
 
-<?= $form->field($model, 'available')->dropDownList([0 => 'No', 1 => 'Yes'], ['options' => [1 => ['selected' => true]]]); ?>
+<?= $form->field($model, 'available')
+    ->dropDownList([0 => Yii::t("app", 'no'), 1 => Yii::t("app", 'yes')], ['options' => [1 => ['selected' => true]]])
+    ->label(Yii::t("app/goods", "available")); ?>
 
 <?php //echo $form->field($model, 'category_id')
 //    ->dropDownList($categories, ['prompt' => 'Category'])
@@ -49,7 +51,7 @@ $form = ActiveForm::begin(); ?>
             'data' => new JsExpression('function(params) { return {q:params.term}; }')
         ],
     ]
-]) ?>
+])->label(Yii::t("app/goods", "category")) ?>
 
 <?= $form->field($model, 'author_id')->widget(Select2::class, [
     'model' => $model,
@@ -67,7 +69,7 @@ $form = ActiveForm::begin(); ?>
             'data' => new JsExpression('function(params) { return {q:params.term}; }')
         ],
     ]
-]) ?>
+])->label(Yii::t("app/goods", "author")) ?>
 
 <?php //echo Html::button('Add Attribute', ['class' => 'btn btn-primary', 'onclick' => 'addAttribute()']); ?>
 

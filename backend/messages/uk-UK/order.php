@@ -1,0 +1,23 @@
+<?php return [
+    "Orders" => "Замовлення",
+//    "Update existing category" => "Оновити існуючу категорію",
+    "Create a new order" => "Створити нове замовлення",
+    "Order list" => "Список замовлень",
+    "Order no.{num}" => "Замовлення номер {num}",
+//    "Category" => "Категорія",
+//    "Start entering category" => "Почніть вводити категорію",
+//    "Select status" => "Виберіть статус",
+
+    "name" => "назва",
+    "sum price" => "сума",
+    "delivery address" => "адреса доставки",
+    "customer" => "клієнт",
+    "id" => "id",
+    "goods id" => "id товару",
+    "goods" => "товар",
+    "status" => "статус",
+    "delivery method" => "спосіб доставки",
+    "payment method" => "спосіб оплати",
+    "created at" => "створений",
+    "updated at" => "оновлений",
+];

@@ -14,7 +14,7 @@ use yii\web\JsExpression;
 
 //var_dump($searchModel->type);die();
 
-$this->title = 'Attribute definition list'; ?>
+$this->title = Yii::t("app/attribute", 'Attribute definition list'); ?>
 
 
 <?php echo \yii\grid\GridView::widget([
@@ -22,10 +22,13 @@ $this->title = 'Attribute definition list'; ?>
     'filterModel' => $searchModel,
     'columns' => [
         'id',
-        'name',
+        [
+            "attribute" => 'name',
+            "label" => Yii::t("app/attribute", 'name')
+        ],
         [
             'attribute' => 'category_id',
-            'label' => 'Category',
+            'label' => Yii::t("app/attribute", "category"),
             'value' => function(\common\models\Attribute $model) {
                 return $model?->category?->name;
             },
@@ -50,6 +53,7 @@ $this->title = 'Attribute definition list'; ?>
         [
             'attribute' => 'type',
             'filter' => $types,
+            "label" => Yii::t("app/attribute", "type"),
 //                Html::dropDownList('AttributeSearch[type]',
 //                $searchModel->type,
 //                $types,
@@ -61,6 +65,7 @@ $this->title = 'Attribute definition list'; ?>
         ],
         [
             'attribute' => 'created_at',
+            "label" => Yii::t("app/attribute", "created at"),
             'filter' => DateRangePicker::widget([
                 'language' => 'uk-UK',
                 'model' => $searchModel,
@@ -84,6 +89,7 @@ $this->title = 'Attribute definition list'; ?>
         ],
         [
             'attribute' => 'updated_at',
+            "label" => Yii::t("app/attribute", "updated at"),
             'filter' => DateRangePicker::widget([
                 'language' => 'uk-UK',
                 'model' => $searchModel,
@@ -112,4 +118,6 @@ $this->title = 'Attribute definition list'; ?>
 
 ]); ?>
 <br>
-<a href = <?php echo \yii\helpers\Url::to(['attribute/create']); ?>>Create a new attribute definition</a>
+<a href = <?php echo \yii\helpers\Url::to(['attribute/create']); ?>>
+    <?= Yii::t("app/attribute", "Create a new attribute") ?>
+</a>

@@ -8,7 +8,7 @@ use yii\helpers\Html;
 ?>
 <div class="card">
     <div class="card-body login-card-body">
-        <p class="login-box-msg">Sign in to start your session</p>
+        <p class="login-box-msg"><?= Yii::t("app", "Sign in to start your session") ?></p>
 
         <?php $form = \yii\bootstrap4\ActiveForm::begin(['id' => 'login-form']) ?>
 
@@ -19,7 +19,7 @@ use yii\helpers\Html;
             'wrapperOptions' => ['class' => 'input-group mb-3']
         ])
             ->label(false)
-            ->textInput(['placeholder' => $model->getAttributeLabel('username')]) ?>
+            ->textInput(['placeholder' => Yii::t("app/user", "username")]) ?>
 
         <?= $form->field($model, 'password', [
             'options' => ['class' => 'form-group has-feedback'],
@@ -28,7 +28,7 @@ use yii\helpers\Html;
             'wrapperOptions' => ['class' => 'input-group mb-3']
         ])
             ->label(false)
-            ->passwordInput(['placeholder' => $model->getAttributeLabel('password')]) ?>
+            ->passwordInput(['placeholder' => Yii::t("app/user", "password")]) ?>
 
         <div class="row">
             <div class="col-8">
@@ -38,15 +38,16 @@ use yii\helpers\Html;
                         'class' => ''
                     ],
                     'uncheck' => null
-                ]) ?>
+                ])->label(Yii::t("app/user", "Remember me")) ?>
             </div>
             <div class="col-4">
-                <?= Html::submitButton('Sign In', ['class' => 'btn btn-primary btn-block']) ?>
+                <?= Html::submitButton(Yii::t("app", "sign in"), ['class' => 'btn btn-primary btn-block']) ?>
             </div>
         </div>
 
         <?php \yii\bootstrap4\ActiveForm::end(); ?>
 
+        <!--
         <div class="social-auth-links text-center mb-3">
             <p>- OR -</p>
             <a href="#" class="btn btn-block btn-primary">
@@ -56,14 +57,16 @@ use yii\helpers\Html;
                 <i class="fab fa-google-plus mr-2"></i> Sign in using Google+
             </a>
         </div>
+        -->
         <!-- /.social-auth-links -->
 
+        <!--
         <p class="mb-1">
             <a href="forgot-password.html">I forgot my password</a>
         </p>
         <p class="mb-0">
             <a href="register.html" class="text-center">Register a new membership</a>
-        </p>
+        </p> -->
     </div>
     <!-- /.login-card-body -->
 </div>

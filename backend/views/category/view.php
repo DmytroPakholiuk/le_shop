@@ -1,28 +1,42 @@
 <?php
-
 /**
  * @var \common\models\Category $category
  * @var yii\web\View $this
  */
 
-$this->title = 'Category #'.$category->id;?>
+$this->title = Yii::t("app/category", 'Category') . ' #'.$category->id;?>
 
-<h1><?php echo $category->name ?></h1><br>
-
-<ul>
-    <li><?php echo $category->description; ?></li>
-    <li>Category ID: <?php echo $category->id; ?></li>
-    <li>Created at: <?php echo $category->created_at; ?></li>
-    <li>Updated at: <?php echo $category->updated_at; ?></li>
-
-    <?php if(isset($parent_category)){
-        echo "<li>Parent category: ".$category->parent->name ?? 'not set'." </li>";
-        } ?>
-
-</ul>
+<?php echo \yii\widgets\DetailView::widget([
+    'model' => $category,
+    'attributes' => [
+        'id',
+        [
+            "attribute" => 'name',
+            "label" => Yii::t("app/category", 'name')
+        ],
+        [
+            "attribute" => 'description',
+            "label" => Yii::t("app/category", 'description'),
+            "format" => "html"
+        ],
+        [
+            'label' => Yii::t("app/category", 'parent category'),
+            'value' => $category->parent->name ?? null,
+        ],
+        [
+            'value' => $category->created_at,
+            'label' => Yii::t("app/category", 'created at'),
+            'format' => 'datetime'
+        ],
+        [
+            'value' => $category->updated_at,
+            'label' => Yii::t("app/category", 'updated at'),
+            'format' => 'datetime'
+        ],
+    ]
+]); ?>
 
 
 <br>
-<a href="update">update</a><br>
-<a href="delete">delete</a>
-
+<a href="update"><?= Yii::t("app", "update") ?></a><br>
+<a href="delete"><?= Yii::t("app", "delete") ?></a>

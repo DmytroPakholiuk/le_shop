@@ -48,7 +48,6 @@ export const useAttributeStore = defineStore('attribute', {
     },
 
     async fetchAttributesForCategory(categoryId) {
-      // console.log("fetching attrs for category")
       if (categoryId !== undefined){
         this.authStore.axios.get(this.authStore.apiUrl + "/api/categories/" + categoryId + "/attributes",
           {

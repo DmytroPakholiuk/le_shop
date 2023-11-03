@@ -187,8 +187,8 @@ export default {
     },
     "goodsStore.category": {
       handler(toParams, previousParams) {
-        if (this.goodsStore.category !== {}){
-          this.inputData.category = this.goodsStore.category
+        if (toParams !== {}){
+          this.inputData.category = toParams
         }
       },
     }

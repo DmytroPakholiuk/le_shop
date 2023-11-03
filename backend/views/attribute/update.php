@@ -8,8 +8,8 @@
  * @var array|null $definitions
  */
 
-$this->title = 'Update existing attribute'; ?>
+$this->title = Yii::t("app/attribute", 'Update existing attribute'); ?>
 
-    <h1>Update existing attribute</h1><br>
+    <h1><?= Yii::t("app/attribute", 'Update existing attribute'); ?></h1><br>
 
 <?php echo $this->render('attribute_form', ['model' => $model, 'types' => $types, 'definitions' => $definitions]);

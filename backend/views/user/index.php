@@ -12,7 +12,7 @@ use yii\grid\ActionColumn;
 use yii\grid\GridView;
 use yii\web\JsExpression;
 
-$this->title = 'User List'; ?>
+$this->title = Yii::t("app/user", 'User list'); ?>
 
 <?php //var_dump($searchModel->roles); die(); ?>
 
@@ -21,10 +21,16 @@ $this->title = 'User List'; ?>
     'filterModel' => $searchModel,
     'columns' => [
         'id',
-        'username',
-        'email',
         [
-            'label' => 'Roles',
+            "label" => Yii::t("app/user", "username"),
+            "attribute" => 'username',
+        ],
+        [
+            "label" => Yii::t("app/user", "email"),
+            "attribute" => 'email',
+        ],
+        [
+            'label' => Yii::t("app/user", "roles"),
             'value' => function(\common\models\User $model) use ($auth){
                 $roles = $auth->getRolesByUser($model->id);
                 $value = '';
@@ -57,6 +63,7 @@ $this->title = 'User List'; ?>
         [
             'attribute' => 'created_at',
             'format' => 'datetime',
+            "label" => Yii::t("app/user", "created at"),
             'filter' => DateRangePicker::widget([
                 'language' => 'uk-UK',
                 'model' => $searchModel,
@@ -81,6 +88,7 @@ $this->title = 'User List'; ?>
         [
             'attribute' => 'updated_at',
             'format' => 'datetime',
+            "label" => Yii::t("app/user", "updated at"),
             'filter' => DateRangePicker::widget([
                 'language' => 'uk-UK',
                 'model' => $searchModel,
@@ -108,6 +116,6 @@ $this->title = 'User List'; ?>
     ]
 ]); ?>
 
-<?php echo \yii\helpers\Html::a('Create a new User', '/user/create', ['class' => 'btn btn-primary']); ?>
+<?php echo \yii\helpers\Html::a(Yii::t("app/user", 'Create a new user'), '/user/create', ['class' => 'btn btn-primary']); ?>
 
 

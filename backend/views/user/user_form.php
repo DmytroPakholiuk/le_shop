@@ -15,17 +15,19 @@ use yii\helpers\Html;
 
 <?php $form = \yii\widgets\ActiveForm::begin(); ?>
 
-<?= $form->field($model, 'username'); ?>
+<?= $form->field($model, 'username')->label(Yii::t("app/user", "username")); ?>
 
-<?= $form->field($model, 'email'); ?>
+<?= $form->field($model, 'email')->label(Yii::t("app/user", "email")); ?>
 
-<?= $form->field($model, 'status')->dropDownList(\common\models\User::statuses()); ?>
+<?= $form->field($model, 'status')->dropDownList(\common\models\User::statuses())
+    ->label(Yii::t("app/user", "status")); ?>
 
-<?= $form->field($model, 'password')->passwordInput() ?>
+<?= $form->field($model, 'password')->passwordInput()->label(Yii::t("app/user", "password")) ?>
 
-<?= $form->field($model, 'password_repeat')->passwordInput() ?>
+<?= $form->field($model, 'password_repeat')->passwordInput()
+    ->label(Yii::t("app/user", "repeat password")) ?>
 
-<h3>Assign Roles</h3>
+<h3><?= Yii::t("app/user", "Assign Roles") ?></h3>
 
 <?php
 $cols = 3;
@@ -62,7 +64,7 @@ echo "</div>";
 echo "</div>";
 ?>
 
-<?= Html::submitButton('Submit', ['class' => 'btn btn-primary']); ?>
+<?= Html::submitButton(Yii::t("app", "submit"), ['class' => 'btn btn-primary']); ?>
 
 <?php \yii\widgets\ActiveForm::end(); ?>
 

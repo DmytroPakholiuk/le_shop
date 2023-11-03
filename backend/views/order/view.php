@@ -8,23 +8,39 @@
 
 use yii\widgets\DetailView;
 
-$this->title = "Order no. {$model->id}" ?>
+$this->title = Yii::t("app/order", "Order no.{num}", [
+    "num" => $model->id
+]) ?>
 
 <?php echo DetailView::widget([
     'model' => $model,
     'attributes' => [
         'id:integer',
         [
-            'label' => 'Ordered',
+            'label' => Yii::t("app/order", "goods"),
             'value' => $model->goods[0]->name
         ],
-        'sum_price',
         [
-            'label' => 'Customer',
+            "label" => Yii::t("app/order", "sum price"),
+            "attribute" => "sum_price"
+        ],
+        [
+            'label' => Yii::t("app/order", "customer"),
             'value' => $model->customer->username ?? null
         ],
-        'delivery_address',
-        'created_at:datetime',
-        'updated_at:datetime',
+        [
+            "attribute" => "delivery_address",
+            'label' => Yii::t("app/order", "delivery address"),
+        ],
+        [
+            'value' => $model->created_at,
+            'label' => Yii::t("app/order", 'created at'),
+            'format' => 'datetime'
+        ],
+        [
+            'value' => $model->updated_at,
+            'label' => Yii::t("app/order", 'updated at'),
+            'format' => 'datetime'
+        ],
     ]
 ]); ?>

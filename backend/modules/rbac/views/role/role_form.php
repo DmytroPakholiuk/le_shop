@@ -15,20 +15,20 @@ use yii\widgets\ActiveForm;
 $this->registerJsFile('/js/rbac_role_form.js', ['depends' => \backend\assets\AppAsset::class]);
 $form = ActiveForm::begin(); ?>
 
-<?= $form->field($model, 'name')->textInput(['disabled' => !$model->isNewRecord]) ?>
+<?= $form->field($model, 'name')->textInput(['disabled' => !$model->isNewRecord])->label(Yii::t("app/rbac", "name")) ?>
 
-<?= $form->field($model, 'description')->textarea(); ?>
+<?= $form->field($model, 'description')->textarea()->label(Yii::t("app/rbac", "description")); ?>
 
-    <h3>Permissions</h3>
+    <h3><?= Yii::t("app/rbac", "Permissions") ?></h3>
 
 <div class="card">
     <div class="card-body">
-        Info: You only have to check direct children. Red color shows the rule applied to permission.
-        Blue means the permission is available as a deep child
+        <?= Yii::t("app/rbac", "Info: You only have to check direct children. Red color shows the rule applied to permission.
+        Blue means the permission is available as a deep child.") ?>
     </div>
 </div>
 
-Search for permissions:
+<?= Yii::t("app/rbac", "Search for permissions") ?>:
 <?= Html::input('text', null, null, [
         'id' => 'permissionSearch',
         'class' => 'form-control',
@@ -72,6 +72,6 @@ echo "</div>";
 echo "</div>";
 ?>
 
-<?= Html::submitButton('Save role', ['class' => 'btn btn-primary']); ?>
+<?= Html::submitButton(Yii::t("app", "submit"), ['class' => 'btn btn-primary']); ?>
 
 <?php ActiveForm::end(); ?>
