@@ -150,13 +150,13 @@ function generateUnitTest() {
 }
 
 function initialiseApi() {
-  output "generating api laravel encryption key" info
-    docker exec le_shop_php bash -c "cd api && php artisan key:generate"
-  output "key generation successful" success
-
   output "updating laravel packages" info
     docker exec le_shop_php bash -c "cd api && composer update"
   output "updating laravel packages successful" success
+
+  output "generating api laravel encryption key" info
+    docker exec le_shop_php bash -c "cd api && php artisan key:generate"
+  output "key generation successful" success
 
   output "running laravel migrations" info
     docker exec le_shop_php bash -c "cd api && php artisan migrate"
@@ -170,6 +170,9 @@ function initialiseApi() {
     docker exec le_shop_php bash -c "cd api && php artisan passport:install"
   output "laravel passport installation successful" success
 
+  sudo chmod -R 777 api/storage/logs
+  sudo chmod -R 777 api/storage/framework
+
 #  output "creating oauth2 client record" info
 #    # checking if this record exists already
 #    QUERY_RESULT=$(docker exec -it le_shop_pgsql bash -c 'psql -d le_shop -U le_shop -c "select count(id) from oauth_clients where id=4 and personal_access_client=true"')
@@ -181,7 +184,6 @@ function initialiseApi() {
 #    # .env file or anything, so we also hardcoded them in the insertion script... anyway, it is another todo: decouple this
 #  output "oauth2 client created successfully" success
 #  output "remember to check the Vue AuthStore to include the right info" error
-# TODO change the command to be fully uninteractive
 
   docker exec le_shop_php bash -c "cd .."
 

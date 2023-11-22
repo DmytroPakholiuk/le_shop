@@ -44,14 +44,14 @@ To install, you will need to:
     <li>Run <code>php yii migrate</code> for migrations</li>
     <li>Run <code>php yii migrate-rbac</code> for RBAC migrations</li>
     <li>Run <code>php artisan migrate</code> in api directory for Laravel migrations</li>
-    <li>The hardest part is to register Vuetify client for LAravel API. You will need to 
+    <li>The hardest part is to register Vuetify client for Laravel API. You will need to 
         run <code>php artisan passport:client --personal</code> and properly configure it in Vuetify app.</li>
 </ol>
 
 <i>It is probable that I made some mistakes making those instructions as I have not done it manually for a while</i>
 
-Alternatively, if you have Linux you can just run install.sh and choose 
-the first option. It will deploy the project in docker-compose
+<b>Alternatively, if you have Linux you can just run install.sh and choose 
+the first option. It will deploy the project in docker-compose</b>
 
 DIRECTORY STRUCTURE
 -------------------
