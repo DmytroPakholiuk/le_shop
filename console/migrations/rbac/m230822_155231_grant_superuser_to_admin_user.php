@@ -12,10 +12,10 @@ class m230822_155231_grant_superuser_to_admin_user extends Migration
      */
     public function safeUp()
     {
-        $auth = Yii::$app->authManager;
-        $user = \common\models\User::findOne(['username' => 'admin']);
-        $superUser = $auth->getRole('SuperUser');
-        $auth->assign($superUser, $user->id);
+        Yii::$app->db->createCommand("
+            INSERT INTO \"auth_assignment\" (item_name, user_id, created_at)
+            values ('SuperUser', 1, 1694036071)
+        ")->execute();
     }
 
     /**
@@ -23,10 +23,9 @@ class m230822_155231_grant_superuser_to_admin_user extends Migration
      */
     public function safeDown()
     {
-        $auth = Yii::$app->authManager;
-        $user = \common\models\User::findOne(['username' => 'admin']);
-        $superUser = $auth->getRole('SuperUser');
-        $auth->revoke($superUser, $user->id);
+        Yii::$app->db->createCommand("            
+            DELETE FROM \"auth_assignment\" WHERE item_name='SuperUser' AND user_id=1
+        ")->execute();
     }
 
     /*
