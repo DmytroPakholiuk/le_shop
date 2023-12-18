@@ -40,6 +40,14 @@ class SiteController extends Controller
                     'logout' => ['post'],
                 ],
             ],
+            "pageCache" => [
+                'class' => 'yii\filters\PageCache',
+                'only' => ['index'],
+                'duration' => 60,
+                'variations' => [
+                    \Yii::$app->language,
+                ],
+            ]
         ];
     }
 

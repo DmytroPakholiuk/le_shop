@@ -17,6 +17,15 @@ $this->title = Yii::t("app/category", 'Category list');?>
 
 <?php //echo $this->render('search', ['model' => $searchModel, 'categories' => $categories]);?>
 
+<?php
+$dependency = [
+    'class' => 'yii\caching\DbDependency',
+    'sql' => 'SELECT MAX(updated_at) FROM le_shop.public.categories',
+];
+
+if ($this->beginCache("categoryIndexGrid", ['dependency' => $dependency])) {
+?>
+
 <?php echo \yii\grid\GridView::widget([
     'dataProvider' => $dataProvider,
     'filterModel' => $searchModel,
@@ -128,5 +137,11 @@ $this->title = Yii::t("app/category", 'Category list');?>
         ]
     ]
 ]); ?>
+
+<?php
+    $this->endCache();
+}
+?>
+
 <br>
 <a href = <?php echo \yii\helpers\Url::to(['category/create']); ?>><?= Yii::t("app/category", "Create a new category") ?></a>
