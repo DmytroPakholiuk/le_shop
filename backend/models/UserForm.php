@@ -50,7 +50,9 @@ class UserForm extends \common\models\User
 //        }
 //        $user->username = $this->username;
 //        $user->email = $this->email;
-        $this->setPassword($this->password);
+        if ($this->password) {
+            $this->setPassword($this->password);
+        }
         $this->generateAuthKey();
         $this->generateEmailVerificationToken();
 

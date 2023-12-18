@@ -4,6 +4,7 @@ namespace backend\modules\rbac\controllers;
 
 use backend\modules\rbac\models\Item;
 use backend\modules\rbac\models\ItemSearch;
+use common\helpers\BinaryInsertSortHelper;
 use yii\filters\AccessControl;
 use yii\helpers\Url;
 use yii\web\Controller;
@@ -139,9 +140,9 @@ class RoleController extends Controller
         foreach ($names as $name){
             $name = trim($name);
             $item = Item::findOne(['name' => $name]);
-            if ($item->type == Item::TYPE_PERMISSION){
+            if ($item?->type == Item::TYPE_PERMISSION){
                 $responseArray[$name] = ItemSearch::getAllChildren($name);
-            } elseif ($item->type == Item::TYPE_ROLE) {
+            } elseif ($item?->type == Item::TYPE_ROLE) {
                 $responseArray[$name] = $auth->getPermissionsByRole($name);
             }
         }

@@ -33,6 +33,14 @@ return [
                 ],
             ],
         ],
+        'redis' => [
+            'class' => \yii\redis\Connection::class,
+//            'hostname' => 'le_shop_redis',
+        //todo change it to refer to the redis container
+            'hostname' => 'localhost',
+            'port' => 16379,
+            'database' => 0,
+        ],
         'db' => [
             'class' => \yii\db\Connection::class,
             'dsn' => getenv('LE_SHOP_DOCKER_DB_DSN'),
