@@ -4,6 +4,7 @@ namespace backend\controllers;
 
 use common\models\LoginForm;
 use Yii;
+use yii\filters\PageCache;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 use yii\web\Controller;
@@ -39,6 +40,14 @@ class SiteController extends Controller
                 'actions' => [
                     'logout' => ['post'],
                 ],
+            ],
+            "pageCache" => [
+                'class' => PageCache::class,
+                'only' => ['index'],
+                'duration' => 120,
+                'variations' => [
+                    \Yii::$app->language,
+                ]
             ],
         ];
     }

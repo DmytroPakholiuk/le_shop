@@ -1,5 +1,8 @@
 version: '3.2'
 
+networks:
+  le_shop_network:
+    external: true
 
 services:
 
@@ -13,6 +16,9 @@ services:
       - ./docker/nginx/le_shop.conf:/etc/nginx/conf.d/le_shop.conf
     depends_on:
       - php
+    networks:
+      le_shop_network:
+        ipv4_address: ${LE_SHOP_DOCKER_NGINX_IP:-175.10.10.3}
 
   php:
 #    image: php:8.1-fpm
@@ -26,6 +32,9 @@ services:
     working_dir: /var/www/le_shop
     depends_on:
       - pgsql
+    networks:
+      le_shop_network:
+        ipv4_address: ${LE_SHOP_DOCKER_PHP_IP:-175.10.10.4}
 
   node:
     container_name: le_shop_node
@@ -37,6 +46,9 @@ services:
     volumes:
       - ./le_view:/var/www/le_shop/le_view
     working_dir: /var/www/le_shop/le_view
+    networks:
+      le_shop_network:
+        ipv4_address: ${LE_SHOP_DOCKER_NODE_IP:-175.10.10.7}
 
 
   pgsql:
@@ -55,6 +67,9 @@ services:
       - .:/var/www/le_shop
       - le_shop_pg_data:/var/lib/postgresql/data:rw
       - ./docker/postgres/entrypoint/:/docker-entrypoint-initdb.d/ # - можемо кидати потрібні ініціалізуючі скрипти
+    networks:
+      le_shop_network:
+        ipv4_address: ${LE_SHOP_DOCKER_PGSQL_IP:-175.10.10.6}
 
 
   redis:
@@ -70,6 +85,9 @@ services:
       - REDIS_PASSWORD=${LE_SHOP_DOCKER_REDIS_PASSWORD}
       - REDIS_PORT=6379
       - REDIS_DATABASES=16
+    networks:
+      le_shop_network:
+        ipv4_address: ${LE_SHOP_DOCKER_REDIS_IP:-175.10.10.5}
 
 volumes:
   le_shop_pg_data:

@@ -37,8 +37,9 @@ return [
             'class' => \yii\redis\Connection::class,
 //            'hostname' => 'le_shop_redis',
         //todo change it to refer to the redis container
-            'hostname' => 'localhost',
-            'port' => 16379,
+//            'hostname' => 'localhost',
+            'hostname' => getenv("LE_SHOP_DOCKER_REDIS_IP"),
+            'port' => 6379,
             'database' => 0,
         ],
         'db' => [
@@ -49,7 +50,8 @@ return [
             'charset' => 'utf8',
         ],
         'cache' => [
-            'class' => \yii\caching\FileCache::class,
+//            'class' => \yii\caching\FileCache::class,
+            'class' => yii\redis\Cache::class,
         ],
         'authManager' => [
             'class' => \yii\rbac\DbManager::class
