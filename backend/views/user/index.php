@@ -112,6 +112,7 @@ $this->title = Yii::t("app/user", 'User list'); ?>
         ],
         [
             'class' => ActionColumn::class,
+            'template' => '{view}{update}'
         ]
     ]
 ]); ?>

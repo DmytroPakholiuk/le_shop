@@ -7,7 +7,9 @@ use backend\modules\rbac\models\ItemSearch;
 use common\helpers\BinaryInsertSortHelper;
 use yii\filters\AccessControl;
 use yii\helpers\Url;
+use yii\rbac\Role;
 use yii\web\Controller;
+use yii\web\NotFoundHttpException;
 
 /**
  * Default controller for the `rbac` module
@@ -149,4 +151,14 @@ class RoleController extends Controller
         return $this->asJson($responseArray);
     }
 
+    public function actionDelete($id)
+    {
+        if(!$model = Item::findOne($id)){
+            throw new NotFoundHttpException();
+        };
+
+        $model->delete();
+
+        return $this->redirect('/rbac/role/index');
+    }
 }

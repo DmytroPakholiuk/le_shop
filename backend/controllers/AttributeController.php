@@ -13,6 +13,12 @@ use yii\web\NotFoundHttpException;
 
 class AttributeController extends \yii\web\Controller
 {
+    public function beforeAction($action)
+    {
+        $this->enableCsrfValidation = false;
+        return parent::beforeAction($action);
+    }
+
     /**
      * @return array[]
      */
@@ -140,9 +146,16 @@ class AttributeController extends \yii\web\Controller
         return $this->render('update', ['model' => $model, 'types' => $types, 'definitions' => $oldDefinitions]);
     }
 
-    public function actionDelete()
-    {
 
+    public function actionDelete($id)
+    {
+        if(!$model = Attribute::findOne($id)){
+            throw new NotFoundHttpException();
+        };
+
+        $model->delete();
+
+        return $this->redirect('/attribute/index');
     }
 
     /**

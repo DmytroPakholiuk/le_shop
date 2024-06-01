@@ -49,6 +49,19 @@ $this->title = Yii::t("app/goods", 'Goods List');
                 . "</div>"
         ],
         [
+            'label' => 'image',
+            'format' => 'raw',
+            'value' => function(\yii\db\ActiveRecord $model) {
+                $layout = "";
+//                var_dump($model->images);die();
+                if ($model->images) {
+                    $layout = "<div><img width='100' height='100' src='/{$model->images[0]->path}'></div>";
+                }
+
+                return $layout;
+            }
+        ],
+        [
             'attribute' => 'available',
             "label" => Yii::t("app/goods", "available"),
             'value' => function(\common\models\Goods $model){
