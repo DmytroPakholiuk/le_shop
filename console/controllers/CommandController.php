@@ -79,4 +79,9 @@ class CommandController extends Controller
         $message->ack();
     }
 
+    public function actionTest() {
+        \Yii::$app->redis->set('mykey', 'some value');
+        echo \Yii::$app->redis->get('mykey');
+    }
+
 }

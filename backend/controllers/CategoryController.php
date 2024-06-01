@@ -12,6 +12,12 @@ use yii\web\NotFoundHttpException;
 
 class CategoryController extends Controller
 {
+    public function beforeAction($action)
+    {
+        $this->enableCsrfValidation = false;
+        return parent::beforeAction($action);
+    }
+
     /**
      * @return array[]
      */
@@ -113,5 +119,16 @@ class CategoryController extends Controller
         }
 
         return $out;
+    }
+
+    public function actionDelete($id)
+    {
+        if(!$model = Category::findOne($id)){
+            throw new NotFoundHttpException();
+        };
+
+        $model->delete();
+
+        return $this->redirect('/category/index');
     }
 }

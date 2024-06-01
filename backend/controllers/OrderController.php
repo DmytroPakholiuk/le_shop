@@ -7,9 +7,16 @@ use common\models\Goods;
 use common\models\Order;
 use common\models\OrderGoods;
 use yii\helpers\Url;
+use yii\web\NotFoundHttpException;
 
 class OrderController extends \yii\web\Controller
 {
+    public function beforeAction($action)
+    {
+        $this->enableCsrfValidation = false;
+        return parent::beforeAction($action);
+    }
+
     public function actionCreate()
     {
         $order = new Order();
@@ -52,5 +59,16 @@ class OrderController extends \yii\web\Controller
         $dataProvider = $searchModel->search(\Yii::$app->request->get());
 
         return $this->render('index', ['dataProvider' => $dataProvider, 'searchModel' => $searchModel]);
+    }
+
+    public function actionDelete($id)
+    {
+        if(!$model = Order::findOne($id)){
+            throw new NotFoundHttpException();
+        };
+
+        $model->delete();
+
+        return $this->redirect('/order/index');
     }
 }

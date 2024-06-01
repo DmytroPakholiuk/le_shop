@@ -20,6 +20,12 @@ use yii\web\UploadedFile;
 
 class GoodsController extends \yii\web\Controller
 {
+    public function beforeAction($action)
+    {
+        $this->enableCsrfValidation = false;
+        return parent::beforeAction($action);
+    }
+
     /**
      * @return array[]
      */
@@ -41,7 +47,7 @@ class GoodsController extends \yii\web\Controller
                         'roles' => ['goods_create']
                     ],
                     [
-                        'actions' => ['update', 'delete-attribute', 'delete-image', 'upload-image'],
+                        'actions' => ['update', 'delete-attribute', 'delete-image', 'upload-image', 'delete'],
                         'allow' => true,
                         'roles' => ['goods_update_any', 'goods_update_own']
                     ]
@@ -151,6 +157,17 @@ class GoodsController extends \yii\web\Controller
 
             return $this->render('update', ['model' => $model, 'categories' => $categories]);
         }
+    }
+
+    public function actionDelete($id)
+    {
+        if(!$model = Goods::findOne($id)){
+            throw new NotFoundHttpException();
+        };
+
+        $model->delete();
+
+        return $this->redirect('/goods/index');
     }
 
     /**
